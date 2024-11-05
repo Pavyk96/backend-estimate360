@@ -2,38 +2,41 @@ package ru.bit.estimate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.bit.estimate.dto.Question;
+import ru.bit.estimate.dto.QuestionRequest;
+import ru.bit.estimate.model.Question;
 import ru.bit.estimate.service.QuestionService;
 
 import java.util.List;
 
+
 @RestController
+@RequestMapping("/api")
 public class QuestionController {
 
     @Autowired
     QuestionService questionService;
 
-    @GetMapping("api/questions")
+    @GetMapping("questions")
     public List<Question> getAllQuestion() {
         return questionService.getAllQuestions();
     }
 
-    @GetMapping("api/questions/{id}")
+    @GetMapping("questions/{id}")
     public Question getQuestionByID(@PathVariable long id) {
         return questionService.getQuestionByID(id);
     }
 
-    @PostMapping("api/question")
-    public void createQuestion(@RequestBody Question question) {
-        questionService.createQuestion(question);
+    @PostMapping("/questions")
+    public Question createQuestion(@RequestBody QuestionRequest question) { //принимает дто
+        return questionService.createQuestion(question);
     }
 
-    @PutMapping("api/question/{id}")
-    public void updateQuestionByID(@RequestBody Question question,@PathVariable long id) {
-        questionService.updateQuestionByID(question, id);
+    @PutMapping("questions/{id}")
+    public Question updateQuestionByID(@RequestBody QuestionRequest question, @PathVariable long id) {
+        return questionService.updateQuestionByID(question, id);
     }
 
-    @DeleteMapping("api/question/{id}")
+    @DeleteMapping("questions/{id}")
     public void deleteQuestionByID(@PathVariable long id) {
         questionService.deleteQuestionByID(id);
     }
