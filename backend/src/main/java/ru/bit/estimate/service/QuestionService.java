@@ -1,46 +1,47 @@
 package ru.bit.estimate.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.bit.estimate.dto.Question;
-import ru.bit.estimate.dto.Questionnaire;
+import ru.bit.estimate.dto.QuestionRequest;
+import ru.bit.estimate.model.Question;
+import ru.bit.estimate.repositories.QuestionRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class QuestionService {
 
-    List<Question> questions =new ArrayList<>(Arrays.asList(new Question(0, "вопрос?", "всякий"),
-            new Question(1, "улыбнись если", "социальный"),
-            new Question(2, "Что чееееее?", "+1823123123")));
+    @Autowired
+    QuestionRepository questionRepository;
+
 
     public List<Question> getAllQuestions() {
-        return questions;
+        return questionRepository.findAll();
     }
 
     public Question getQuestionByID(long id) {
-        for (var question : questions) {
-            if (question.getId() == id) {
-                return question;
-            }
-        }
-        return null;
+        return questionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Вопрос не найден"));
     }
 
-    public void createQuestion(Question question) {
-        questions.add(question);
+
+    public Question createQuestion(QuestionRequest request) {
+        return questionRepository.save(QuestionRequest.fromDto(request));
     }
 
-    public void updateQuestionByID(Question questionNew, long id) {
-        for (var question : questions) {
-            if (question.getId() == id) {
-                questions.set(questions.indexOf(question), questionNew);
-            }
-        }
+    public Question updateQuestionByID(QuestionRequest request, long id) {
+        Question existingQuestion = getQuestionByID(id);
+        Question updateQuestion = QuestionRequest.fromDto(request);
+
+        existingQuestion.setType(updateQuestion.getType());
+        existingQuestion.setQuestion(updateQuestion.getQuestion());
+
+        return questionRepository.save(existingQuestion);
     }
+
 
     public void deleteQuestionByID(long id) {
-        questions.removeIf(question -> question.getId() == id);
+        questionRepository.deleteById(id);
     }
 }
