@@ -1,4 +1,4 @@
-package ru.bit.estimate.service;
+package ru.bit.estimate.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,11 +6,12 @@ import org.springframework.stereotype.Service;
 import ru.bit.estimate.dto.QuestionRequest;
 import ru.bit.estimate.model.Question;
 import ru.bit.estimate.repositories.QuestionRepository;
+import ru.bit.estimate.service.interf.QuestionService;
 
 import java.util.List;
 
 @Service
-public class QuestionService {
+public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     QuestionRepository questionRepository;
