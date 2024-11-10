@@ -1,6 +1,42 @@
 version: '3.8'
 
 services:
+  keycloak_postgres:
+    container_name: keycloak_postgres
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=keycloak
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KC_DATABASE=postgres
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://keycloak_postgres:5432/keycloak
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=postgres
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+    ports:
+      - "8484:8080"
+    depends_on:
+      - keycloak_postgres
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+      - ./keycloak_export:/opt/keycloak_export
+
+    command: start-dev
+    restart: unless-stopped
+
+
   postgres:
     image: 'postgres:latest'
     container_name: "estimate_postgres"
@@ -14,4 +50,7 @@ services:
       - POSTGRES_DB=estimate_db
     restart: always
 volumes:
+  keycloak_data:
+  keycloak_export:
+  postgres_data:
   db_data:
