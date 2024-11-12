@@ -32,10 +32,8 @@ services:
     volumes:
       - keycloak_data:/opt/keycloak/data
       - ./keycloak_export:/opt/keycloak_export
-
     command: start-dev
     restart: unless-stopped
-
 
   postgres:
     image: 'postgres:latest'
@@ -49,6 +47,24 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=estimate_db
     restart: always
+
+  backend:
+    image: payk96/estimate
+    ports:
+      - "8081:8080"  # локальный порт 8081 связан с портом 8080 внутри контейнера
+    environment:
+      - spring.application.name=estimate
+      - spring.datasource.driver-class-name=org.postgresql.Driver
+      - spring.datasource.url=jdbc:postgresql://postgres:5432/estimate_db  # Обновлено на имя сервиса postgres
+      - spring.datasource.username=postgres
+      - spring.datasource.password=postgres
+      - spring.jpa.hibernate.ddl-auto=update
+      - spring.jpa.show-sql=true
+      - server.port=8080
+    depends_on:
+      - postgres
+      - keycloak_postgres
+
 volumes:
   keycloak_data:
   keycloak_export:
