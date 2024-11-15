@@ -59,5 +59,4 @@ public class KeycloakDataSourceConfig {
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         return properties;
     }
-
 }

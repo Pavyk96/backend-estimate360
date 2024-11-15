@@ -5,5 +5,5 @@ import ru.bit.estimate.keycloack.model.UserEntity;
 
 import java.util.UUID;
 
-public interface UserRepo extends JpaRepository<UUID, UserEntity> {
+public interface UserRepo extends JpaRepository<UserEntity, UUID> {
 }

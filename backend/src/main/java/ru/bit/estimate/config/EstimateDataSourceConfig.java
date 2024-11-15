@@ -28,7 +28,7 @@ public class EstimateDataSourceConfig {
     public DataSourceProperties estimateDataSourceProperties() {
         // Установите свойства для основной базы данных
         DataSourceProperties properties = new DataSourceProperties();
-        properties.setUrl("jdbc:postgresql://postgres:5432/estimate_db"); // URL для подключения
+        properties.setUrl("jdbc:postgresql://postgres:5432/estimate"); // URL для подключения
         properties.setUsername("postgres");
         properties.setPassword("postgres");
         properties.setDriverClassName("org.postgresql.Driver");
@@ -71,5 +71,4 @@ public class EstimateDataSourceConfig {
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect"); // Диалект для PostgreSQL
         return properties;
     }
-
 }
