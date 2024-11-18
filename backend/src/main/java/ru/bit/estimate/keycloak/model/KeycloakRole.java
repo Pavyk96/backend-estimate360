@@ -1,41 +1,40 @@
-package ru.bit.estimate.keycloack.model;
+package ru.bit.estimate.keycloak.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
+@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "keycloak_role")
 public class KeycloakRole {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private String id;
 
     @Column(name = "client_realm_constraint")
     private String clientRealmConstraint;
 
     @Column(name = "client_role")
-    private Boolean clientRole;
+    private String clientRole;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "realm_id", nullable = false)
+    @Column(name = "realm_id")
     private String realmId;
 
-    @Column(name = "client")
     private String client;
 
-    @Column(name = "realm")
     private String realm;
-}
 
+}
