@@ -1,5 +1,6 @@
 package ru.bit.estimate.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -22,13 +23,26 @@ import java.util.Objects;
 )
 public class KeycloakDataSourceConfig {
 
+
+    @Value("${spring.datasource.keycloak.url}")
+    private String url;
+
+    @Value("${spring.datasource.keycloak.username}")
+    private String username;
+
+    @Value("${spring.datasource.keycloak.password}")
+    private String password;
+
+    @Value("${spring.datasource.keycloak.driver-class-name}")
+    private String driverClassName;
+
     @Bean
     public DataSourceProperties keycloakDataSourceProperties() {
         DataSourceProperties properties = new DataSourceProperties();
-        properties.setUrl("jdbc:postgresql://keycloak_postgres:5432/keycloak");
-        properties.setUsername("postgres");
-        properties.setPassword("postgres");
-        properties.setDriverClassName("org.postgresql.Driver");
+        properties.setUrl(url);
+        properties.setUsername(username);
+        properties.setPassword(password);
+        properties.setDriverClassName(driverClassName);
         return properties;
     }
 
@@ -59,4 +73,5 @@ public class KeycloakDataSourceConfig {
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         return properties;
     }
+
 }

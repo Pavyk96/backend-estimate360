@@ -1,5 +1,6 @@
 package ru.bit.estimate.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -17,28 +18,38 @@ import java.util.Objects;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "ru.bit.estimate.repositories", // Пакет с репозиториями для основной базы данных
+        basePackages = "ru.bit.estimate.repository",
         entityManagerFactoryRef = "estimateEntityManagerFactory",
         transactionManagerRef = "estimateTransactionManager"
 )
 public class EstimateDataSourceConfig {
 
+    @Value("${spring.datasource.estimate.url}")
+    private String url;
+
+    @Value("${spring.datasource.estimate.username}")
+    private String username;
+
+    @Value("${spring.datasource.estimate.password}")
+    private String password;
+
+    @Value("${spring.datasource.estimate.driver-class-name}")
+    private String driverClassName;
+
     @Bean
     @Primary
     public DataSourceProperties estimateDataSourceProperties() {
-        // Установите свойства для основной базы данных
         DataSourceProperties properties = new DataSourceProperties();
-        properties.setUrl("jdbc:postgresql://postgres:5432/estimate"); // URL для подключения
-        properties.setUsername("postgres");
-        properties.setPassword("postgres");
-        properties.setDriverClassName("org.postgresql.Driver");
+        properties.setUrl(url);
+        properties.setUsername(username);
+        properties.setPassword(password);
+        properties.setDriverClassName(driverClassName);
         return properties;
     }
 
     @Bean
     @Primary
     public DataSource estimateDataSource() {
-        // Создание DataSource для основной базы данных
         return estimateDataSourceProperties().initializeDataSourceBuilder().build();
     }
 
@@ -46,10 +57,9 @@ public class EstimateDataSourceConfig {
     @Primary
     public LocalContainerEntityManagerFactoryBean estimateEntityManagerFactory(
             EntityManagerFactoryBuilder builder) {
-        // Конфигурация EntityManagerFactory для основной базы данных
         return builder
                 .dataSource(estimateDataSource())
-                .packages("ru.bit.estimate.model") // Пакет с сущностями (моделями)
+                .packages("ru.bit.estimate.model")
                 .persistenceUnit("estimate")
                 .properties(hibernateProperties())
                 .build();
@@ -59,16 +69,15 @@ public class EstimateDataSourceConfig {
     @Primary
     public PlatformTransactionManager estimateTransactionManager(
             EntityManagerFactoryBuilder builder) {
-        // Конфигурация TransactionManager для основной базы данных
         return new JpaTransactionManager(Objects.requireNonNull(estimateEntityManagerFactory(builder).getObject()));
     }
 
     private Map<String, Object> hibernateProperties() {
-        // Дополнительные свойства Hibernate
         Map<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto", "update"); // Управление схемой БД
-        properties.put("hibernate.show_sql", true); // Показ SQL-запросов
-        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect"); // Диалект для PostgreSQL
+        properties.put("hibernate.hbm2ddl.auto", "update");
+        properties.put("hibernate.show_sql", true);
+        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         return properties;
     }
+
 }
