@@ -11,7 +11,20 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - keycloak_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  estimate_postgres:
+    container_name: estimate_postgres
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=estimate
+    ports:
+      - "5433:5432"
+    volumes:
+      - estimate_postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
   keycloak:
@@ -39,4 +52,5 @@ services:
 volumes:
   keycloak_data:
   keycloak_export:
-  postgres_data:
+  keycloak_postgres_data:
+  estimate_postgres_data:
