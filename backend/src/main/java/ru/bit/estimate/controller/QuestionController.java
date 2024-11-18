@@ -1,20 +1,23 @@
 package ru.bit.estimate.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.bit.estimate.dto.QuestionRequest;
+import ru.bit.estimate.keycloak.repository.KeycloakUserRepository;
 import ru.bit.estimate.model.Question;
-import ru.bit.estimate.service.interf.QuestionService;
+import ru.bit.estimate.service.QuestionService;
 
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class QuestionController {
 
-    @Autowired
-    QuestionService questionService;
+    @NonNull
+    private final QuestionService questionService;
 
     @GetMapping("/questions")
     public List<Question> getAllQuestion() {
@@ -27,7 +30,7 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public Question createQuestion(@RequestBody QuestionRequest question) { //принимает дто
+    public Question createQuestion(@RequestBody QuestionRequest question) {
         return questionService.createQuestion(question);
     }
 
