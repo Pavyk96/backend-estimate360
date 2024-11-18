@@ -1,25 +1,27 @@
-package ru.bit.estimate.keycloack.model;
+package ru.bit.estimate.keycloak.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_entity")
 public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
 
-    @Column(name = "email", nullable = false)
+
+    @Id
+    private String id;
+
+    @Column(name = "email")
     private String email;
 
     @Column(name = "email_constraint")
@@ -28,7 +30,6 @@ public class UserEntity {
     @Column(name = "email_verified")
     private Boolean emailVerified;
 
-    @Column(name = "enabled")
     private Boolean enabled;
 
     @Column(name = "federation_link")
@@ -40,10 +41,9 @@ public class UserEntity {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "realm_id", nullable = false)
+    @Column(name = "realm_id")
     private String realmId;
 
-    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(name = "created_timestamp")
@@ -53,6 +53,6 @@ public class UserEntity {
     private String serviceAccountClientLink;
 
     @Column(name = "not_before")
-    private Integer notBefore;
-}
+    private Long notBefore;
 
+}
