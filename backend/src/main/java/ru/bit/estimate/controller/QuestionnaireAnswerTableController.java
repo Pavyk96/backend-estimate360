@@ -1,8 +1,8 @@
 package ru.bit.estimate.controller;
 
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.bit.estimate.dto.QuestionnaireAnswerTableRequest;
 import ru.bit.estimate.model.QuestionnaireAnswerTable;

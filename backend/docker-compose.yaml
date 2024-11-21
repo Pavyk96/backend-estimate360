@@ -28,7 +28,7 @@ services:
     restart: unless-stopped
 
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:21.1.2
     container_name: keycloak
     environment:
       - KC_DATABASE=postgres
@@ -38,6 +38,8 @@ services:
       - KC_DB_PASSWORD=postgres
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+      - KEYCLOAK_ADMIN=admin           # Добавьте эту строку
+      - KEYCLOAK_ADMIN_PASSWORD=admin   # Добавьте эту строку
     ports:
       - "8484:8080"
     depends_on:

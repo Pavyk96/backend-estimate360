@@ -1,5 +1,6 @@
 package ru.bit.estimate.controller;
 
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
