@@ -2,7 +2,6 @@ package ru.bit.estimate.service.impl;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.bit.estimate.keycloak.model.UserEntity;
 import ru.bit.estimate.keycloak.repository.KeycloakUserRepository;

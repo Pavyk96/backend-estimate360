@@ -38,8 +38,8 @@ services:
       - KC_DB_PASSWORD=postgres
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-      - KEYCLOAK_ADMIN=admin           # Добавьте эту строку
-      - KEYCLOAK_ADMIN_PASSWORD=admin   # Добавьте эту строку
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
     ports:
       - "8484:8080"
     depends_on:
@@ -50,6 +50,26 @@ services:
 
     command: start-dev
     restart: unless-stopped
+
+  backend:
+    image: payk96/estimate
+    container_name: backend
+    ports:
+      - "8080:8080"
+    environment:
+      - spring.application.name=estimate
+      - spring.datasource.driver-class-name=org.postgresql.Driver
+      - spring.datasource.url=jdbc:postgresql://estimate_postgres:5432/estimate
+      - spring.datasource.username=postgres
+      - spring.datasource.password=postgres
+      - spring.jpa.hibernate.ddl-auto=update
+      - spring.jpa.show-sql=true
+      - server.port=8080
+    depends_on:
+      - estimate_postgres
+      - keycloak
+    restart: unless-stopped
+
 
 volumes:
   keycloak_data:
