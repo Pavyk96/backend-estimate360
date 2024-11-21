@@ -1,4 +1,4 @@
-package ru.bit.estimate.service.interf;
+package ru.bit.estimate.service;
 
 import ru.bit.estimate.dto.QuestionnaireAnswerTableRequest;
 import ru.bit.estimate.model.QuestionnaireAnswerTable;

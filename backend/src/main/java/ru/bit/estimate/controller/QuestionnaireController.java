@@ -1,21 +1,22 @@
 package ru.bit.estimate.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.bit.estimate.dto.QuestionRequest;
 import ru.bit.estimate.dto.QuestionnaireRequest;
-import ru.bit.estimate.model.Question;
 import ru.bit.estimate.model.Questionnaire;
-import ru.bit.estimate.service.interf.QuestionnaireService;
+import ru.bit.estimate.service.QuestionnaireService;
 
 import java.util.List;
 
-@RequestMapping("/api")
 @RestController
+@RequestMapping("/api")
+@RequiredArgsConstructor
 public class QuestionnaireController {
-    @Autowired
-    QuestionnaireService service;
+
+    @NonNull
+    private final QuestionnaireService service;
 
     @GetMapping("/questionnaires")
     public List<Questionnaire> getAllQuestion() {

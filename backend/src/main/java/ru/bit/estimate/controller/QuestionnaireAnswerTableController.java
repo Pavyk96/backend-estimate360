@@ -1,6 +1,8 @@
 package ru.bit.estimate.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.bit.estimate.dto.QuestionnaireAnswerTableRequest;
 import ru.bit.estimate.model.QuestionnaireAnswerTable;
@@ -8,12 +10,13 @@ import ru.bit.estimate.service.impl.QuestionnaireAnswerTableServiceImpl;
 
 import java.util.List;
 
-@RequestMapping("/api")
 @RestController
+@RequestMapping("/api")
+@RequiredArgsConstructor
 public class QuestionnaireAnswerTableController {
 
-    @Autowired
-    QuestionnaireAnswerTableServiceImpl service;
+    @NonNull
+    private final QuestionnaireAnswerTableServiceImpl service;
 
     @GetMapping("/records")
     public List<QuestionnaireAnswerTable> getRecorde() {

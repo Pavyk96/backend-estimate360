@@ -1,20 +1,23 @@
 package ru.bit.estimate.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.bit.estimate.dto.QuestionnaireAnswerTableRequest;
 import ru.bit.estimate.model.QuestionnaireAnswerTable;
-import ru.bit.estimate.repositories.QuestionnaireAnswerTableRepository;
-import ru.bit.estimate.service.interf.QuestionnaireAnswerTableService;
+import ru.bit.estimate.repository.QuestionnaireAnswerTableRepository;
+import ru.bit.estimate.service.QuestionnaireAnswerTableService;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class QuestionnaireAnswerTableServiceImpl implements QuestionnaireAnswerTableService {
 
-    @Autowired
-    QuestionnaireAnswerTableRepository questionnaireRepository;
+    @NonNull
+    private final QuestionnaireAnswerTableRepository questionnaireRepository;
 
     public List<QuestionnaireAnswerTable> getRecord() {
         return questionnaireRepository.findAll();
