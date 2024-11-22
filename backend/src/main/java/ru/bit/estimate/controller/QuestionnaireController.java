@@ -28,7 +28,7 @@ public class QuestionnaireController {
         return service.getQuestionnaireById(id);
     }
 
-    @PostMapping("/questionnaire")
+    @PostMapping("/questionnaires")
     public Questionnaire createQuestion(@RequestBody QuestionnaireRequest request) {
         return service.createQuestionnaire(request);
     }

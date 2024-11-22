@@ -28,7 +28,7 @@ public class QuestionnaireAnswerTableController {
         return service.getRecordById(id);
     }
 
-    @PostMapping("/record")
+    @PostMapping("/records")
     public QuestionnaireAnswerTable createRecorde(@RequestBody QuestionnaireAnswerTableRequest request) {
         return service.createRecord(request);
     }
