@@ -1,0 +1,61 @@
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.myQuiz {
+  padding: 70px 20px 180px 20px;
+}
+
+.title {
+  font-size: 40px;
+  margin-bottom: 72px;
+}
+
+.add {
+  width: 430px;
+  height: 200px;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add div div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add p {
+  font-size: 20px;
+  margin-bottom: 26px;
+}
+
+.notAssignQuizTitle {
+  font-size: 20px;
+  margin-top: 72px;
+  margin-bottom: 30px;
+}
+
+.notAssignQuiz {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 30px;
+
+}
+
+.assignQuizTitle {
+  font-size: 20px;
+  margin-top: 92px;
+  margin-bottom: 30px;
+}
+
+.assignQuiz {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 30px;
+}

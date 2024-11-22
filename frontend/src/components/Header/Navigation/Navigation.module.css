@@ -1,0 +1,27 @@
+.navigation{
+  margin-left: auto;
+}
+.navigation ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navigation ul li {
+  margin-right: 40px;
+}
+
+.navigation ul li:last-child {
+  margin-right: 0;
+}
+
+.item a {
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+.item a.active {
+  color: #999999;
+}
