@@ -19,7 +19,6 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/auth").permitAll()
                                 .requestMatchers(HttpMethod.GET, "api/questionnaires").permitAll()
                                 .requestMatchers(HttpMethod.GET, "api/questions").permitAll()
 
@@ -30,7 +29,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "api/questions").hasRole("HR")
                                 .requestMatchers(HttpMethod.POST, "api/questions").hasRole("HR")
                                 .requestMatchers(HttpMethod.DELETE, "api/questions").hasRole("HR")
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 ).sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 ).oauth2ResourceServer(
