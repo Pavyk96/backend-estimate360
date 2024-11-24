@@ -1,5 +1,7 @@
 package ru.bit.estimate.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +11,7 @@ import ru.bit.estimate.service.QuestionService;
 
 import java.util.List;
 
-
+@Tag(name = "questions_methods")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -18,26 +20,44 @@ public class QuestionController {
     @NonNull
     private final QuestionService questionService;
 
+    @Operation(
+            summary = "Получить все вопросы"
+    )
     @GetMapping("/questions")
     public List<Question> getAllQuestion() {
         return questionService.getAllQuestions();
     }
 
+    @Operation(
+            summary = "Получить вопрос по id",
+            description = "Принимает id вопроса, который нужно получить"
+    )
     @GetMapping("/questions/{id}")
     public Question getQuestionByID(@PathVariable long id) {
         return questionService.getQuestionByID(id);
     }
 
+    @Operation(
+            summary = "Создать вопрос",
+            description = "Принимает ДТО вопроса (вопрос, тип вопроса)"
+    )
     @PostMapping("/questions")
     public Question createQuestion(@RequestBody QuestionRequest question) {
         return questionService.createQuestion(question);
     }
 
+    @Operation(
+            summary = "Изменить вопрос по id",
+            description = "Принимает ДТО вопроса (вопрос, тип вопроса), id вопроса, который нужно изменить"
+    )
     @PutMapping("/questions/{id}")
     public Question updateQuestionByID(@RequestBody QuestionRequest question, @PathVariable long id) {
         return questionService.updateQuestionByID(question, id);
     }
 
+    @Operation(
+            summary = "Удалить вопрос по id"
+    )
     @DeleteMapping("/questions/{id}")
     public void deleteQuestionByID(@PathVariable long id) {
         questionService.deleteQuestionByID(id);
