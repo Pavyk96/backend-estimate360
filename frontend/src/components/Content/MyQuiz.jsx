@@ -2,7 +2,7 @@ import React from "react";
 import s from './MyQuiz.module.css';
 import add from './Add.svg';
 import AssignQuiz from "./Quiz/AssignQuiz";
-import NotAssignQuiz from "./Quiz/NAssignQuiz";
+import NAssignQuiz from "./Quiz/NAssignQuiz";
 import { NavLink } from "react-router-dom";
 
 function MyQuiz(props) {
@@ -23,7 +23,7 @@ function MyQuiz(props) {
       <p className={s.notAssignQuizTitle}>Не назначенные анкеты</p>
       <div className={s.notAssignQuiz}>
         {notAssignedQuizzes.map((quiz) => (
-          <NotAssignQuiz key={quiz.id} quiz={quiz} onAssign={props.onAssignQuiz}/>
+          <NAssignQuiz key={quiz.id} quiz={quiz} onAssign={props.onAssignQuiz}/>
         ))}
       </div>
       <p className={s.assignQuizTitle}>Назначенные анкеты</p>
