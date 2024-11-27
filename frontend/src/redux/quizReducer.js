@@ -44,12 +44,7 @@ function quizReducer(state = initState, action) {
                 date: new Date().toLocaleDateString(),
                 assigned: false
             }
-            newState.currentQuiz = {
-                id: null,
-                title: "",
-                description: "",
-                questions: []
-            }
+            newState.currentQuiz = initState.currentQuiz
             break;
         case "ASSIGN_QUIZ":
             newState.quizzes[action.quizId].assigned = true
