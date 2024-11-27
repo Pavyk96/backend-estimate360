@@ -4,6 +4,7 @@ const initState = {
         id: null,
         title: "",
         description: "",
+        answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
         questions: [],
     },
     newQuestionText: ""
@@ -16,7 +17,6 @@ function quizReducer(state = initState, action) {
             let newQuestion = {
                 id: newState.currentQuiz.questions.length + 1,
                 question: newState.newQuestionText,
-                answer: ["1", "2", "3", "4", "5"]
             };
             newState.currentQuiz.questions.push(newQuestion)
             newState.newQuestionText = ""
@@ -54,6 +54,15 @@ function quizReducer(state = initState, action) {
         case "ASSIGN_QUIZ":
             newState.quizzes[action.quizId].assigned = true
             break
+        case "LOAD-QUIZ":
+            newState.currentQuiz = { ...newState.quizzes[action.quizId] };
+            if (newState.quizzes[action.quizId]) {
+                delete newState.quizzes[action.quizId];
+            }
+            break;
+        case "DELETE-QUIZ":
+            delete newState.quizzes[action.quizId];
+            break;
         default:
             break;
     }
@@ -106,6 +115,20 @@ export function assignQuiz(quizId) {
         type: "ASSIGN_QUIZ",
         quizId
     }
+}
+
+export function LoadQuizCreator(quizId) {
+    return {
+        type: "LOAD-QUIZ",
+        quizId
+    };
+}
+
+export function DeleteQuizCreator(quizId) {
+    return {
+        type: "DELETE-QUIZ",
+        quizId
+    };
 }
 
 

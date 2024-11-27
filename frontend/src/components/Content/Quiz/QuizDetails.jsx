@@ -1,55 +1,70 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // Подключаем useSelector
+import back from "../Back.svg";
 import s from './QuizDetails.module.css';
+import { NavLink, useNavigate } from "react-router-dom";
 
-function QuizDetails({ quiz }) {
-    const { quizId } = useParams();
+function QuizDetails(props) {
+    const navigate = useNavigate();
 
-    // Получаем answers из состояния через useSelector
-    const answers = useSelector(state => state.currentQuiz?.questions?.[0]?.answer || []);
-
-    if (!quiz || !quiz.questions) {
-        return <p>Анкета не найдена или не содержит вопросов.</p>;
+    let editQuiz = () => {
+        props.loadQuiz(props.quiz.id);
+        navigate("/quiz/add");
     }
 
+    let assignQuiz = () => {
+        navigate("/quiz");
+    }
     return (
         <div className={s.quizDetails}>
-            <h1 className={s.quizTitle}>{quiz.title}</h1>
-            <p className={s.quizDescription}>{quiz.description}</p>
-
-            <div className={s.answersHeader}>Вопросы и ответы</div>
-
-            {/* Строка с вариантами ответов, которая будет общей для всех вопросов */}
-            <div className={s.answersHeaderRow}>
-                {answers.map((ans, i) => (
-                    <span key={i} className={s.answerHeader}>
-                        {ans}
-                    </span>
-                ))}
+            <div className={s.back}>
+                <img src={back}></img>
+                <NavLink to="/quiz" className={({ isActive }) => isActive ? s.active : undefined}>НАЗАД</NavLink>
             </div>
-
-            <div className={s.questionsContainer}>
-                {quiz.questions.map((question, index) => (
-                    <React.Fragment key={question.id}>
-                        <div className={s.questionRow}>
-                            <span>{index + 1}. {question.question}</span>
-                        </div>
-                        <div className={s.answersContainer}>
-                            {question.answer.map((ans, i) => (
-                                <label key={i}>
-                                    <input
-                                        type="checkbox"
-                                        className={s.answerCheckbox}
-                                        value={ans}
-                                        name={`question-${question.id}`}
-                                    />
-                                    {ans}
-                                </label>
-                            ))}
-                        </div>
-                    </React.Fragment>
-                ))}
+            <p className={s.title}>Просмотр анкеты</p>
+            <div className={s.buttonBox}>
+                <div className={s.edit}>
+                    <button onClick={editQuiz}>Редкатировать анкету</button>
+                </div>
+                <div className={s.assign}>
+                    <button onClick={assignQuiz}>Назначить анкету</button>
+                </div>
+            </div>
+            <div className={s.quizTitleBox}>
+                <p className={s.quizName}>{props.quiz.title || "Без названия"}</p>
+                <p className={s.quizDescription}>{props.quiz.description || "Описание отсутствует"}</p>
+            </div>
+            <div className={s.questionBox}>
+                <div className={s.questionBoxHeader}>
+                    <p className={s.assertion}>Утверждение</p>
+                    <div className={s.answers}>
+                        {props.quiz.answers && props.quiz.answers.length > 0
+                            ? props.quiz.answers.map(answer => (
+                                <p className={s.answerItem}>{answer}</p>
+                            ))
+                            : <p>Ответы отсутствуют</p>}
+                    </div>
+                </div>
+                <div className={s.questionBoxBody}>
+                    {props.quiz.questions.length > 0 ? (
+                        props.quiz.questions.map((question) => (
+                            <div className={s.questionItem}>
+                                <p className={s.question}>{question.question}</p>
+                                <div className={s.answerOptions}>
+                                    {Array.from({ length: 6 }).map(() => (
+                                        <label className={s.questionLabel}>
+                                            <input
+                                                type="radio"
+                                                name={`question-${question.id}`}
+                                            />
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>Вопросы отсутствуют</p>
+                    )}
+                </div>
             </div>
         </div>
     );
