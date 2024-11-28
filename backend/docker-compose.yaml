@@ -10,8 +10,6 @@ services:
       - POSTGRES_DB=estimate
     ports:
       - "5433:5432"
-    networks:
-      - estimate-network
     volumes:
       - estimate_postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -25,8 +23,6 @@ services:
       - POSTGRES_DB=keycloak_1
     ports:
       - "5432:5432"
-    networks:
-      - estimate-network
     volumes:
       - keycloak_postgres_data_1:/var/lib/postgresql/data
     restart: unless-stopped
@@ -46,8 +42,6 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=admin
     ports:
       - "8484:8080"
-    networks:
-      - estimate-network
     depends_on:
       - keycloak_postgres_1
     volumes:
@@ -57,11 +51,12 @@ services:
     restart: unless-stopped
 
   estimate-app:
+    image: payk96/estimate:0.0.1
     build:
       context: .
     container_name: estimate-app
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://estimate_postgres:5432/estimate
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -71,19 +66,15 @@ services:
       - KEYCLOAK_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0M+auAxobI46uLcDRAmFksSMBs5DyAuvuILuQk/SLkL0SALBGtaJG97/EBcwHFtavglXa/oCNxP44F8x1GbRC11QLvH+CxDG0GD+hHFKbTmrhKwc9IkLksgoG4cHmwrJHvefqbvcy0wS6g3sFK2Jl7Tr5fo5H26ZnJzA/Pl4Gi8zv7rscwX5XjGaT1Uzg2+2+Ls0eSHaNV+5GQNaIwpy+yGcEketEFSWeVwLLw9relZghNp/4Ck4Hf+CbsDNHgWBKT+voAvJb6DfUIM7KDf1AGkkTs9szKXapTvYUy6Td2qAqCX/WztDR+IgH7/o4Dryr9YZLWPPXX9xH5pf+V7j1QIDAQAB
       - CLIENT_ID=estimate-app
       - GRANT_TYPE=password
-      - RESOURCE_URL=http://localhost:8484/realms/estimate/protocol/openid-connect/token
-    networks:
-      - estimate-network
+      - RESOURCE_URL=http://keycloak_1:8080/realms/estimate/protocol/openid-connect/token
     depends_on:
       - estimate_postgres
       - keycloak_1
     restart: unless-stopped
+
 
 volumes:
   keycloak_data_1:
   keycloak_postgres_data_1:
   estimate_postgres_data:
 
-networks:
-  estimate-network:
-    driver: bridge

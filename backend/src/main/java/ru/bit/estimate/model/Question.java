@@ -27,6 +27,10 @@ public class Question {
     @Column(nullable = false)
     private String type;
 
+    @ManyToOne
+    @JoinColumn(name = "questionnaire_id", nullable = false)
+    private Questionnaire questionnaire;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

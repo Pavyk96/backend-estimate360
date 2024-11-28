@@ -2,6 +2,7 @@ package ru.bit.estimate.dto;
 
 import lombok.*;
 import ru.bit.estimate.model.Question;
+import ru.bit.estimate.model.Questionnaire;
 
 @Getter
 @Setter

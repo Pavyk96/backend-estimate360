@@ -37,6 +37,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     public Questionnaire updateQuestionnaireById(QuestionnaireRequest request, Long id) {
         var oldQuestionnaire = getQuestionnaireById(id);
         oldQuestionnaire.setName(request.getName());
+        oldQuestionnaire.setDescription(request.getDescription());
         repo.save(oldQuestionnaire);
         return oldQuestionnaire;
     }

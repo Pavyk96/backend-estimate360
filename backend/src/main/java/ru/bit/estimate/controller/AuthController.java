@@ -1,5 +1,6 @@
 package ru.bit.estimate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -11,6 +12,7 @@ import ru.bit.estimate.dto.AuthDTO;
 
 @Setter
 @RestController
+@RequiredArgsConstructor
 public class AuthController {
 
     @Value("${client-id}")
