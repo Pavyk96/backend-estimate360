@@ -57,7 +57,6 @@ public class SecurityConfig {
                 );
         return httpSecurity.build();
     }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -75,6 +74,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
 
     /**
      * Configures the CORS settings to allow all origins, headers, and methods.

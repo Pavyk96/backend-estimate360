@@ -1,5 +1,6 @@
 package ru.bit.estimate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "questions")
 public class Question {
 
@@ -26,10 +28,6 @@ public class Question {
 
     @Column(nullable = false)
     private String type;
-
-    @ManyToOne
-    @JoinColumn(name = "questionnaire_id", nullable = false)
-    private Questionnaire questionnaire;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)

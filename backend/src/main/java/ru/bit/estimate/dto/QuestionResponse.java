@@ -9,11 +9,13 @@ import ru.bit.estimate.model.Question;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionResponse {
+    private Long id;
     private String question;
     private String type;
 
     public static QuestionResponse toDTO(Question question) {
         return QuestionResponse.builder()
+                .id(question.getId())
                 .question(question.getQuestion())
                 .type(question.getType())
                 .build();

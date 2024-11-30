@@ -87,8 +87,13 @@ public class JWTUtil {
      * @return True if the token is expired, false otherwise.
      */
     public boolean isTokenExpired(String token) {
-        return getClaimsFromToken(token).getExpiration().before(new Date());
+        Claims claims = getClaimsFromToken(token);
+        if (claims == null) {
+            throw new IllegalArgumentException("Invalid token or claims could not be parsed");
+        }
+        return claims.getExpiration().before(new Date());
     }
+
 
     /**
      * Validates the token against the user details.
@@ -108,6 +113,7 @@ public class JWTUtil {
      */
     public Claims getClaimsFromToken(String token) {
         try {
+
             return Jwts.parser()
                     .verifyWith(key)
                     .build()
@@ -117,5 +123,6 @@ public class JWTUtil {
             return null;
         }
     }
+
 
 }
