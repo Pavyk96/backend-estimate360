@@ -37,7 +37,7 @@ public class SurveyController {
 
     @Operation(
             summary = "Создать опросник",
-            description = "Принимает ДТО опросника (название опросника)"
+            description = "Принимает ДТО опросника (название, описание)"
     )
     @PostMapping("/surveys")
     public Survey createSurvey(@RequestBody SurveyRequest request) {
@@ -46,7 +46,7 @@ public class SurveyController {
 
     @Operation(
             summary = "Изменить опросник по id",
-            description = "Принимает ДТО опросника (название опросника)"
+            description = "Принимает ДТО опросника (название, описание)"
     )
     @PutMapping("/surveys/{id}")
     public Survey updateSurveyByID(@RequestBody SurveyRequest request, @PathVariable long id) {

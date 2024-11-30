@@ -1,5 +1,6 @@
 package ru.bit.estimate.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,10 @@ public class AuthController {
     @Value("${grant-type}")
     private String grantType;
 
+    @Operation(
+            summary = "Аутентификация пользователя",
+            description = "Принимает логин и пароль"
+    )
     @GetMapping("/auth")
     public String auth(@RequestBody AuthDTO authDTO) {
         var header = new HttpHeaders();

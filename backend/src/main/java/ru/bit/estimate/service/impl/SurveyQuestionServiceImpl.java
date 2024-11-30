@@ -124,4 +124,42 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService {
         surveyQuestionsRepo.deleteAllBySurveyId(surveyId);
     }
 
+    @Override
+    public SurveyQuestionResponse addQuestionToSurvey(Long surveyId, Long questionId) {
+        Survey survey = surveyRepo.findById(surveyId)
+                .orElseThrow(() -> new EntityNotFoundException("Survey not found with id: " + surveyId));
+
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + questionId));
+
+        boolean alreadyExists = surveyQuestionsRepo.existsBySurveyAndQuestion(survey, question);
+        if (alreadyExists) {
+            throw new IllegalStateException("Question already exists in the survey");
+        }
+
+        SurveyQuestions surveyQuestions = new SurveyQuestions();
+        surveyQuestions.setSurvey(survey);
+        surveyQuestions.setQuestion(question);
+        surveyQuestionsRepo.save(surveyQuestions);
+
+        List<Question> questionList = surveyQuestionsRepo.findAllQuestionsBySurvey(survey);
+        return SurveyQuestionResponse.toDTO(survey, questionList);
+    }
+
+    @Override
+    public SurveyQuestionResponse removeQuestionFromSurvey(Long surveyId, Long questionId) {
+        Survey survey = surveyRepo.findById(surveyId)
+                .orElseThrow(() -> new EntityNotFoundException("Survey not found with id: " + surveyId));
+
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + questionId));
+
+        SurveyQuestions surveyQuestions = surveyQuestionsRepo.findBySurveyAndQuestion(survey, question)
+                .orElseThrow(() -> new EntityNotFoundException("This question is not associated with the survey"));
+        surveyQuestionsRepo.delete(surveyQuestions);
+
+        List<Question> questionList = surveyQuestionsRepo.findAllQuestionsBySurvey(survey);
+        return SurveyQuestionResponse.toDTO(survey, questionList);
+    }
+
 }

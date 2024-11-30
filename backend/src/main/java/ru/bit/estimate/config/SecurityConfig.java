@@ -46,9 +46,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Добавлено для разрешения CORS
                 .authorizeHttpRequests(request ->
                         request.requestMatchers("/swagger-ui/**", "/v3/**", "/auth").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/questions", "/api/questionnaires").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/questions", "/api/surveys", "/api/surveys-questions").permitAll()
                                 .requestMatchers("/api/questions").hasAuthority("HR")
-                                .requestMatchers("/api/questionnaires").hasAuthority("HR")
+                                .requestMatchers("/api/surveys-questions").hasAuthority("HR")
+                                .requestMatchers("/api/surveys").hasAuthority("HR")
                                 .anyRequest().authenticated())
                 .sessionManagement(manager ->
                         manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
