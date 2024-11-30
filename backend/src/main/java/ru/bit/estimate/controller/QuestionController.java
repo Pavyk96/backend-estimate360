@@ -6,7 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.bit.estimate.dto.QuestionRequest;
-import ru.bit.estimate.model.Question;
+import ru.bit.estimate.dto.QuestionResponse;
 import ru.bit.estimate.service.QuestionService;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class QuestionController {
             summary = "Получить все вопросы"
     )
     @GetMapping("/questions")
-    public List<Question> getAllQuestion() {
+    public List<QuestionResponse> getAllQuestion() {
         return questionService.getAllQuestions();
     }
 
@@ -33,7 +33,7 @@ public class QuestionController {
             description = "Принимает id вопроса, который нужно получить"
     )
     @GetMapping("/questions/{id}")
-    public Question getQuestionByID(@PathVariable long id) {
+    public QuestionResponse getQuestionByID(@PathVariable long id) {
         return questionService.getQuestionByID(id);
     }
 
@@ -42,7 +42,7 @@ public class QuestionController {
             description = "Принимает ДТО вопроса (вопрос, тип вопроса)"
     )
     @PostMapping("/questions")
-    public Question createQuestion(@RequestBody QuestionRequest question) {
+    public QuestionResponse createQuestion(@RequestBody QuestionRequest question) {
         return questionService.createQuestion(question);
     }
 
@@ -51,7 +51,7 @@ public class QuestionController {
             description = "Принимает ДТО вопроса (вопрос, тип вопроса), id вопроса, который нужно изменить"
     )
     @PutMapping("/questions/{id}")
-    public Question updateQuestionByID(@RequestBody QuestionRequest question, @PathVariable long id) {
+    public QuestionResponse updateQuestionByID(@RequestBody QuestionRequest question, @PathVariable long id) {
         return questionService.updateQuestionByID(question, id);
     }
 

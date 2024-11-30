@@ -1,19 +1,6 @@
 version: "3.8"
 
 services:
-  keycloak_postgres:
-    container_name: keycloak_postgres
-    image: postgres:16
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=keycloak
-    ports:
-      - "5432:5432"
-    volumes:
-      - keycloak_postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-
   estimate_postgres:
     container_name: estimate_postgres
     image: postgres:16
@@ -27,13 +14,26 @@ services:
       - estimate_postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
-  keycloak:
-    image: quay.io/keycloak/keycloak:21.1.2
-    container_name: keycloak
+  keycloak_postgres_1:
+    container_name: keycloak_postgres_1
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=keycloak_1
+    ports:
+      - "5432:5432"
+    volumes:
+      - keycloak_postgres_data_1:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  keycloak_1:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak_1
     environment:
       - KC_DATABASE=postgres
       - KC_DB=postgres
-      - KC_DB_URL=jdbc:postgresql://keycloak_postgres:5432/keycloak
+      - KC_DB_URL=jdbc:postgresql://keycloak_postgres_1:5432/keycloak_1
       - KC_DB_USERNAME=postgres
       - KC_DB_PASSWORD=postgres
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
@@ -43,36 +43,38 @@ services:
     ports:
       - "8484:8080"
     depends_on:
-      - keycloak_postgres
+      - keycloak_postgres_1
     volumes:
-      - keycloak_data:/opt/keycloak/data
-      - ./keycloak_export:/opt/keycloak_export
-
+      - keycloak_data_1:/opt/keycloak/data_1
+      - ./keycloak_export_1:/opt/keycloak_export_1
     command: start-dev
     restart: unless-stopped
 
-  backend:
-    image: payk96/estimate
-    container_name: backend
+  estimate-app:
+    image: payk96/estimate:0.0.1
+    build:
+      context: .
+    container_name: estimate-app
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
-      - spring.application.name=estimate
-      - spring.datasource.driver-class-name=org.postgresql.Driver
-      - spring.datasource.url=jdbc:postgresql://estimate_postgres:5432/estimate
-      - spring.datasource.username=postgres
-      - spring.datasource.password=postgres
-      - spring.jpa.hibernate.ddl-auto=update
-      - spring.jpa.show-sql=true
-      - server.port=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://estimate_postgres:5432/estimate
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_APPLICATION_NAME=estimate
+      - KEYCLOAK_URL=http://keycloak_1:8080/auth
+      - KEYCLOAK_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8ZlVuVQWTuK2dkDv7cAOvwEKaOqE4JwnCcGtmH34eeKpKl+ovWaUmgy30Nl67RJye36cpEThIxWiEfoS0SJ0i4pOXvr7G/hOdJik+UaEMNGR9Kgfr91DQ1KHMerjbsjbLysLpV++5YrutjnsliiqTEvdZn4Ccd/kz19AQ8peDbqmBj2PDl4TlGOu2UBC/3nL2JtJZJHgT3k9Kiy2+M0u/2hr9GH1FR9jYENomDSf0APm+gp6JypRYpfILQqW1lKAmivweMaAs8j9CIBr80sIZ/8NAxn3ijDwQslN8UfSJnChA+iCjasEy7RMgQiemO6P7eTRPtC7hH2LJKnvQBFNgQIDAQAB
+      - CLIENT_ID=estimate-app
+      - GRANT_TYPE=password
+      - RESOURCE_URL=http://keycloak_1:8080/realms/estimate/protocol/openid-connect/token
     depends_on:
       - estimate_postgres
-      - keycloak
+      - keycloak_1
     restart: unless-stopped
 
 
 volumes:
-  keycloak_data:
-  keycloak_export:
-  keycloak_postgres_data:
+  keycloak_data_1:
+  keycloak_postgres_data_1:
   estimate_postgres_data:
+

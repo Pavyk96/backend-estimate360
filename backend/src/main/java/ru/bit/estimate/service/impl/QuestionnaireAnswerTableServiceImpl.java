@@ -1,13 +1,12 @@
 package ru.bit.estimate.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.bit.estimate.dto.QuestionnaireAnswerTableRequest;
-import ru.bit.estimate.model.QuestionnaireAnswerTable;
-import ru.bit.estimate.repository.QuestionnaireAnswerTableRepository;
+import ru.bit.estimate.dto.SurveyAnswerTableRequest;
+import ru.bit.estimate.model.SurveyAnswerTable;
+import ru.bit.estimate.repository.SurveyAnswerTableRepository;
 import ru.bit.estimate.service.QuestionnaireAnswerTableService;
 
 import java.util.List;
@@ -17,26 +16,26 @@ import java.util.List;
 public class QuestionnaireAnswerTableServiceImpl implements QuestionnaireAnswerTableService {
 
     @NonNull
-    private final QuestionnaireAnswerTableRepository questionnaireRepository;
+    private final SurveyAnswerTableRepository questionnaireRepository;
 
-    public List<QuestionnaireAnswerTable> getRecord() {
+    public List<SurveyAnswerTable> getRecord() {
         return questionnaireRepository.findAll();
     }
 
-    public QuestionnaireAnswerTable getRecordById(long id) {
+    public SurveyAnswerTable getRecordById(long id) {
         return questionnaireRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Опросник не найден"));
     }
 
-    public QuestionnaireAnswerTable createRecord(QuestionnaireAnswerTableRequest request) {
-        return questionnaireRepository.save(QuestionnaireAnswerTableRequest.fromDto(request));
+    public SurveyAnswerTable createRecord(SurveyAnswerTableRequest request) {
+        return questionnaireRepository.save(SurveyAnswerTableRequest.fromDto(request));
     }
 
-    public void updateRecordById(QuestionnaireAnswerTableRequest request, long id) {
-        QuestionnaireAnswerTable oldQuestionnaire = getRecordById(id);
-        QuestionnaireAnswerTable updateQuestionnaire = QuestionnaireAnswerTableRequest.fromDto(request);
+    public void updateRecordById(SurveyAnswerTableRequest request, long id) {
+        SurveyAnswerTable oldQuestionnaire = getRecordById(id);
+        SurveyAnswerTable updateQuestionnaire = SurveyAnswerTableRequest.fromDto(request);
 
-        oldQuestionnaire.setQuestionnaireId(updateQuestionnaire.getQuestionnaireId());
+        oldQuestionnaire.setSurveyId(updateQuestionnaire.getSurveyId());
         oldQuestionnaire.setQuestionId(updateQuestionnaire.getQuestionId());
         oldQuestionnaire.setUserId(updateQuestionnaire.getUserId());
         oldQuestionnaire.setAnswer(updateQuestionnaire.getAnswer());

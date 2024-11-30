@@ -3,8 +3,8 @@ package ru.bit.estimate.controller;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.bit.estimate.dto.QuestionnaireAnswerTableRequest;
-import ru.bit.estimate.model.QuestionnaireAnswerTable;
+import ru.bit.estimate.dto.SurveyAnswerTableRequest;
+import ru.bit.estimate.model.SurveyAnswerTable;
 import ru.bit.estimate.service.impl.QuestionnaireAnswerTableServiceImpl;
 
 import java.util.List;
@@ -12,28 +12,28 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class QuestionnaireAnswerTableController {
+public class SurveyAnswerTableController {
 
     @NonNull
     private final QuestionnaireAnswerTableServiceImpl service;
 
     @GetMapping("/records")
-    public List<QuestionnaireAnswerTable> getRecorde() {
+    public List<SurveyAnswerTable> getRecorde() {
         return service.getRecord();
     }
 
     @GetMapping("/records/{id}")
-    public QuestionnaireAnswerTable getRecordeById(@PathVariable long id) {
+    public SurveyAnswerTable getRecordeById(@PathVariable long id) {
         return service.getRecordById(id);
     }
 
     @PostMapping("/records")
-    public QuestionnaireAnswerTable createRecorde(@RequestBody QuestionnaireAnswerTableRequest request) {
+    public SurveyAnswerTable createRecorde(@RequestBody SurveyAnswerTableRequest request) {
         return service.createRecord(request);
     }
 
     @PutMapping("/records/{id}")
-    public void updateRecord(@RequestBody QuestionnaireAnswerTableRequest request, @PathVariable long id) {
+    public void updateRecord(@RequestBody SurveyAnswerTableRequest request, @PathVariable long id) {
         service.updateRecordById(request, id);
     }
 

@@ -1,51 +1,85 @@
 package ru.bit.estimate.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.bit.estimate.dto.QuestionRequest;
+import ru.bit.estimate.dto.QuestionResponse;
 import ru.bit.estimate.model.Question;
-import ru.bit.estimate.repository.QuestionRepository;
+import ru.bit.estimate.repository.QuestionRepo;
 import ru.bit.estimate.service.QuestionService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
 
     @NonNull
-    private final QuestionRepository questionRepository;
+    private final QuestionRepo questionRepo;
 
-
-    public List<Question> getAllQuestions() {
-        return questionRepository.findAll();
+    /**
+     * Получить все вопросы.
+     *
+     * @return список объектов QuestionResponse.
+     */
+    public List<QuestionResponse> getAllQuestions() {
+        return questionRepo.findAll().stream()
+                .map(QuestionResponse::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Question getQuestionByID(long id) {
-        return questionRepository.findById(id)
+    /**
+     * Получить вопрос по идентификатору.
+     *
+     * @param id идентификатор вопроса.
+     * @return объект QuestionResponse.
+     */
+    public QuestionResponse getQuestionByID(long id) {
+        Question question = questionRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Вопрос не найден"));
+        return QuestionResponse.toDTO(question);
     }
 
-
-    public Question createQuestion(QuestionRequest request) {
-        return questionRepository.save(QuestionRequest.fromDto(request));
+    /**
+     * Создать новый вопрос.
+     *
+     * @param request данные запроса для создания вопроса.
+     * @return созданный вопрос в виде объекта QuestionResponse.
+     */
+    public QuestionResponse createQuestion(QuestionRequest request) {
+        Question question = QuestionRequest.fromDto(request);
+        return QuestionResponse.toDTO(questionRepo.save(question));
     }
 
-    public Question updateQuestionByID(QuestionRequest request, long id) {
-        Question existingQuestion = getQuestionByID(id);
-        Question updateQuestion = QuestionRequest.fromDto(request);
+    /**
+     * Обновить существующий вопрос по идентификатору.
+     *
+     * @param request данные запроса для обновления вопроса.
+     * @param id      идентификатор существующего вопроса.
+     * @return обновленный вопрос в виде объекта QuestionResponse.
+     */
+    public QuestionResponse updateQuestionByID(QuestionRequest request, long id) {
+        Question existingQuestion = questionRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Вопрос не найден"));
 
-        existingQuestion.setType(updateQuestion.getType());
-        existingQuestion.setQuestion(updateQuestion.getQuestion());
+        existingQuestion.setType(request.getType());
+        existingQuestion.setQuestion(request.getQuestion());
 
-        return questionRepository.save(existingQuestion);
+        return QuestionResponse.toDTO(questionRepo.save(existingQuestion));
     }
 
-
+    /**
+     * Удалить вопрос по идентификатору.
+     *
+     * @param id идентификатор вопроса.
+     */
     public void deleteQuestionByID(long id) {
-        questionRepository.deleteById(id);
+        if (!questionRepo.existsById(id)) {
+            throw new EntityNotFoundException("Вопрос не найден");
+        }
+        questionRepo.deleteById(id);
     }
 }
