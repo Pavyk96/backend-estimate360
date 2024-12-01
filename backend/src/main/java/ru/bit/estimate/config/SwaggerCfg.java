@@ -16,7 +16,7 @@ public class SwaggerCfg {
         return new OpenAPI()
                 .servers(
                         List.of(
-                                new Server().url("http://localhost:8080")
+                                new Server().url("http://localhost:8081")
                         )
                 )
                 .info(
