@@ -12,11 +12,14 @@ import ru.bit.estimate.keycloak.repository.KeycloakGroupRepository;
 import ru.bit.estimate.keycloak.repository.KeycloakUserRepository;
 import ru.bit.estimate.keycloak.repository.UserGroupMembershipRepository;
 import ru.bit.estimate.service.FullUserService;
+
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class FullUserServiceImpl implements FullUserService {
+
     @NonNull
     private final KeycloakUserRepository userRepository;
 
@@ -28,63 +31,94 @@ public class FullUserServiceImpl implements FullUserService {
 
     @Override
     public FullUser getFullById(String id) {
-        UserEntity user = findUserById(id);
-        KeycloakGroup group = getUserGroup(user);
-        String postId = group.getId();
-        UserEntity boss = getUserByGroupId(group.getParentGroup());
+        UserEntity user = findUserByIdSafe(id).orElse(null);
+        if (user == null) return null; // Пропускаем, если пользователя нет
 
-        List<KeycloakGroup> servitorsGroup = getServitorGroups(group);
-        List<String> servitorsGroupIds = extractGroupIds(servitorsGroup);
+        Optional<KeycloakGroup> groupOpt = getUserGroupSafe(user);
+        if (groupOpt.isEmpty()) return null; // Пропускаем, если группа не найдена
 
-        List<String> servitorsIdList = userGroupMembershipRepository.getUserIdsByGroupIds(servitorsGroupIds);
+        KeycloakGroup group = groupOpt.get();
+        UserEntity boss = findUserByGroupIdSafe(group.getParentGroup()).orElse(null);
+        KeycloakGroup bossGroup = boss != null ? getUserGroupSafe(boss).orElse(null) : null;
 
-        return FullUser.toDto(user, postId, boss, servitorsIdList);
+        List<KeycloakGroup> allServitorsGroup = getServitorGroupsSafe(group);
+        List<UserEntity> servitorsEntity = getUsersByGroupIds(extractGroupIds(allServitorsGroup));
+        List<ReducedUser> reducedServitorsList = servitorsEntity.stream()
+                .map(servitor -> getUserGroupSafe(servitor)
+                        .map(group1 -> ReducedUser.toDTO(servitor, group1))
+                        .orElse(null)
+                )
+                .filter(reducedUser -> reducedUser != null) // Убираем null из результатов
+                .toList();
+
+        ReducedUser reducedUser = ReducedUser.toDTO(user, group);
+        ReducedUser reducedBoss = boss != null && bossGroup != null ? ReducedUser.toDTO(boss, bossGroup) : null;
+
+        return FullUser.toDto(reducedUser, reducedBoss, reducedServitorsList);
     }
 
     @Override
     public ReducedUser getReducedById(String id) {
-        UserEntity user = findUserById(id);
-        KeycloakGroup group = getUserGroup(user);
-        String postId = group.getId();
-        return ReducedUser.toDTO(user, postId, group);
+        UserEntity user = findUserByIdSafe(id).orElse(null);
+        if (user == null) return null;
+
+        return getUserGroupSafe(user)
+                .map(group -> ReducedUser.toDTO(user, group))
+                .orElse(null);
     }
 
-    private UserEntity findUserById(String userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    @Override
+    public List<ReducedUser> getAllReducedUsers() {
+        List<UserEntity> allUsers = userRepository.findAll();
+        return allUsers.stream()
+                .map(user -> getUserGroupSafe(user)
+                        .map(group -> ReducedUser.toDTO(user, group))
+                        .orElse(null)
+                )
+                .filter(reducedUser -> reducedUser != null) // Убираем null из результатов
+                .toList();
     }
 
-
-    private KeycloakGroup getUserGroup(UserEntity user) {
-        UserGroupMembership userGroupMembership = userGroupMembershipRepository.getUserGroupByUserId(user.getId());
-        return groupRepository.findById(userGroupMembership.getGroupId())
-                .orElseThrow(() -> new RuntimeException("Группа пользователя не была найдена"));
+    private Optional<UserEntity> findUserByIdSafe(String userId) {
+        return userRepository.findById(userId);
     }
 
-
-
-    private UserEntity getUserByGroupId(String id) {
-        UserGroupMembership userGroupMembership = userGroupMembershipRepository.findById(id).orElseThrow();
-        return userRepository.findById(userGroupMembership.getUserId()).orElseThrow();
+    private Optional<KeycloakGroup> getUserGroupSafe(UserEntity user) {
+        try {
+            UserGroupMembership userGroupMembership = userGroupMembershipRepository.getUserGroupByUserId(user.getId());
+            return groupRepository.findById(userGroupMembership.getGroupId());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
-    private List<KeycloakGroup> getServitorGroups(KeycloakGroup group) {
-        return groupRepository.findAllByParentGroup(group.getId());
+    private Optional<UserEntity> findUserByGroupIdSafe(String groupId) {
+        try {
+            UserGroupMembership userGroupMembership = userGroupMembershipRepository.findById(groupId).orElseThrow();
+            return userRepository.findById(userGroupMembership.getUserId());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
+    private List<KeycloakGroup> getServitorGroupsSafe(KeycloakGroup group) {
+        try {
+            return groupRepository.findAllByParentGroup(group.getId());
+        } catch (Exception e) {
+            return List.of();
+        }
+    }
+
+    private List<UserEntity> getUsersByGroupIds(List<String> groupIds) {
+        return groupIds.stream()
+                .map(this::findUserByGroupIdSafe)
+                .flatMap(Optional::stream)
+                .toList();
+    }
 
     private List<String> extractGroupIds(List<KeycloakGroup> groups) {
         return groups.stream()
                 .map(KeycloakGroup::getId)
                 .toList();
     }
-
-
-    private List<UserEntity> getUsersByGroupIds(List<String> groupIds) {
-        return groupIds.stream()
-                .map(this::getUserByGroupId)
-                .toList();
-    }
-
-
 }

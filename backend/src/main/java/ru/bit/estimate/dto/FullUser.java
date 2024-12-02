@@ -9,24 +9,15 @@ import java.util.List;
 @Builder
 @Data
 public class FullUser {
-    private String name;
-    private String surname;
-    private String email;
+    private ReducedUser user;
+    private ReducedUser chief;
+    private List<ReducedUser> subordinates;
 
-    private String postId;
-    private String bossId;
-    private List<String> servitorsId;
-
-    public static FullUser toDto(UserEntity user, String postId, UserEntity boss, List<String> servitors) {
+    public static FullUser toDto(ReducedUser reducedUser, ReducedUser boss, List<ReducedUser> servitors) {
         return FullUser.builder()
-                .name(user.getFirstName())
-                .surname(user.getLastName())
-                .email(user.getEmail())
-
-                .postId(postId)
-                .bossId(boss.getId())
-                .servitorsId(servitors)
-
+                .user(reducedUser)
+                .chief(boss)
+                .subordinates(servitors)
                 .build();
     }
 }
