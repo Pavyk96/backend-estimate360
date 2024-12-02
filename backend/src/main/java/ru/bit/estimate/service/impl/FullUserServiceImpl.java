@@ -12,7 +12,10 @@ import ru.bit.estimate.keycloak.repository.KeycloakGroupRepository;
 import ru.bit.estimate.keycloak.repository.KeycloakUserRepository;
 import ru.bit.estimate.keycloak.repository.UserGroupMembershipRepository;
 import ru.bit.estimate.service.FullUserService;
+
+import java.security.Key;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -30,23 +33,34 @@ public class FullUserServiceImpl implements FullUserService {
     public FullUser getFullById(String id) {
         UserEntity user = findUserById(id);
         KeycloakGroup group = getUserGroup(user);
-        String postId = group.getId();
+
         UserEntity boss = getUserByGroupId(group.getParentGroup());
+        KeycloakGroup bossGroup = getUserGroup(boss);
 
-        List<KeycloakGroup> servitorsGroup = getServitorGroups(group);
-        List<String> servitorsGroupIds = extractGroupIds(servitorsGroup);
+        List<KeycloakGroup> allServitorsGroup = getServitorGroups(group); //все подчиненные профессии
 
-        List<String> servitorsIdList = userGroupMembershipRepository.getUserIdsByGroupIds(servitorsGroupIds);
+        List<UserEntity> servitorsEntity = getUsersByGroupIds(extractGroupIds(allServitorsGroup)); //все подчиненные
+        List<KeycloakGroup> servitorsGroup = servitorsEntity.stream() //все професии подчиненных
+                .map(this::getUserGroup)
+                .toList();
 
-        return FullUser.toDto(user, postId, boss, servitorsIdList);
+        ReducedUser reducedUser = ReducedUser.toDTO(user, group);
+        ReducedUser reducedBoss = ReducedUser.toDTO(boss, bossGroup);
+        List<ReducedUser> reducedServitorsList = servitorsEntity.stream()
+                .map(servitor -> {
+                    KeycloakGroup servitorGroup = getUserGroup(servitor); // Получаем группу для текущего подчиненного
+                    return ReducedUser.toDTO(servitor, servitorGroup); // Создаем ReducedUser
+                })
+                .toList();
+
+        return FullUser.toDto(reducedUser, reducedBoss, reducedServitorsList);
     }
 
     @Override
     public ReducedUser getReducedById(String id) {
         UserEntity user = findUserById(id);
         KeycloakGroup group = getUserGroup(user);
-        String postId = group.getId();
-        return ReducedUser.toDTO(user, postId, group);
+        return ReducedUser.toDTO(user, group);
     }
 
     private UserEntity findUserById(String userId) {
@@ -72,6 +86,23 @@ public class FullUserServiceImpl implements FullUserService {
         return groupRepository.findAllByParentGroup(group.getId());
     }
 
+    private List<UserEntity> getUsersByGroupIds(List<String> groupIds) {
+        return groupIds.stream()
+                .map(this::getUserByGroupIdSafe) // Используем безопасный метод
+                .flatMap(Optional::stream) // Убираем пустые значения (если Optional пуст)
+                .toList();
+    }
+
+    private Optional<UserEntity> getUserByGroupIdSafe(String id) {
+        try {
+            UserGroupMembership userGroupMembership = userGroupMembershipRepository.findById(id).orElseThrow();
+            return userRepository.findById(userGroupMembership.getUserId());
+        } catch (Exception e) {
+            return Optional.empty(); // Если ошибка, возвращаем пустой Optional
+        }
+    }
+
+
 
     private List<String> extractGroupIds(List<KeycloakGroup> groups) {
         return groups.stream()
@@ -79,12 +110,6 @@ public class FullUserServiceImpl implements FullUserService {
                 .toList();
     }
 
-
-    private List<UserEntity> getUsersByGroupIds(List<String> groupIds) {
-        return groupIds.stream()
-                .map(this::getUserByGroupId)
-                .toList();
-    }
 
 
 }

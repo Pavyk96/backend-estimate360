@@ -13,7 +13,7 @@ public class ReducedUser {
     private String email;
     private String post;
 
-    public static ReducedUser toDTO(UserEntity user, String postId, KeycloakGroup group) {
+    public static ReducedUser toDTO(UserEntity user, KeycloakGroup group) {
         return ReducedUser.builder()
                 .name(user.getFirstName())
                 .surname(user.getLastName())
