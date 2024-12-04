@@ -71,6 +71,7 @@ public class KeycloakDataSourceConfig {
     private Map<String, Object> hibernateProperties() {
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        properties.put("hibernate.hbm2ddl.auto", "update"); // Добавлено для обновления таблиц
         return properties;
     }
 

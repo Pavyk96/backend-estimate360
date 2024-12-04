@@ -41,7 +41,7 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Добавлено для разрешения CORS
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/swagger-ui/", "/v3/", "/auth").permitAll()
+                        request.requestMatchers("/swagger-ui/**", "/v3/**", "/auth").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/questions", "/api/surveys", "/api/surveys-questions").permitAll()
                                 .requestMatchers("/api/questions").hasAuthority("HR")
                                 .requestMatchers("/api/surveys-questions").hasAuthority("HR")
@@ -49,7 +49,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/users").hasAuthority("HR")
                                 .requestMatchers("/api/reduced-users").hasAuthority("HR")
                                 .requestMatchers("/api/full-users").hasAuthority("HR")
-                                .anyRequest().authenticated())
+                                .anyRequest().permitAll())
                 .sessionManagement(manager ->
                         manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
