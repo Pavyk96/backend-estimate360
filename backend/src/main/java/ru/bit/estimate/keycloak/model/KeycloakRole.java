@@ -24,7 +24,7 @@ public class KeycloakRole {
     private String clientRealmConstraint;
 
     @Column(name = "client_role")
-    private String clientRole;
+    private Boolean clientRole;
 
     private String description;
 

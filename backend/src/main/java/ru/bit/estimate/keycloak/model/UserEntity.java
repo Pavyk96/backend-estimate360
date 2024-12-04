@@ -20,8 +20,6 @@ import java.util.Collection;
 @AllArgsConstructor
 @Table(name = "user_entity")
 public class UserEntity implements UserDetails {
-
-
     @Id
     private String id;
 
