@@ -1,5 +1,5 @@
 import React from 'react';
-import back from "../Back.svg";
+import back from "../../../../img/Back.svg";
 import s from './QuizDetails.module.css';
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -12,7 +12,7 @@ function QuizDetails(props) {
     }
 
     let assignQuiz = () => {
-        navigate("/quiz");
+        navigate(`/assignQuiz/${props.quiz.id}`);
     }
     return (
         <div className={s.quizDetails}>

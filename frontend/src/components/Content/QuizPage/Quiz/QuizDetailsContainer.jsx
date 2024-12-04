@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import QuizDetails from './QuizDetails';
-import { LoadQuizCreator } from '../../../redux/quizReducer';
+import { LoadQuizCreator } from '../../../../redux/quizReducer';
 
 function mapStateToProps(state, ownProps) {
   const { quizId } = ownProps;

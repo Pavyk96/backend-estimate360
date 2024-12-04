@@ -10,7 +10,7 @@ function Navigation(props) {
           <NavLink to="/quiz" className={({ isActive }) => isActive ? s.active : undefined}>Анкеты</NavLink>
         </li>
         <li className={s.item}>
-          <NavLink to="/command" className={({ isActive }) => isActive ? s.active : undefined}>Сотрудники</NavLink>
+          <NavLink to="/employees" className={({ isActive }) => isActive ? s.active : undefined}>Сотрудники</NavLink>
         </li>
       </ul>
     </nav>

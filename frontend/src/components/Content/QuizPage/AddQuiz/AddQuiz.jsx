@@ -1,8 +1,8 @@
 import React from "react";
 import s from './AddQuiz.module.css';
 import { NavLink, useNavigate } from "react-router-dom";
-import back from "../Back.svg";
-import add from "../Add.svg";
+import back from "../../../../img/Back.svg";
+import add from "../../../../img/Add.svg";
 import Question from "./Question";
 
 function AddQuiz(props) {

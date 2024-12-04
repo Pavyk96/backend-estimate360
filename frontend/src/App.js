@@ -1,7 +1,9 @@
 import './App.css';
-import AddQuizContainer from './components/Content/AddQuiz/AddQuizContainer';
-import MyQuizContainer from './components/Content/MyQuizContainer';
-import QuizDetailsContainer from './components/Content/Quiz/QuizDetailsContainer';
+import EmployeesContainer from './components/Content/EmployeesPage/EmployeesContainer';
+import AddQuizContainer from './components/Content/QuizPage/AddQuiz/AddQuizContainer';
+import AssignQuizContainer from './components/Content/QuizPage/AssignQuiz/AssignQuizContainer';
+import MyQuizContainer from './components/Content/QuizPage/MyQuizContainer';
+import QuizDetailsContainer from './components/Content/QuizPage/Quiz/QuizDetailsContainer';
 import Header from './components/Header/Header';
 import { Routes, Route } from 'react-router-dom';
 
@@ -14,6 +16,8 @@ function App() {
           <Route path='/quiz' element={<MyQuizContainer />} />
           <Route path='/quiz/add' element={<AddQuizContainer />} />
           <Route path='/quiz/:quizId' element={<QuizDetailsContainer />} />
+          <Route path='/assignQuiz/:quizId' element={<AssignQuizContainer />} />
+          <Route path='/employees' element={<EmployeesContainer />} />
         </Routes>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import s from './NAssignQuiz.module.css';
-import { NavLink } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 
 function NAssignQuiz(props) {
   return (
@@ -11,15 +11,7 @@ function NAssignQuiz(props) {
       <div className={s.action}>
         <ul>
           <li className={s.item}>
-            <NavLink
-              to={`/quiz/${props.quiz.id}`}
-              onClick={(e) => {
-                e.preventDefault(); 
-                props.onAssign(props.quiz.id);
-              }}
-            >
-              НАЗНАЧИТЬ
-            </NavLink>
+            <NavLink to={`/assignQuiz/${props.quiz.id}`}>НАЗНАЧИТЬ</NavLink>
           </li>
           <li className={s.item}>
             <NavLink to={`/quiz/${props.quiz.id}`} className={({ isActive }) => isActive ? s.active : undefined}>ПОСМОТРЕТЬ</NavLink>
