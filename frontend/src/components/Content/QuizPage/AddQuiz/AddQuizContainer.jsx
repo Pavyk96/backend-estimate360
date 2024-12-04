@@ -7,7 +7,7 @@ import {
     UpdateQuizDescriptionCreator,
     UpdateQuizTitleCreator,
     SaveQuizCreator
-} from "../../../redux/quizReducer";
+} from "../../../../redux/quizReducer";
 
 function mapStateToProps(state) {
     return {

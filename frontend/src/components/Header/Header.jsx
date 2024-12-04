@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "./Logo.svg";
+import logo from "../../img/Logo.svg";
 import s from './Header.module.css';
 import Navigation from "./Navigation/Navigation";
 import Person from "./Person/Person";
