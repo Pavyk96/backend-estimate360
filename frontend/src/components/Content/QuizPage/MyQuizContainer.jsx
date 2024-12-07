@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import MyQuiz from "./MyQuiz";
+import { fetchAllQuizzes } from "../../../redux/quizReducer";
 
 function mapStateToProps(state) {
   return {
@@ -9,7 +10,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch){
   return{
-    
+    fetchQuiz: () => dispatch(fetchAllQuizzes()),
   }
 }
 

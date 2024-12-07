@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import back from "../../../../img/Back.svg";
 import s from './QuizDetails.module.css';
 import { NavLink, useNavigate } from "react-router-dom";
 
 function QuizDetails(props) {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (props.quizId) {
+            props.fetchQuiz(props.quizId);
+        }
+    }, [props.quizId, props.fetchQuiz]);
 
     let editQuiz = () => {
         props.loadQuiz(props.quiz.id);
@@ -15,6 +21,7 @@ function QuizDetails(props) {
         navigate(`/assignQuiz/${props.quiz.id}`);
     }
     return (
+
         <div className={s.quizDetails}>
             <div className={s.back}>
                 <img src={back}></img>
@@ -30,16 +37,16 @@ function QuizDetails(props) {
                 </div>
             </div>
             <div className={s.quizTitleBox}>
-                <p className={s.quizName}>{props.quiz.title || "Без названия"}</p>
+                <p className={s.quizName}>{props.quiz.name || "Без названия"}</p>
                 <p className={s.quizDescription}>{props.quiz.description || "Описание отсутствует"}</p>
             </div>
             <div className={s.questionBox}>
                 <div className={s.questionBoxHeader}>
                     <p className={s.assertion}>Утверждение</p>
                     <div className={s.answers}>
-                        {props.quiz.answers && props.quiz.answers.length > 0
+                        {Array.isArray(props.quiz.answers) && props.quiz.answers.length > 0
                             ? props.quiz.answers.map(answer => (
-                                <p className={s.answerItem}>{answer}</p>
+                                <p className={s.answerItem} key={answer}>{answer}</p>
                             ))
                             : <p>Ответы отсутствуют</p>}
                     </div>

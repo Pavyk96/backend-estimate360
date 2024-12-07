@@ -18,10 +18,34 @@
 
 .questionBody textarea{
   font-size: 20px;
-  height: 24px;
+  height: auto;
   resize: none;
   outline: none;
   border: none;
   width: 100%;
   overflow: hidden;
+}
+
+.saveQuestionChange{
+  width: 100px;
+  height: 18px;
+  padding: 8px 10px;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  border: 2px solid black;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.saveQuestionChange button{
+  text-transform: uppercase;
+  font-size: 13px;
+  color: #000000;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  background-color: #FFFFFF;
+  border: none;
 }
