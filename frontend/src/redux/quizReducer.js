@@ -30,7 +30,7 @@ const initState = savedState ? JSON.parse(savedState) : {
     error: null
 };
 
-const token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJma2stX0NJcHltczFtSU5GZGlIOXFHNlhMcEs4Si1FcGhPS2ZaM1FEb3FNIn0.eyJleHAiOjE3MzM1ODE2NzgsImlhdCI6MTczMzU4MTM3OCwianRpIjoiZDRjMzkwMmYtYmY3MC00M2ZlLWJmZDAtMGI4YjBkMjA4NDZjIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrXzE6ODA4MC9yZWFsbXMvZXN0aW1hdGUiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMWYxZDcwYTMtZWNlNy00MjkxLWJiYTctN2E2YTlhMTBlMzgxIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZXN0aW1hdGUtYXBwIiwic2lkIjoiYzE1ZGM0MzktNGIzNS00MmMwLWFlMTgtZjE1NTlhYjk5YjA5IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJsb2NhbGhvc3Q6ODA4MSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1lc3RpbWF0ZSIsIm9mZmxpbmVfYWNjZXNzIiwiSFIiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiR2VvcmdlIEthYiIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1aSIsImdpdmVuX25hbWUiOiJHZW9yZ2UiLCJmYW1pbHlfbmFtZSI6IkthYiIsImVtYWlsIjoiZ2VvcmdpamthYmlja2lqMUBnbWFpbC5jb20ifQ.Ygk-d_wQc4ShsIEZDSTCE711xfDeUB4Z8qFGb-zqWRrffCk5XnFmisyiMb_BDoIgILW1pNQNyRhCu5U6--ibu_SOrZVE8UxGoDN5M_Nuxo1L-wldYepX3wdfXFKBBYl4wMb2M_O0hetqH2xOa7B5yMhxRooAFIeScqy85qDDXzC3Z11Lhg8pqhYDDqNzUAlb5b37RvEkaluuC2zafGSlFgDHkNDdXbsOiC0v8GMxkvaCKY1V-SlPKNimtIw6NwderaCc5HY02r_gz95WFXgDu9lTHJf7IoGsr1cqJUTiuGTBOGCoNhd2T1jmWfaAUQOkkKMLRGJ3mlRRfYNaRB6fjg"
+const token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJma2stX0NJcHltczFtSU5GZGlIOXFHNlhMcEs4Si1FcGhPS2ZaM1FEb3FNIn0.eyJleHAiOjE3MzM1OTQ3NTEsImlhdCI6MTczMzU5NDQ1MSwianRpIjoiMTUxYzRiNzYtNjZjNS00MTM3LWIxZjctOTU1YjhkNzJiMmNiIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrXzE6ODA4MC9yZWFsbXMvZXN0aW1hdGUiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMWYxZDcwYTMtZWNlNy00MjkxLWJiYTctN2E2YTlhMTBlMzgxIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZXN0aW1hdGUtYXBwIiwic2lkIjoiODBlYjEwMWYtMWIxZi00NzJjLWE4ZTYtYzZjMGZjMzU0NjQ1IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJsb2NhbGhvc3Q6ODA4MSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1lc3RpbWF0ZSIsIm9mZmxpbmVfYWNjZXNzIiwiSFIiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiR2VvcmdlIEthYiIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1aSIsImdpdmVuX25hbWUiOiJHZW9yZ2UiLCJmYW1pbHlfbmFtZSI6IkthYiIsImVtYWlsIjoiZ2VvcmdpamthYmlja2lqMUBnbWFpbC5jb20ifQ.AIj6IcHWbz-gmT5kfue_vddThEUrQlaXgTvoy6hcXcTpMUFt4vr0ec7D2176dCAze0m3mr1rgyA8nsIky1oCyDdS2gu8iSZZ-EcZuo0OrcBDtwBBK9gwDgvHFthVvI4NP5zvWoSxyDdTcgEbTyyXJObwcp4pSBVRwaigAkx61KjsZz4dz-5pszAqJ1AjqXZWOgPO9lQMHxgpLqVqKLUDbvXFId1VsvEjneONSifp3CgvidzzgCfD4hQF6abi1lYpWeKKGkBST3XGuPEU1q6h3a5fMukjMYWdwnOd-zGg1oc__VyUOIurxK_155u2oztGca277lQE_-ogKMhGp-zrOA"
 
 function quizReducer(state = initState, action) {
     let newState = structuredClone(state);
@@ -131,6 +131,18 @@ function quizReducer(state = initState, action) {
 
         case "COMPLETE-QUIZ-CREATION":
             newState.currentQuiz = {
+                id: null,
+                name: "",
+                description: "",
+                createdAt: "",
+                answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
+                questions: [],
+            };
+            newState.newQuestionText = "";
+            break;
+
+        case "COMPLETE-QUIZ-EDIT":
+            newState.editQuiz = {
                 id: null,
                 name: "",
                 description: "",
@@ -348,7 +360,8 @@ export function CompleteQuizEdit(quizData) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         try {
-            const createQuizResponse = await fetch(`http://localhost:8081/api/surveys/${quizData.id}`, {
+            const surveyId = quizData.id;
+            const createQuizResponse = await fetch(`http://localhost:8081/api/surveys/${surveyId}`, {
                 method: "PUT",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -363,12 +376,16 @@ export function CompleteQuizEdit(quizData) {
             if (!createQuizResponse.ok) {
                 throw new Error(`Ошибка создания квиза: ${createQuizResponse.statusText}`);
             }
-
-            const savedQuiz = await createQuizResponse.json();
-            const surveyId = savedQuiz.id;
+            
+            await fetch(`http://localhost:8081/api/surveys-questions/${surveyId}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                }
+            });
 
             const questionIdList = quizData.questions.map((question) => question.id);
-
             const updateSurveyResponse = await fetch(`http://localhost:8081/api/surveys-questions/${surveyId}`, {
                 method: "PUT",
                 headers: {
@@ -386,7 +403,7 @@ export function CompleteQuizEdit(quizData) {
             }
 
             dispatch({
-                type: "COMPLETE-QUIZ-CREATION",
+                type: "COMPLETE-QUIZ-EDIT",
             });
 
             dispatch(fetchAllQuizzes())

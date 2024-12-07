@@ -31,7 +31,7 @@ function Question(props) {
           <textarea onInput={handleInput} onChange={updateQuestionBody} value={props.questionBody} placeholder="Введите ваш вопрос" />
         </div>
         <div className={s.saveQuestionChange} onClick={handleSave}>
-          <button>Сохранить</button>
+          <button>Сохранить изменения</button>
         </div>
       </div>
     </div>
