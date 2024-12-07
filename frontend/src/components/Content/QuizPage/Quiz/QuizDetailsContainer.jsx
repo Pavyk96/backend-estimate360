@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import QuizDetails from './QuizDetails';
-import { fetchCurrentQuizToView, LoadQuizCreator } from '../../../../redux/quizReducer';
+import { fetchQuizToView, LoadQuizCreator } from '../../../../redux/quizReducer';
 
 
 function mapStateToProps(state) {
@@ -15,7 +15,7 @@ function mapDispatchToProps(dispatch) {
     loadQuiz: (quizId) => {
       dispatch(LoadQuizCreator(quizId))
     },
-    fetchQuiz: (quizId) => dispatch(fetchCurrentQuizToView(quizId)),
+    fetchQuiz: (quizId) => dispatch(fetchQuizToView(quizId)),
 
   }
 }

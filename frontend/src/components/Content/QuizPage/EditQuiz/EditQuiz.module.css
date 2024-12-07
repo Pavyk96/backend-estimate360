@@ -1,0 +1,144 @@
+p {
+  padding: 0;
+  margin: 0;
+}
+
+.addQuiz {
+  padding: 40px 20px;
+}
+
+.back {
+  display: flex;
+  align-items: center;
+}
+
+.back img {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}
+
+.back a {
+  text-decoration: none;
+  color: #000000;
+  padding: 0;
+  margin: 0;
+}
+
+.title {
+  font-size: 40px;
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.finish {
+  width: 250px;
+  height: 30px;
+  padding: 10px 14px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  border: 2px solid black;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.finish button{
+  text-transform: uppercase;
+  font-size: 13px;
+  color: #000000;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  background-color: #EBEBEB;
+  border: none;
+}
+
+.quizTitleBox{
+  background-color: #FFFFFF;
+  height: auto;
+  width: auto;
+  border-radius: 12px;
+  padding: 36px 32px;
+  margin-bottom: 70px;
+}
+
+.quizTitleBox textarea{
+  resize: none;
+  outline: none;
+  border: none;
+  width: 100%;
+  overflow: hidden;
+}
+
+textarea{
+  margin: 0;
+  padding: 0;
+}
+
+.quizName textarea{
+  font-size: 30px;
+}
+
+.quizDescription textarea{
+  font-size: 15px;
+}
+
+.saveQuizData{
+  width: 100px;
+  height: 18px;
+  padding: 8px 10px;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  border: 2px solid black;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.saveQuizData button{
+  text-transform: uppercase;
+  font-size: 13px;
+  color: #000000;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  background-color: #FFFFFF;
+  border: none;
+}
+
+.newQuestionBody{
+  background-color: #FFFFFF;
+  height: auto;
+  width: auto;
+  border-radius: 12px;
+  padding: 36px 32px;
+  margin-bottom: 40px;
+}
+
+.newQuestionBody textarea{
+  font-size: 20px;
+  height: 24px;
+  resize: none;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #666666;
+  width: 100%;
+  overflow: hidden;
+}
+
+.addNewQuestion{
+  height: 100%;  
+  display: flex;
+  justify-content: center;
+}
+
+.addNewQuestion button{
+  background-color: #EBEBEB;
+  border: none;
+}
+
+
+

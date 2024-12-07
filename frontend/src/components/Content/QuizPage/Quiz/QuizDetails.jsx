@@ -14,7 +14,7 @@ function QuizDetails(props) {
 
     let editQuiz = () => {
         props.loadQuiz(props.quiz.id);
-        navigate("/quiz/add");
+        navigate("/quiz/edit");
     }
 
     let assignQuiz = () => {

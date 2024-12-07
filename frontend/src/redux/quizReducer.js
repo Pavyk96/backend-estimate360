@@ -17,40 +17,59 @@ const initState = savedState ? JSON.parse(savedState) : {
         answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
         questions: [],
     },
+    editQuiz: {
+        id: null,
+        name: "",
+        description: "",
+        createdAt: "",
+        answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
+        questions: [],
+    },
     newQuestionText: "",
     loading: false,
     error: null
 };
 
-const token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJma2stX0NJcHltczFtSU5GZGlIOXFHNlhMcEs4Si1FcGhPS2ZaM1FEb3FNIn0.eyJleHAiOjE3MzM1NzAxMTQsImlhdCI6MTczMzU2OTgxNCwianRpIjoiMTAxNGY3ZDItNzI1Ny00ODUxLThjY2MtYmJkNzMxYThkY2MzIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrXzE6ODA4MC9yZWFsbXMvZXN0aW1hdGUiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMWYxZDcwYTMtZWNlNy00MjkxLWJiYTctN2E2YTlhMTBlMzgxIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZXN0aW1hdGUtYXBwIiwic2lkIjoiZGY2YjYzZTAtZjMyMC00OTNhLTg4ODktNmFiZTNmNzAxMjEwIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJsb2NhbGhvc3Q6ODA4MSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1lc3RpbWF0ZSIsIm9mZmxpbmVfYWNjZXNzIiwiSFIiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiR2VvcmdlIEthYiIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1aSIsImdpdmVuX25hbWUiOiJHZW9yZ2UiLCJmYW1pbHlfbmFtZSI6IkthYiIsImVtYWlsIjoiZ2VvcmdpamthYmlja2lqMUBnbWFpbC5jb20ifQ.H8NvKGLjhg8pJNUDc-cZ7OEjT04xK5A8mXgAJQ7wFdOiRjfYhc0pwu_SKA26XUuIjcJu0lhQ9dpLMjRC7QGgl6QdScXj1-qdZdM-FHtlI0CIdFQDmC_rqjfVt1yPR_iHWXlvOpH3joKyhy-uUmXiZ_0ZMtHxt9kzaJWrHIamPWNMz5NyvIwPyyhxAwWDqzx7iGftUdrOrMfn30i6wlURDwyst7-K5JufsAQXutggPG23frXojU-kdBENMgrScG-4fQIVRvqv63LG15twfAe8YTmZlvOey-ZTKhbLs03jhN32L01104ISz059VgUUOe0qeas1DI_CHVOdJaArpinkHQ"
+const token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJma2stX0NJcHltczFtSU5GZGlIOXFHNlhMcEs4Si1FcGhPS2ZaM1FEb3FNIn0.eyJleHAiOjE3MzM1ODE2NzgsImlhdCI6MTczMzU4MTM3OCwianRpIjoiZDRjMzkwMmYtYmY3MC00M2ZlLWJmZDAtMGI4YjBkMjA4NDZjIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrXzE6ODA4MC9yZWFsbXMvZXN0aW1hdGUiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMWYxZDcwYTMtZWNlNy00MjkxLWJiYTctN2E2YTlhMTBlMzgxIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZXN0aW1hdGUtYXBwIiwic2lkIjoiYzE1ZGM0MzktNGIzNS00MmMwLWFlMTgtZjE1NTlhYjk5YjA5IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJsb2NhbGhvc3Q6ODA4MSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1lc3RpbWF0ZSIsIm9mZmxpbmVfYWNjZXNzIiwiSFIiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiR2VvcmdlIEthYiIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1aSIsImdpdmVuX25hbWUiOiJHZW9yZ2UiLCJmYW1pbHlfbmFtZSI6IkthYiIsImVtYWlsIjoiZ2VvcmdpamthYmlja2lqMUBnbWFpbC5jb20ifQ.Ygk-d_wQc4ShsIEZDSTCE711xfDeUB4Z8qFGb-zqWRrffCk5XnFmisyiMb_BDoIgILW1pNQNyRhCu5U6--ibu_SOrZVE8UxGoDN5M_Nuxo1L-wldYepX3wdfXFKBBYl4wMb2M_O0hetqH2xOa7B5yMhxRooAFIeScqy85qDDXzC3Z11Lhg8pqhYDDqNzUAlb5b37RvEkaluuC2zafGSlFgDHkNDdXbsOiC0v8GMxkvaCKY1V-SlPKNimtIw6NwderaCc5HY02r_gz95WFXgDu9lTHJf7IoGsr1cqJUTiuGTBOGCoNhd2T1jmWfaAUQOkkKMLRGJ3mlRRfYNaRB6fjg"
 
 function quizReducer(state = initState, action) {
     let newState = structuredClone(state);
     switch (action.type) {
-        case "UPDATE-QUESTION-TEXT":
-            newState.newQuestionText = action.newText
-            break;
-        case "UPDATE-QUESTION-BODY":
-            let question = newState.currentQuiz.questions.find(q => q.id === action.id)
-            if (question) {
-                question.question = action.newText
-            }
-            break;
         case "UPDATE-QUIZ-TITLE":
             newState.currentQuiz.name = action.newText
             break;
         case "UPDATE-QUIZ-DESCRIPTION":
             newState.currentQuiz.description = action.newText
             break
+        case "SET-QUESTION-TEXT":
+            newState.newQuestionText = action.newText
+            break;
+        case "UPDATE-QUESTION-TEXT":
+            let question = newState.currentQuiz.questions.find(q => q.id === action.id)
+            if (question) {
+                question.question = action.newText
+            }
+            break;
+
+        case "UPDATE-QUIZ-TITLE-EDIT":
+            newState.editQuiz.name = action.newText
+            break;
+        case "UPDATE-QUIZ-DESCRIPTION-EDIT":
+            newState.editQuiz.description = action.newText
+            break
+        case "UPDATE-QUESTION-TEXT-EDIT":
+            let questionedit = newState.editQuiz.questions.find(q => q.id === action.id)
+            if (questionedit) {
+                questionedit.question = action.newText
+            }
+            break;
+
         case "ASSIGN_QUIZ":
             newState.quizzes[action.quizId].assigned = true
             break
 
         case "LOAD-QUIZ":
-            newState.currentQuiz = { ...newState.quizzes[action.quizId] };
-            if (newState.quizzes[action.quizId]) {
-                delete newState.quizzes[action.quizId];
-            }
+            newState.editQuiz = { ...newState.viewQuiz };
             break;
 
         case "DELETE-QUIZ":
@@ -68,25 +87,33 @@ function quizReducer(state = initState, action) {
         case "SET-ERROR":
             newState.error = action.error;
             break;
-
         case "ADD-QUESTION":
+            console.log(action.newQuestion || "Ошибка нет вопроса")
             newState.currentQuiz.questions.push(action.newQuestion);
             newState.newQuestionText = ""
+            console.log(newState.currentQuiz.questions || "Ошибка вопрос не добавился")
             break;
 
-        case "SET-CURRENT-QUIZ":
-            console.log("Устанавливается текущий квиз:", action.quiz);
-            newState.currentQuiz = {
+        case "ADD-QUESTION-EDIT":
+            console.log(action.newQuestion || "Ошибка нет вопроса")
+            newState.editQuiz.questions.push(action.newQuestion);
+            newState.newQuestionText = ""
+            console.log(newState.editQuiz.questions || "Ошибка вопрос не добавился")
+            break;
+
+        case "SET-EDIT-QUIZ":
+            console.log("Устанавливается квиз: для редактирования", action.quiz);
+            newState.editQuiz = {
                 id: action.quiz.id,
                 name: action.quiz.name,
                 description: action.quiz.description,
                 answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
                 createdAt: action.quiz.createdAt,
-                questions: action.quiz.questions, 
+                questions: action.quiz.questions,
             };
             break;
 
-        case "SET-CURRENT-QUIZ-TO-VIEW":
+        case "SET-QUIZ-TO-VIEW":
             console.log("Устанавливается текущий квиз для просмотра:", action.quiz);
             newState.viewQuiz = {
                 id: action.quiz.id,
@@ -94,7 +121,7 @@ function quizReducer(state = initState, action) {
                 description: action.quiz.description,
                 answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
                 createdAt: action.quiz.createdAt,
-                questions: action.quiz.questions, 
+                questions: action.quiz.questions,
             };
             break;
 
@@ -103,19 +130,15 @@ function quizReducer(state = initState, action) {
             break;
 
         case "COMPLETE-QUIZ-CREATION":
-            if (newState.currentQuiz.id && newState.currentQuiz.name) {
-                newState.currentQuiz = {
-                    id: null,
-                    name: "",
-                    description: "",
-                    createdAt: "",
-                    answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
-                    questions: [],
-                };
-                newState.newQuestionText = "";
-            } else {
-                newState.error = "Квиз не завершен. Укажите название и добавьте вопросы.";
-            }
+            newState.currentQuiz = {
+                id: null,
+                name: "",
+                description: "",
+                createdAt: "",
+                answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
+                questions: [],
+            };
+            newState.newQuestionText = "";
             break;
         default:
             break;
@@ -128,35 +151,35 @@ function quizReducer(state = initState, action) {
 }
 
 
-export function UpdateQuestionTextCreator(text) {
+export function UpdateQuizTitleCreator(text, type) {
     return {
-        type: "UPDATE-QUESTION-TEXT",
+        type: type,
         newText: text
     }
 }
 
-export function UpdateQuestionBodyCreator(id, text) {
+export function UpdateQuizDescriptionCreator(text, type) {
     return {
-        type: "UPDATE-QUESTION-BODY",
+        type: type,
+        newText: text
+    }
+}
+
+
+export function UpdateQuestionTextCreator(text) {
+    return {
+        type: "SET-QUESTION-TEXT",
+        newText: text
+    }
+}
+
+export function UpdateQuestionBodyCreator(id, text, type) {
+    return {
+        type: type,
         id: id,
         newText: text
     }
 }
-
-export function UpdateQuizTitleCreator(text) {
-    return {
-        type: "UPDATE-QUIZ-TITLE",
-        newText: text
-    }
-}
-
-export function UpdateQuizDescriptionCreator(text) {
-    return {
-        type: "UPDATE-QUIZ-DESCRIPTION",
-        newText: text
-    }
-}
-
 
 
 export function assignQuiz(quizId) {
@@ -180,46 +203,11 @@ export function DeleteQuizCreator(quizId) {
     };
 }
 
-export function saveQuizToServer(quizData) {
+export function addQuestionOnServer(questionText, dispType) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
+        console.log(questionText || "Ошибка вопроса нет в функции")
         try {
-            // Создание квиза
-            const surveyResponse = await fetch("http://localhost:8081/api/surveys", {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name: quizData.name,
-                    description: quizData.description,
-                }),
-            });
-            if (!surveyResponse.ok) {
-                throw new Error(`Ошибка создания квиза: ${surveyResponse.statusText}`);
-            }
-            const savedQuiz = await surveyResponse.json();            
-
-            // Установка текущего квиза
-            console.log('ID сохраненного квиза:', savedQuiz.id);
-            dispatch({
-                type: "SET-CURRENT-QUIZ",
-                quiz: { id: savedQuiz.id, name: quizData.name, description: quizData.description, createdAt: savedQuiz.createdAt, questions: [] },
-            });
-        } catch (error) {
-            dispatch({ type: "SET-ERROR", error: error.message });
-        } finally {
-            dispatch({ type: "STOP-LOADING" });
-        }
-    };
-}
-
-export function addQuestionToQuiz(quizId, questionText) {
-    return async (dispatch) => {
-        dispatch({ type: "START-LOADING" });
-        try {
-            // Создание вопроса
             const questionResponse = await fetch("http://localhost:8081/api/questions", {
                 method: "POST",
                 headers: {
@@ -233,24 +221,8 @@ export function addQuestionToQuiz(quizId, questionText) {
             }
             const newQuestion = await questionResponse.json();
 
-            // Добавление вопроса в анкету
-            const addToSurveyResponse = await fetch(
-                `http://localhost:8081/api/surveys-questions/surveys/${quizId}/questions/${newQuestion.id}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            if (!addToSurveyResponse.ok) {
-                throw new Error(`Ошибка добавления вопроса в анкету: ${addToSurveyResponse.statusText}`);
-            }
-
-            // Обновление текущего квиза
             dispatch({
-                type: "ADD-QUESTION",
+                type: dispType,
                 newQuestion: newQuestion,
             });
         } catch (error) {
@@ -261,38 +233,26 @@ export function addQuestionToQuiz(quizId, questionText) {
     };
 }
 
-export function fetchCurrentQuiz(quizId) {
+export function updateQuestionOnServer(id, newText) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         try {
-            const response = await fetch(`http://localhost:8081/api/surveys-questions/${quizId}`, {
-                method: "GET",
+            const payload = {
+                question: newText,
+                type: "fitst_type"
+            };
+            const response = await fetch(`http://localhost:8081/api/questions/${id}`, {
+                method: 'PUT',
                 headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 },
+                body: JSON.stringify(payload)
             });
             if (!response.ok) {
-                throw new Error(`Ошибка загрузки квиза: ${response.statusText}`);
+                throw new Error(`Ошибка обновления вопроса: ${response.statusText}`);
             }
-            const quizData = await response.json();
-            const quiz = {
-                id: quizData.id,
-                name: quizData.name,
-                description: quizData.description,
-                createdAt: quizData.createdAt,
-                questions: quizData.questionList.map((question) => ({
-                    id: question.id,
-                    question: question.question,
-                    type: question.type,
-                })),
-            };
-
-            dispatch({
-                type: "SET-CURRENT-QUIZ",
-                quiz,
-            });
-
+            dispatch(UpdateQuestionBodyCreator(id, newText, "UPDATE-QUESTION-TEXT"));
         } catch (error) {
             dispatch({ type: "SET-ERROR", error: error.message });
         } finally {
@@ -301,7 +261,187 @@ export function fetchCurrentQuiz(quizId) {
     };
 }
 
-export function fetchCurrentQuizToView(quizId) {
+export function updateQuestionOnServerEdit(id, newText) {
+    return async (dispatch) => {
+        dispatch({ type: "START-LOADING" });
+        try {
+            const payload = {
+                question: newText,
+                type: "fitst_type"
+            };
+            const response = await fetch(`http://localhost:8081/api/questions/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                throw new Error(`Ошибка обновления вопроса: ${response.statusText}`);
+            }
+            dispatch(UpdateQuestionBodyCreator(id, newText, "UPDATE-QUESTION-TEXT-EDIT"));
+        } catch (error) {
+            dispatch({ type: "SET-ERROR", error: error.message });
+        } finally {
+            dispatch({ type: "STOP-LOADING" });
+        }
+    };
+}
+
+export function CompleteQuizCreation(quizData) {
+    return async (dispatch) => {
+        dispatch({ type: "START-LOADING" });
+        try {
+            const createQuizResponse = await fetch("http://localhost:8081/api/surveys", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: quizData.name,
+                    description: quizData.description,
+                }),
+            });
+
+            if (!createQuizResponse.ok) {
+                throw new Error(`Ошибка создания квиза: ${createQuizResponse.statusText}`);
+            }
+
+            const savedQuiz = await createQuizResponse.json();
+            const surveyId = savedQuiz.id;
+
+            const questionIdList = quizData.questions.map((question) => question.id);
+
+            const updateSurveyResponse = await fetch(`http://localhost:8081/api/surveys-questions/${surveyId}`, {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    surveyId,
+                    questionIdList,
+                }),
+            });
+
+            if (!updateSurveyResponse.ok) {
+                dispatch({ type: "SET-ERROR", error: `Ошибка добавления вопросов в квиз: ${updateSurveyResponse.statusText}` });
+            }
+
+            dispatch({
+                type: "COMPLETE-QUIZ-CREATION",
+            });
+
+            dispatch(fetchAllQuizzes())
+
+        } catch (error) {
+            dispatch({ type: "SET-ERROR", error: error.message });
+        } finally {
+            dispatch({ type: "STOP-LOADING" });
+        }
+    }
+}
+
+export function CompleteQuizEdit(quizData) {
+    return async (dispatch) => {
+        dispatch({ type: "START-LOADING" });
+        try {
+            const createQuizResponse = await fetch(`http://localhost:8081/api/surveys/${quizData.id}`, {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: quizData.name,
+                    description: quizData.description,
+                }),
+            });
+
+            if (!createQuizResponse.ok) {
+                throw new Error(`Ошибка создания квиза: ${createQuizResponse.statusText}`);
+            }
+
+            const savedQuiz = await createQuizResponse.json();
+            const surveyId = savedQuiz.id;
+
+            const questionIdList = quizData.questions.map((question) => question.id);
+
+            const updateSurveyResponse = await fetch(`http://localhost:8081/api/surveys-questions/${surveyId}`, {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    surveyId,
+                    questionIdList,
+                }),
+            });
+
+            if (!updateSurveyResponse.ok) {
+                dispatch({ type: "SET-ERROR", error: `Ошибка добавления вопросов в квиз: ${updateSurveyResponse.statusText}` });
+            }
+
+            dispatch({
+                type: "COMPLETE-QUIZ-CREATION",
+            });
+
+            dispatch(fetchAllQuizzes())
+
+        } catch (error) {
+            dispatch({ type: "SET-ERROR", error: error.message });
+        } finally {
+            dispatch({ type: "STOP-LOADING" });
+        }
+    }
+}
+
+// export function fetchEditQuiz(quizId) {
+//     return async (dispatch) => {
+//         dispatch({ type: "START-LOADING" });
+//         try {
+//             const response = await fetch(`http://localhost:8081/api/surveys-questions/${quizId}`, {
+//                 method: "GET",
+//                 headers: {
+//                     Authorization: `Bearer ${token}`,
+//                     "Content-Type": "application/json",
+//                 },
+//             });
+//             if (!response.ok) {
+//                 throw new Error(`Ошибка загрузки квиза: ${response.statusText}`);
+//             }
+//             const quizData = await response.json();
+//             const quiz = {
+//                 id: quizData.id,
+//                 name: quizData.name,
+//                 description: quizData.description,
+//                 createdAt: quizData.createdAt,
+//                 questions: quizData.questionList.map((question) => ({
+//                     id: question.id,
+//                     question: question.question,
+//                     type: question.type,
+//                 })),
+//             };
+
+//             dispatch({
+//                 type: "SET-EDIT-QUIZ",
+//                 quiz,
+//             });
+
+//         } catch (error) {
+//             dispatch({ type: "SET-ERROR", error: error.message });
+//         } finally {
+//             dispatch({ type: "STOP-LOADING" });
+//         }
+//     };
+// }
+
+
+
+export function fetchQuizToView(quizId) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         try {
@@ -329,7 +469,7 @@ export function fetchCurrentQuizToView(quizId) {
             };
 
             dispatch({
-                type: "SET-CURRENT-QUIZ-TO-VIEW",  // Устанавливаем квиз для отображения
+                type: "SET-QUIZ-TO-VIEW",
                 quiz,
             });
 
@@ -378,42 +518,6 @@ export function fetchAllQuizzes() {
         }
     };
 }
-
-export function CompleteQuizCreation() {
-    return {
-        type: "COMPLETE-QUIZ-CREATION",
-    };
-}
-
-export function updateQuestionOnServer(id, newText) {
-    return async (dispatch) => {
-        dispatch({ type: "START-LOADING" });
-        try {
-            const payload = {
-                question: newText,
-                type: "fitst_type"
-            };
-            const response = await fetch(`http://localhost:8081/api/questions/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-            if (!response.ok) {
-                throw new Error(`Ошибка обновления вопроса: ${response.statusText}`);
-            }
-            dispatch(UpdateQuestionBodyCreator(id, newText));
-        } catch (error) {
-            dispatch({ type: "SET-ERROR", error: error.message });
-        } finally {
-            dispatch({ type: "STOP-LOADING" });
-        }
-    };
-}
-
-
 
 
 export function formatDate(dateString) {
