@@ -1,20 +1,17 @@
 const savedState = localStorage.getItem('employeeState');
 const initState = savedState ? JSON.parse(savedState) : {
     employeesShort: {},
-    currentemployee: {
-        id: null,
-        name: "",
-        surname: "",
-        email: "",
-        post: "",
-        chief: "",
-        subordinates: [],
+    currentEmployee: {
+        user: {},
+        chief: {},
+        subordinates: []
     },
     loading: false,
     error: null
 }
 
-const token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJma2stX0NJcHltczFtSU5GZGlIOXFHNlhMcEs4Si1FcGhPS2ZaM1FEb3FNIn0.eyJleHAiOjE3MzM1ODE2NzgsImlhdCI6MTczMzU4MTM3OCwianRpIjoiZDRjMzkwMmYtYmY3MC00M2ZlLWJmZDAtMGI4YjBkMjA4NDZjIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrXzE6ODA4MC9yZWFsbXMvZXN0aW1hdGUiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMWYxZDcwYTMtZWNlNy00MjkxLWJiYTctN2E2YTlhMTBlMzgxIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZXN0aW1hdGUtYXBwIiwic2lkIjoiYzE1ZGM0MzktNGIzNS00MmMwLWFlMTgtZjE1NTlhYjk5YjA5IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJsb2NhbGhvc3Q6ODA4MSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1lc3RpbWF0ZSIsIm9mZmxpbmVfYWNjZXNzIiwiSFIiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiR2VvcmdlIEthYiIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1aSIsImdpdmVuX25hbWUiOiJHZW9yZ2UiLCJmYW1pbHlfbmFtZSI6IkthYiIsImVtYWlsIjoiZ2VvcmdpamthYmlja2lqMUBnbWFpbC5jb20ifQ.Ygk-d_wQc4ShsIEZDSTCE711xfDeUB4Z8qFGb-zqWRrffCk5XnFmisyiMb_BDoIgILW1pNQNyRhCu5U6--ibu_SOrZVE8UxGoDN5M_Nuxo1L-wldYepX3wdfXFKBBYl4wMb2M_O0hetqH2xOa7B5yMhxRooAFIeScqy85qDDXzC3Z11Lhg8pqhYDDqNzUAlb5b37RvEkaluuC2zafGSlFgDHkNDdXbsOiC0v8GMxkvaCKY1V-SlPKNimtIw6NwderaCc5HY02r_gz95WFXgDu9lTHJf7IoGsr1cqJUTiuGTBOGCoNhd2T1jmWfaAUQOkkKMLRGJ3mlRRfYNaRB6fjg"
+
+const token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsSThGeVdnZ29JTUpYWERJcG1iOWlZYWM2OVdZNkNfMDZtajV0RjFwc0dJIn0.eyJleHAiOjE3MzM4NDk1NjUsImlhdCI6MTczMzg0OTI2NSwiYXV0aF90aW1lIjoxNzMzODQ4NzQ5LCJqdGkiOiI2NmMwNWU1Yi1iZGQ2LTQyMzctODYxOS03NjJjYmQwNTZkN2QiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0Ojg0ODQvcmVhbG1zL2VzdGltYXRlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjAxMWU2YTMyLWU2YWUtNGUxOS1hMmIxLWE0ZjI4YmM2YWM2OCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImVzdGltYXRlLWFwcCIsInNpZCI6ImM3ZmY0NTIzLWI0OTktNDhlZC05N2Y3LTlkMWE3YzA5MjFlMSIsImFjciI6IjAiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWVzdGltYXRlIiwib2ZmbGluZV9hY2Nlc3MiLCJIUiIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoi0JPQtdC-0YDQs9C40Lkg0JrQsNCx0LjRhtC60LjQuSIsInByZWZlcnJlZF91c2VybmFtZSI6Im9yZ3kiLCJnaXZlbl9uYW1lIjoi0JPQtdC-0YDQs9C40LkiLCJmYW1pbHlfbmFtZSI6ItCa0LDQsdC40YbQutC40LkiLCJlbWFpbCI6Imdlb3JnaWprYWJpY2tpakBnbWFpbC5jb20ifQ.EuhHXs844uR5wHLidoKsN_RpsPHhpnM09rFHjkhBxR5_ZuVUxgINCNgrdpwtsHWkP35qLV3PacHgZYa69nn_vzi4cPo-iSeZ_KQn-VBe3EW1RLOyd7wQV3QNRDADPk1Og3cZnrQpuZcdCFL8jXvsbKC9Fwfe7SEL0CGRFC62SXIp9DoNdWuoCMXl6-31j7Ortzkyvo2-XybafbcBRyCWFMeaT9YJI3o1YcTjwbb6rCZgQpchVEou5ncG2Vfrzj-0Djwl6qVFEGG2thRWgs4awjZMlS6rM0n0UJ0dfV3V4qIVx8nSL4EtiXRJRfGnVML-cCxou2_I9C0VOYGKZlasgQ"
 
 function employeesReducer(state = initState, action) {
     let newState = structuredClone(state);
@@ -31,6 +28,14 @@ function employeesReducer(state = initState, action) {
 
         case "SET-EMPLOYEES-SHORT":
             newState.employeesShort = { ...action.employeesShort };
+            break;
+
+        case "SET-CURRNET-EMPLOYEE":
+            newState.currentEmployee = {
+                user: action.currentEmployee.user,
+                chief: action.currentEmployee.chief,
+                subordinates: action.currentEmployee.subordinates
+            };
             break;
         default:
             break;
@@ -72,6 +77,42 @@ export function fetchAllEmployees() {
             dispatch({
                 type: "SET-EMPLOYEES-SHORT",
                 employeesShort: employeesMap,
+            });
+        } catch (error) {
+            dispatch({ type: "SET-ERROR", error: error.message });
+        } finally {
+            dispatch({ type: "STOP-LOADING" });
+        }
+    };
+}
+
+
+export function fetchCurrnetEmployee(id) {
+    return async (dispatch) => {
+        dispatch({ type: "START-LOADING" });
+        try {
+            const response = await fetch(`http://localhost:8081/api/full-users/${id}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`Ошибка загрузки сотрудников: ${response.statusText}`);
+            }
+
+            const employee = await response.json();
+            console.log("Полученные данные:", employee);
+            const currentEmp = {
+                user: employee.user,
+                chief: employee.chief,
+                subordinates: employee.subordinates
+            }
+
+            dispatch({
+                type: "SET-CURRNET-EMPLOYEE",
+                currentEmployee: currentEmp,
             });
         } catch (error) {
             dispatch({ type: "SET-ERROR", error: error.message });

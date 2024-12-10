@@ -11,13 +11,14 @@ function Employees(props) {
   }, [props.fetchAllEmployees]);
 
   const filteredEmployees = Object.values(props.employees).filter(employee => {
-    const fullName = `${employee.surname} ${employee.name}`.toLowerCase();
+    const fullName = `${employee.name} ${employee.surname}`.toLowerCase();
     return fullName.includes(searchQuery.toLowerCase());
   });
 
   let employees = filteredEmployees.map(employee => (
     <Employee
       key={employee.id}
+      employeeId={employee.id}
       employeeName={employee.name}
       employeeSurname={employee.surname}
       employeeEmail={employee.email}

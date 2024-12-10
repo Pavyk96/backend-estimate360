@@ -16,6 +16,13 @@
   font-size: 15px;
 }
 
+.questionBody select{
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
 .questionBody textarea{
   font-size: 20px;
   height: auto;

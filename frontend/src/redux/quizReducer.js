@@ -8,6 +8,7 @@ const initState = savedState ? JSON.parse(savedState) : {
         createdAt: "",
         answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
         questions: [],
+        assigned: false,
     },
     viewQuiz: {
         id: null,
@@ -16,6 +17,7 @@ const initState = savedState ? JSON.parse(savedState) : {
         createdAt: "",
         answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
         questions: [],
+        assigned: false,
     },
     editQuiz: {
         id: null,
@@ -24,13 +26,16 @@ const initState = savedState ? JSON.parse(savedState) : {
         createdAt: "",
         answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
         questions: [],
+        assigned: false,
     },
+    questionTypes: ["Инициативность", "Гибкость", "Коммуникативность", "Командная работа", "Ответственность"],
+    selectedQuestionType: "",
     newQuestionText: "",
     loading: false,
     error: null
 };
 
-const token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJma2stX0NJcHltczFtSU5GZGlIOXFHNlhMcEs4Si1FcGhPS2ZaM1FEb3FNIn0.eyJleHAiOjE3MzM1OTQ3NTEsImlhdCI6MTczMzU5NDQ1MSwianRpIjoiMTUxYzRiNzYtNjZjNS00MTM3LWIxZjctOTU1YjhkNzJiMmNiIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrXzE6ODA4MC9yZWFsbXMvZXN0aW1hdGUiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMWYxZDcwYTMtZWNlNy00MjkxLWJiYTctN2E2YTlhMTBlMzgxIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZXN0aW1hdGUtYXBwIiwic2lkIjoiODBlYjEwMWYtMWIxZi00NzJjLWE4ZTYtYzZjMGZjMzU0NjQ1IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJsb2NhbGhvc3Q6ODA4MSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1lc3RpbWF0ZSIsIm9mZmxpbmVfYWNjZXNzIiwiSFIiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiR2VvcmdlIEthYiIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1aSIsImdpdmVuX25hbWUiOiJHZW9yZ2UiLCJmYW1pbHlfbmFtZSI6IkthYiIsImVtYWlsIjoiZ2VvcmdpamthYmlja2lqMUBnbWFpbC5jb20ifQ.AIj6IcHWbz-gmT5kfue_vddThEUrQlaXgTvoy6hcXcTpMUFt4vr0ec7D2176dCAze0m3mr1rgyA8nsIky1oCyDdS2gu8iSZZ-EcZuo0OrcBDtwBBK9gwDgvHFthVvI4NP5zvWoSxyDdTcgEbTyyXJObwcp4pSBVRwaigAkx61KjsZz4dz-5pszAqJ1AjqXZWOgPO9lQMHxgpLqVqKLUDbvXFId1VsvEjneONSifp3CgvidzzgCfD4hQF6abi1lYpWeKKGkBST3XGuPEU1q6h3a5fMukjMYWdwnOd-zGg1oc__VyUOIurxK_155u2oztGca277lQE_-ogKMhGp-zrOA"
+const token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsSThGeVdnZ29JTUpYWERJcG1iOWlZYWM2OVdZNkNfMDZtajV0RjFwc0dJIn0.eyJleHAiOjE3MzM4NDkxMzgsImlhdCI6MTczMzg0ODgzOCwiYXV0aF90aW1lIjoxNzMzODQ4NzQ5LCJqdGkiOiJhMmY3NGQ3YS0wOGY5LTQ2NTktOTc1Zi0zNzU5MGMzMGZhNTMiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0Ojg0ODQvcmVhbG1zL2VzdGltYXRlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjAxMWU2YTMyLWU2YWUtNGUxOS1hMmIxLWE0ZjI4YmM2YWM2OCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImVzdGltYXRlLWFwcCIsInNpZCI6ImM3ZmY0NTIzLWI0OTktNDhlZC05N2Y3LTlkMWE3YzA5MjFlMSIsImFjciI6IjAiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWVzdGltYXRlIiwib2ZmbGluZV9hY2Nlc3MiLCJIUiIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoi0JPQtdC-0YDQs9C40Lkg0JrQsNCx0LjRhtC60LjQuSIsInByZWZlcnJlZF91c2VybmFtZSI6Im9yZ3kiLCJnaXZlbl9uYW1lIjoi0JPQtdC-0YDQs9C40LkiLCJmYW1pbHlfbmFtZSI6ItCa0LDQsdC40YbQutC40LkiLCJlbWFpbCI6Imdlb3JnaWprYWJpY2tpakBnbWFpbC5jb20ifQ.P1dplWe00dkj0Zdg2kJnSZeCewGRt5It81RrygoxAN9-orzET1WFyY_l09l6yFof45voLiU3sXIJpafTCHrT39LHVCX5roBoRg4DVKA5ifMM901nw7a2FDAnWso_LUcSN1aBXzgcQelsaJpBeu8qIPC8PFPq47p-JwzSBrD9ikjJjP2opvhHCXHPnUDmoPb0mFTM2Q4yyOthKXHzsNGFW-Kea6Li5bkvmTZaXl3NNJHG0qbkIkRNKcykdJhImw-bYoYTI-_7ku24OJ7Vx3yYuGJkDQu-7mNlYy_9YdKi8An68GdsMuHU0vP6p2P1r6DeD-1i5blYt6Rln4Xjg_d6xg"
 
 function quizReducer(state = initState, action) {
     let newState = structuredClone(state);
@@ -44,12 +49,23 @@ function quizReducer(state = initState, action) {
         case "SET-QUESTION-TEXT":
             newState.newQuestionText = action.newText
             break;
+        case "SET-QUESTION-TYPE":
+            newState.selectedQuestionType = action.selectedType;
+            break;
         case "UPDATE-QUESTION-TEXT":
             let question = newState.currentQuiz.questions.find(q => q.id === action.id)
             if (question) {
                 question.question = action.newText
             }
             break;
+        case "UPDATE-QUESTION-TYPE":
+            let questionType = newState.currentQuiz.questions.find(q => q.id === action.id)
+            if (questionType) {
+                questionType.type = action.newType
+            }
+            break;
+
+
 
         case "UPDATE-QUIZ-TITLE-EDIT":
             newState.editQuiz.name = action.newText
@@ -61,6 +77,12 @@ function quizReducer(state = initState, action) {
             let questionedit = newState.editQuiz.questions.find(q => q.id === action.id)
             if (questionedit) {
                 questionedit.question = action.newText
+            }
+            break;
+        case "UPDATE-QUESTION-TYPE":
+            let questionTypeEdit = newState.editQuiz.questions.find(q => q.id === action.id)
+            if (questionTypeEdit) {
+                questionTypeEdit.type = action.newType
             }
             break;
 
@@ -91,6 +113,7 @@ function quizReducer(state = initState, action) {
             console.log(action.newQuestion || "Ошибка нет вопроса")
             newState.currentQuiz.questions.push(action.newQuestion);
             newState.newQuestionText = ""
+            newState.selectedQuestionType = ""
             console.log(newState.currentQuiz.questions || "Ошибка вопрос не добавился")
             break;
 
@@ -98,6 +121,7 @@ function quizReducer(state = initState, action) {
             console.log(action.newQuestion || "Ошибка нет вопроса")
             newState.editQuiz.questions.push(action.newQuestion);
             newState.newQuestionText = ""
+            newState.selectedQuestionType = ""
             console.log(newState.editQuiz.questions || "Ошибка вопрос не добавился")
             break;
 
@@ -110,6 +134,7 @@ function quizReducer(state = initState, action) {
                 answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
                 createdAt: action.quiz.createdAt,
                 questions: action.quiz.questions,
+                assigned: action.quiz.assigned,
             };
             break;
 
@@ -122,6 +147,7 @@ function quizReducer(state = initState, action) {
                 answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
                 createdAt: action.quiz.createdAt,
                 questions: action.quiz.questions,
+                assigned: action.quiz.assigned,
             };
             break;
 
@@ -137,8 +163,11 @@ function quizReducer(state = initState, action) {
                 createdAt: "",
                 answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
                 questions: [],
+                assigned: false,
             };
             newState.newQuestionText = "";
+            newState.questionTypes =  ["Инициативность", "Гибкость", "Коммуникативность", "Командная работа", "Ответственность"];
+            newState.selectedQuestionType = "";
             break;
 
         case "COMPLETE-QUIZ-EDIT":
@@ -149,6 +178,7 @@ function quizReducer(state = initState, action) {
                 createdAt: "",
                 answers: ["Не знаю", "Точно нет", "Скорее нет", "По случаю", "Скорее да", "Точно да"],
                 questions: [],
+                assigned: false,
             };
             newState.newQuestionText = "";
             break;
@@ -185,11 +215,26 @@ export function UpdateQuestionTextCreator(text) {
     }
 }
 
+export function SetQuestionTypeCreator(type) {
+    return {
+        type: "SET-QUESTION-TYPE",
+        selectedType: type
+    };
+}
+
 export function UpdateQuestionBodyCreator(id, text, type) {
     return {
         type: type,
         id: id,
         newText: text
+    }
+}
+
+export function UpdateQuestionTypeCreator(id, qtype, type) {
+    return {
+        type: type,
+        id: id,
+        newType: qtype
     }
 }
 
@@ -215,10 +260,11 @@ export function DeleteQuizCreator(quizId) {
     };
 }
 
-export function addQuestionOnServer(questionText, dispType) {
+export function addQuestionOnServer(questionText, qtype, dispType) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         console.log(questionText || "Ошибка вопроса нет в функции")
+        console.log(qtype || "Ошибка типа вопроса нет в функции")
         try {
             const questionResponse = await fetch("http://localhost:8081/api/questions", {
                 method: "POST",
@@ -226,7 +272,7 @@ export function addQuestionOnServer(questionText, dispType) {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ question: questionText, type: "first_type" }),
+                body: JSON.stringify({ question: questionText, type: qtype }),
             });
             if (!questionResponse.ok) {
                 throw new Error(`Ошибка создания вопроса: ${questionResponse.statusText}`);
@@ -245,13 +291,13 @@ export function addQuestionOnServer(questionText, dispType) {
     };
 }
 
-export function updateQuestionOnServer(id, newText) {
+export function updateQuestionOnServer(id, newText, newType) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         try {
             const payload = {
                 question: newText,
-                type: "fitst_type"
+                type: newType
             };
             const response = await fetch(`http://localhost:8081/api/questions/${id}`, {
                 method: 'PUT',
@@ -264,7 +310,6 @@ export function updateQuestionOnServer(id, newText) {
             if (!response.ok) {
                 throw new Error(`Ошибка обновления вопроса: ${response.statusText}`);
             }
-            dispatch(UpdateQuestionBodyCreator(id, newText, "UPDATE-QUESTION-TEXT"));
         } catch (error) {
             dispatch({ type: "SET-ERROR", error: error.message });
         } finally {
@@ -273,7 +318,7 @@ export function updateQuestionOnServer(id, newText) {
     };
 }
 
-export function updateQuestionOnServerEdit(id, newText) {
+export function updateQuestionOnServerEdit(id, newText, newType) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         try {
@@ -376,7 +421,7 @@ export function CompleteQuizEdit(quizData) {
             if (!createQuizResponse.ok) {
                 throw new Error(`Ошибка создания квиза: ${createQuizResponse.statusText}`);
             }
-            
+
             await fetch(`http://localhost:8081/api/surveys-questions/${surveyId}`, {
                 method: "DELETE",
                 headers: {
@@ -556,6 +601,3 @@ export function formatDate(dateString) {
 
 
 export default quizReducer;
-
-
-

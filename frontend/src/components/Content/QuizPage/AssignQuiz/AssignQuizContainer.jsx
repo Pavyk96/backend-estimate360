@@ -2,17 +2,20 @@ import { connect } from "react-redux";
 import AssignQuiz from "./AssignQuiz";
 import { assignQuiz } from "../../../../redux/quizReducer";
 import { useParams } from "react-router-dom";
+import { fetchAllEmployees } from "../../../../redux/employeesReducer";
 
 function mapStateToProps(state, ownProps) {
   const { quizId } = ownProps;
   return {
     quiz: state.quiz.quizzes[quizId],
+    employees: state.employee.employeesShort
   };
 }
 
 function mapDispatchToProps(dispatch){
   return{
-    onAssignQuiz: (quizId) => dispatch(assignQuiz(quizId))
+    onAssignQuiz: (quizId) => dispatch(assignQuiz(quizId)),
+    fetchAllEmployees: () => dispatch(fetchAllEmployees()),
   }
 }
 

@@ -11,7 +11,7 @@ function AssignQuiz(props) {
       <p className={s.description}>{props.quiz.description || "Описание отсутствует"}</p>
       <ul className={s.action}>
         <li className={s.item}>
-          <NavLink to={`/quiz/${props.quiz.id}`} className={({ isActive }) => isActive ? s.active : undefined}>ПОСМОТРЕТЬ</NavLink>
+          <NavLink to={`/quizAs/${props.quiz.id}`} className={({ isActive }) => isActive ? s.active : undefined}>ПОСМОТРЕТЬ</NavLink>
         </li>
       </ul>
     </div>

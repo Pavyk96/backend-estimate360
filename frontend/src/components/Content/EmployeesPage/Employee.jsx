@@ -13,7 +13,7 @@ function Employee(props) {
                 </div>
                 <p className={s.position}>{props.employeePost || "Должность"}</p>
             </div>
-            <NavLink to="/quiz" className={s.go}>
+            <NavLink to={`/employees/${props.employeeId}`} className={s.go}>
                 <img src={back}></img>
             </NavLink>
         </div>

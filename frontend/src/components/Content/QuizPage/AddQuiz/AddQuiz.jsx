@@ -18,8 +18,11 @@ function AddQuiz(props) {
     <Question
       questionNumber={question.id}
       questionBody={question.question}
+      questionSelectedType={question.type}
+      questionTypes={props.questionTypes}
       updateQuestionBody={(id, newText) => props.updateQuestionBody(id, newText)}
-      saveQuestion={(id, newText) => props.updateQuestionOnServer(id, newText)}
+      updateQuestionType={(id, newType) => props.updateQuestionType(id, newType)}
+      saveQuestion={(id, newText, newType) => props.updateQuestionOnServer(id, newText, newType)}
     />
   ));
 
@@ -30,8 +33,7 @@ function AddQuiz(props) {
 
 
   let addQuestion = () => {
-    console.log(newQuestionText || "Ошибка вопрос не перед в функции")
-    props.addQuestion(newQuestionText);
+    props.addQuestion(newQuestionText, props.selectedQuestionType);
   }
 
   let updateQuestionText = (e) => {
@@ -51,12 +53,17 @@ function AddQuiz(props) {
 
   let finishQuizCreation = () => {
     const quiz = {
-          name: quizTitle,
-          description: quizDecription,
-          questions: props.questions,
-        };
+      name: quizTitle,
+      description: quizDecription,
+      questions: props.questions,
+    };
     props.completeQuizCreation(quiz);
     navigate("/quiz");
+  }
+
+  let setQuestionType = (e) => {
+    let type = e.target.value;
+    props.SetQuestionType(type);
   }
 
   return (
@@ -82,6 +89,12 @@ function AddQuiz(props) {
       </div>
       <div className={s.newQuestion}>
         <div className={s.newQuestionBody}>
+          <select value={props.selectedQuestionType} onChange={setQuestionType}>
+            <option value="" disabled>Выберите тип вопроса</option>
+            {props.questionTypes.map((type, index) => (
+              <option key={index} value={type}>{type}</option>
+            ))}
+          </select>
           <textarea onInput={handleInput} onChange={updateQuestionText} value={newQuestionText} placeholder="Введите вопрос" />
         </div>
         <div className={s.addNewQuestion}>

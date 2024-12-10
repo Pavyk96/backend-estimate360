@@ -18,8 +18,11 @@ function EditQuiz(props) {
     <Question
       questionNumber={question.id}
       questionBody={question.question}
+      questionSelectedType={question.type}
+      questionTypes={props.questionTypes}
       updateQuestionBody={(id, newText) => props.updateQuestionBody(id, newText)}
-      saveQuestion={(id, newText) => props.updateQuestionOnServer(id, newText)}
+      updateQuestionType={(id, newType) => props.updateQuestionType(id, newType)}
+      saveQuestion={(id, newText, newType) => props.updateQuestionOnServer(id, newText, newType)}
     />
   ));
 
@@ -30,8 +33,7 @@ function EditQuiz(props) {
 
 
   let addQuestion = () => {
-    console.log(newQuestionText || "Ошибка вопрос не перед в функции")
-    props.addQuestion(newQuestionText);
+    props.addQuestion(newQuestionText, props.selectedQuestionType);
   }
 
   let updateQuestionText = (e) => {
@@ -60,12 +62,17 @@ function EditQuiz(props) {
     navigate("/quiz");
   }
 
+  let setQuestionType = (e) => {
+    let type = e.target.value;
+    props.SetQuestionType(type);
+  }
+
 
   return (
     <div className={s.addQuiz}>
       <div className={s.back}>
         <img src={back}></img>
-        <NavLink to="/quiz" className={({ isActive }) => isActive ? s.active : undefined}>НАЗАД</NavLink>
+        <NavLink to={`/quiz/${props.quizId}`} className={({ isActive }) => isActive ? s.active : undefined}>НАЗАД</NavLink>
       </div>
       <p className={s.title}>Редкатирование анкеты</p>
       <div className={s.finish} onClick={finishQuizCreation}>
@@ -84,6 +91,12 @@ function EditQuiz(props) {
       </div>
       <div className={s.newQuestion}>
         <div className={s.newQuestionBody}>
+          <select value={props.selectedQuestionType} onChange={setQuestionType}>
+            <option value="" disabled>Выберите тип вопроса</option>
+            {props.questionTypes.map((type, index) => (
+              <option key={index} value={type}>{type}</option>
+            ))}
+          </select>
           <textarea onInput={handleInput} onChange={updateQuestionText} value={newQuestionText} placeholder="Введите вопрос" />
         </div>
         <div className={s.addNewQuestion}>

@@ -13,12 +13,12 @@ function Question(props) {
     props.updateQuestionBody(props.questionNumber, e.target.value);
   };
 
+  const updateQuestionType = (e) => {
+    props.updateQuestionType(props.questionNumber, e.target.value);
+  };
+
   const handleSave = () => {
-    if (props.saveQuestion) {
-      props.saveQuestion(props.questionNumber, props.questionBody); 
-    } else {
-      console.warn("Функция saveQuestion не передана в props");
-    }
+      props.saveQuestion(props.questionNumber, props.questionBody, props.questionSelectedType);
   };
 
   return (
@@ -28,6 +28,12 @@ function Question(props) {
           <p>Вопрос {props.questionNumber}</p>
         </div>
         <div className={s.questionBody}>
+          <select value={props.questionSelectedType} onChange={updateQuestionType}>
+            <option value="" disabled>Выберите тип вопроса</option>
+            {props.questionTypes.map((type, index) => (
+              <option key={index} value={type}>{type}</option>
+            ))}
+          </select>
           <textarea onInput={handleInput} onChange={updateQuestionBody} value={props.questionBody} placeholder="Введите ваш вопрос" />
         </div>
         <div className={s.saveQuestionChange} onClick={handleSave}>

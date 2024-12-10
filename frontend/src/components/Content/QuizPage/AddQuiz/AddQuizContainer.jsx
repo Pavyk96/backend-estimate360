@@ -8,6 +8,8 @@ import {
     updateQuestionOnServer,
     addQuestionOnServer,
     CompleteQuizCreation,
+    SetQuestionTypeCreator,
+    UpdateQuestionTypeCreator,
 } from "../../../../redux/quizReducer";
 
 function mapStateToProps(state) {
@@ -17,24 +19,30 @@ function mapStateToProps(state) {
         quizDecription: state.quiz.currentQuiz.description,
         questions: state.quiz.currentQuiz.questions,
         newQuestionText: state.quiz.newQuestionText,
+        questionTypes: state.quiz.questionTypes,
+        selectedQuestionType: state.quiz.selectedQuestionType,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
 
-        addQuestion: (questionText, dispType) => dispatch(addQuestionOnServer(questionText, dispType  = "ADD-QUESTION")),
+        addQuestion: (questionText, qtype,  dispType) => dispatch(addQuestionOnServer(questionText, qtype,  dispType  = "ADD-QUESTION")),
         completeQuizCreation: (quizData) => dispatch(CompleteQuizCreation(quizData)),
 
 
         updateQuestionText: (text) => {
             dispatch(UpdateQuestionTextCreator(text));
         },
+        SetQuestionType: (type) => dispatch(SetQuestionTypeCreator(type)),
         updateQuestionBody: (id, text) => {
             dispatch(UpdateQuestionBodyCreator(id, text, "UPDATE-QUESTION-TEXT"));
         },
-        updateQuestionOnServer: (id, newText) => {
-            dispatch(updateQuestionOnServer(id, newText));
+        updateQuestionType: (id, qtype) => {
+            dispatch(UpdateQuestionTypeCreator(id, qtype, "UPDATE-QUESTION-TYPE"));
+        },
+        updateQuestionOnServer: (id, newText, newType) => {
+            dispatch(updateQuestionOnServer(id, newText, newType));
         },
         updateQuizTitle: (text) => {
             dispatch(UpdateQuizTitleCreator(text, "UPDATE-QUIZ-TITLE"));
