@@ -6,15 +6,15 @@ function AssignQuizEmployee(props) {
         <div className={s.assignQuizEmployee}>
             <div className={s.employeeInfoBox}>
                 <div className={s.nameBox}>
-                    <p>{"Имя" || "Имя"}</p>
-                    <p>{"Фамилия" || "Фамилия"}</p>
-                    <p>{"Отчество" || "Отчество"}</p>
+                    <p>{props.employeeName || "Имя"}</p>
+                    <p>{props.employeeSurname || "Фамилия"}</p>
                 </div>
-                <p className={s.position}>{"Должность" || "Должность"}</p>
+                <p className={s.position}>{props.employeePost || "Должность"}</p>
             </div>
             <label className={s.questionLabel}>
                 <input
-                    type="radio"
+                    className={s.roundCheckbox}
+                    type="checkbox"
                 />
             </label>
         </div>

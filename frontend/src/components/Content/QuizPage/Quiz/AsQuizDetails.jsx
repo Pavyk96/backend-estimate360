@@ -3,7 +3,7 @@ import back from "../../../../img/Back.svg";
 import s from './QuizDetails.module.css';
 import { NavLink, useNavigate } from "react-router-dom";
 
-function QuizDetails(props) {
+function AsQuizDetails(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -28,14 +28,6 @@ function QuizDetails(props) {
                 <NavLink to="/quiz" className={({ isActive }) => isActive ? s.active : undefined}>НАЗАД</NavLink>
             </div>
             <p className={s.title}>Просмотр анкеты</p>
-            <div className={s.buttonBox}>
-                <div className={s.edit}>
-                    <button onClick={editQuiz}>Редкатировать анкету</button>
-                </div>
-                <div className={s.assign}>
-                    <button onClick={assignQuiz}>Назначить анкету</button>
-                </div>
-            </div>
             <div className={s.quizTitleBox}>
                 <p className={s.quizName}>{props.quiz.name || "Без названия"}</p>
                 <p className={s.quizDescription}>{props.quiz.description || "Описание отсутствует"}</p>
@@ -77,4 +69,4 @@ function QuizDetails(props) {
     );
 }
 
-export default QuizDetails;
+export default AsQuizDetails;

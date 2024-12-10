@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import QuizDetails from './QuizDetails';
+import AsQuizDetails from './AsQuizDetails';
 import { fetchQuizToView, LoadQuizCreator } from '../../../../redux/quizReducer';
 
 
@@ -27,6 +27,6 @@ function withParams(Component) {
   };
 }
 
-const QuizDetailsContainer = connect(mapStateToProps, mapDispatchToProps)(QuizDetails);
+const AsQuizDetailsContainer = connect(mapStateToProps, mapDispatchToProps)(AsQuizDetails);
 
-export default withParams(QuizDetailsContainer);
+export default withParams(AsQuizDetailsContainer);

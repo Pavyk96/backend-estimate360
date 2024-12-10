@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import s from './MyQuiz.module.css';
 import add from '../../../img/Add.svg';
 import AssignQuiz from "./Quiz/AssignQuiz";
@@ -6,6 +6,11 @@ import NAssignQuiz from "./Quiz/NAssignQuiz";
 import { NavLink } from "react-router-dom";
 
 function MyQuiz(props) {
+
+  useEffect(() => {
+    props.fetchQuiz();   
+  }, [props.fetchQuiz]);
+
   const assignedQuizzes = Object.values(props.quizzes).filter((quiz) => quiz.assigned);
   const notAssignedQuizzes = Object.values(props.quizzes).filter((quiz) => !quiz.assigned);
 

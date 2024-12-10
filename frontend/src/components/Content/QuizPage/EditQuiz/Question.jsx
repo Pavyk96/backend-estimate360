@@ -18,7 +18,7 @@ function Question(props) {
   };
 
   const handleSave = () => {
-      props.saveQuestion(props.questionNumber, props.questionBody, props.questionSelectedType);
+    props.saveQuestion(props.questionNumber, props.questionBody, props.questionSelectedType);
   };
 
   return (

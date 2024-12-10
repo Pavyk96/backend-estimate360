@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import s from './AddQuiz.module.css';
+import s from './EditQuiz.module.css';
 import { NavLink, useNavigate } from "react-router-dom";
 import back from "../../../../img/Back.svg";
 import add from "../../../../img/Add.svg";
 import Question from "./Question";
 
-function AddQuiz(props) {
+function EditQuiz(props) {
   const navigate = useNavigate();
 
   const handleInput = (e) => {
@@ -53,11 +53,12 @@ function AddQuiz(props) {
 
   let finishQuizCreation = () => {
     const quiz = {
+      id: props.quizId,
       name: quizTitle,
       description: quizDecription,
       questions: props.questions,
     };
-    props.completeQuizCreation(quiz);
+    props.CompleteQuizEdit(quiz);
     navigate("/quiz");
   }
 
@@ -66,15 +67,16 @@ function AddQuiz(props) {
     props.SetQuestionType(type);
   }
 
+
   return (
     <div className={s.addQuiz}>
       <div className={s.back}>
         <img src={back}></img>
-        <NavLink to="/quiz" className={({ isActive }) => isActive ? s.active : undefined}>НАЗАД</NavLink>
+        <NavLink to={`/quiz/${props.quizId}`} className={({ isActive }) => isActive ? s.active : undefined}>НАЗАД</NavLink>
       </div>
-      <p className={s.title}>Создание анкеты</p>
+      <p className={s.title}>Редкатирование анкеты</p>
       <div className={s.finish} onClick={finishQuizCreation}>
-        <button >Завершить создание анкеты</button>
+        <button >Завершить редкатирование анкеты</button>
       </div>
       <div className={s.quizTitleBox}>
         <div className={s.quizName}>
@@ -105,4 +107,4 @@ function AddQuiz(props) {
   )
 }
 
-export default AddQuiz;
+export default EditQuiz;

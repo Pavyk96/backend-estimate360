@@ -8,13 +8,12 @@ function Employee(props) {
         <div className={s.assignQuizEmployee}>
             <div className={s.employeeInfoBox}>
                 <div className={s.nameBox}>
-                    <p>{"Имя" || "Имя"}</p>
-                    <p>{"Фамилия" || "Фамилия"}</p>
-                    <p>{"Отчество" || "Отчество"}</p>
+                    <p>{props.employeeName || "Имя"}</p>
+                    <p>{props.employeeSurname || "Фамилия"}</p>
                 </div>
-                <p className={s.position}>{"Должность" || "Должность"}</p>
+                <p className={s.position}>{props.employeePost || "Должность"}</p>
             </div>
-            <NavLink to="/quiz" className={s.go}>
+            <NavLink to={`/employees/${props.employeeId}`} className={s.go}>
                 <img src={back}></img>
             </NavLink>
         </div>

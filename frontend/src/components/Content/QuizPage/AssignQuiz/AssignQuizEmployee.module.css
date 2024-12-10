@@ -33,3 +33,20 @@ input[type="radio"] {
 
 
 
+.roundCheckbox {
+  appearance: none; /* Убираем стандартный вид */
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #555;
+  border-radius: 50%; /* Делаем круглым */
+  outline: none;
+  cursor: pointer;
+  transition: 0.2s;
+  background-color: #fff; /* Цвет фона */
+}
+
+.roundCheckbox:checked {
+  background-color: #d8d8d8; /* Цвет при выборе */
+  border-color: #555; /* Цвет границы при выборе */
+}
