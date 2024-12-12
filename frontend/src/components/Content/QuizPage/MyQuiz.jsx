@@ -16,22 +16,22 @@ function MyQuiz(props) {
 
   return (
     <div className={s.myQuiz}>
-      <p className={s.title}>Анкеты</p>
+      <p className={s.title}>Оценки</p>
       <div className={s.add}>
         <div>
-          <p>Создать анкету</p>
+          <p>Создать оценку</p>
           <div >
             <NavLink to="/quiz/add" className={({ isActive }) => isActive ? s.active : undefined}><img src={add} alt="Add Quiz"></img></NavLink>
           </div>
         </div>
       </div>
-      <p className={s.notAssignQuizTitle}>Не назначенные анкеты</p>
+      <p className={s.notAssignQuizTitle}>Не назначенные оценки</p>
       <div className={s.notAssignQuiz}>
         {notAssignedQuizzes.map((quiz) => (
           <NAssignQuiz key={quiz.id} quiz={quiz} />
         ))}
       </div>
-      <p className={s.assignQuizTitle}>Назначенные анкеты</p>
+      <p className={s.assignQuizTitle}>Назначенные оценки</p>
       <div className={s.assignQuiz}>
         {assignedQuizzes.map((quiz) => (
           <AssignQuiz key={quiz.id} quiz={quiz} />

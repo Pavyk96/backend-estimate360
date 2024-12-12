@@ -18,27 +18,50 @@ function AssignQuiz(props) {
     return fullName.includes(searchQuery.toLowerCase());
   });
 
+  const handleAssignSelected = (e) => {
+    e.preventDefault();
+    props.submitSelectedUsers(props.quiz.id, props.selectedUsers);
+    navigate("/quiz");
+  };
+
+  const handleAssignAll = (e) => {
+    e.preventDefault();
+    props.submitAllUsers(props.quiz.id);
+    navigate("/quiz");
+  };
+
+  const handleCheckboxChange = (userId, isChecked) => {
+    if (isChecked) {
+      props.addUserToSelected(userId);
+    } else {
+      props.removeUserFromSelected(userId);
+    }
+  };
+
   let employees = filteredEmployees.map(employee => (
     <AssignQuizEmployee
       key={employee.id}
+      employeeId={employee.id}
       employeeName={employee.name}
       employeeSurname={employee.surname}
       employeeEmail={employee.email}
       employeePost={employee.post}
+      isSelected={props.selectedUsers.includes(employee.id)}
+      onCheckboxChange={handleCheckboxChange}
     />
   ));
 
-  let assignQuiz = (e) => {
-    e.preventDefault();
-    props.onAssignQuiz(props.quiz.id);
-    navigate("/quiz");
-  }
+  // let assignQuiz = (e) => {
+  //   e.preventDefault();
+  //   props.onAssignQuiz(props.quiz.id);
+  //   navigate("/quiz");
+  // }
 
-  let assignQuizToAll = (e) => {
-    e.preventDefault();
-    props.onAssignQuiz(props.quiz.id);
-    navigate("/quiz");
-  }
+  // let assignQuizToAll = (e) => {
+  //   e.preventDefault();
+  //   props.onAssignQuiz(props.quiz.id);
+  //   navigate("/quiz");
+  // }
 
   return (
     <div className={s.assignQuiz}>
@@ -51,10 +74,10 @@ function AssignQuiz(props) {
         <p>Сотрудники</p>
         <div className={s.buttonBox}>
           <div className={s.assign}>
-            <button onClick={assignQuiz}>Назначить выбранным</button>
+            <button onClick={handleAssignSelected}>Назначить выбранным</button>
           </div>
           <div className={s.assignAll}>
-            <button onClick={assignQuizToAll}>Назначить оценку всем</button>
+            <button onClick={handleAssignAll}>Назначить оценку всем</button>
           </div>
         </div>
       </div>

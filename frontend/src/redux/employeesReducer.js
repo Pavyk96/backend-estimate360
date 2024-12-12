@@ -6,12 +6,13 @@ const initState = savedState ? JSON.parse(savedState) : {
         chief: {},
         subordinates: []
     },
+    selectedUsers: [],
     loading: false,
     error: null
 }
 
 
-const token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsSThGeVdnZ29JTUpYWERJcG1iOWlZYWM2OVdZNkNfMDZtajV0RjFwc0dJIn0.eyJleHAiOjE3MzM4NDk1NjUsImlhdCI6MTczMzg0OTI2NSwiYXV0aF90aW1lIjoxNzMzODQ4NzQ5LCJqdGkiOiI2NmMwNWU1Yi1iZGQ2LTQyMzctODYxOS03NjJjYmQwNTZkN2QiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0Ojg0ODQvcmVhbG1zL2VzdGltYXRlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjAxMWU2YTMyLWU2YWUtNGUxOS1hMmIxLWE0ZjI4YmM2YWM2OCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImVzdGltYXRlLWFwcCIsInNpZCI6ImM3ZmY0NTIzLWI0OTktNDhlZC05N2Y3LTlkMWE3YzA5MjFlMSIsImFjciI6IjAiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWVzdGltYXRlIiwib2ZmbGluZV9hY2Nlc3MiLCJIUiIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoi0JPQtdC-0YDQs9C40Lkg0JrQsNCx0LjRhtC60LjQuSIsInByZWZlcnJlZF91c2VybmFtZSI6Im9yZ3kiLCJnaXZlbl9uYW1lIjoi0JPQtdC-0YDQs9C40LkiLCJmYW1pbHlfbmFtZSI6ItCa0LDQsdC40YbQutC40LkiLCJlbWFpbCI6Imdlb3JnaWprYWJpY2tpakBnbWFpbC5jb20ifQ.EuhHXs844uR5wHLidoKsN_RpsPHhpnM09rFHjkhBxR5_ZuVUxgINCNgrdpwtsHWkP35qLV3PacHgZYa69nn_vzi4cPo-iSeZ_KQn-VBe3EW1RLOyd7wQV3QNRDADPk1Og3cZnrQpuZcdCFL8jXvsbKC9Fwfe7SEL0CGRFC62SXIp9DoNdWuoCMXl6-31j7Ortzkyvo2-XybafbcBRyCWFMeaT9YJI3o1YcTjwbb6rCZgQpchVEou5ncG2Vfrzj-0Djwl6qVFEGG2thRWgs4awjZMlS6rM0n0UJ0dfV3V4qIVx8nSL4EtiXRJRfGnVML-cCxou2_I9C0VOYGKZlasgQ"
+const token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsSThGeVdnZ29JTUpYWERJcG1iOWlZYWM2OVdZNkNfMDZtajV0RjFwc0dJIn0.eyJleHAiOjE3MzQwMjA3MTUsImlhdCI6MTczNDAyMDQxNSwiYXV0aF90aW1lIjoxNzM0MDIwMTYzLCJqdGkiOiJiZjhhZjBiNS04MjFjLTRjNWUtODBjNC1kMTQwYjczYmQ5OGQiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0Ojg0ODQvcmVhbG1zL2VzdGltYXRlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjAxMWU2YTMyLWU2YWUtNGUxOS1hMmIxLWE0ZjI4YmM2YWM2OCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImVzdGltYXRlLWFwcCIsInNpZCI6ImUwMzI1MjdiLWU0M2ItNDM3My1iYzI1LWYxYzY4Yzg5NmU1MyIsImFjciI6IjAiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWVzdGltYXRlIiwib2ZmbGluZV9hY2Nlc3MiLCJIUiIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoi0JPQtdC-0YDQs9C40Lkg0JrQsNCx0LjRhtC60LjQuSIsInByZWZlcnJlZF91c2VybmFtZSI6Im9yZ3kiLCJnaXZlbl9uYW1lIjoi0JPQtdC-0YDQs9C40LkiLCJmYW1pbHlfbmFtZSI6ItCa0LDQsdC40YbQutC40LkiLCJlbWFpbCI6Imdlb3JnaWprYWJpY2tpakBnbWFpbC5jb20ifQ.B3yAX9bYreMagDLPi84F4hFCUcV7V7B_1RzS5EExzYayIF-g_NXX455SrIUxEozFbn-G5cnMqMrXJOJX5X5lXFSKsZJZE08ep6W4KMCmv3mqd4Y6CD7tb3ju0LEvIpt-4-cF7jK6qBzj9out856SIU6hmBA5GI8D91wCgPArq6fjeU2zDCVZY6WuX0bleVYSUMsRj0K9J2imb_mCOrjJ-PEHX3cyMyAJGglU_WNociHw_PaVsc3-gD1xcec3pz49mLBhWAWUbAtIsbewbSKtxdGrnAuD5gk55oWXrUuhpOIfTDOEsIiT5-ainT6lwjz_YVxpKEff-KWZbg63wS46JA"
 
 function employeesReducer(state = initState, action) {
     let newState = structuredClone(state);
@@ -37,6 +38,18 @@ function employeesReducer(state = initState, action) {
                 subordinates: action.currentEmployee.subordinates
             };
             break;
+        case "ADD-USER":
+            newState.selectedUsers = newState.selectedUsers.filter(userId => userId !== null);
+            if (!newState.selectedUsers.includes(action.userId)) {
+                newState.selectedUsers.push(action.userId);
+            }
+            break;
+        case "REMOVE-USER":
+            newState.selectedUsers = newState.selectedUsers.filter(userId => userId !== action.userId);
+            break;
+        case "CLEAR-SELECTED-USERS":
+            newState.selectedUsers = [];
+            break;
         default:
             break;
     }
@@ -46,6 +59,93 @@ function employeesReducer(state = initState, action) {
 
     return newState
 
+}
+
+export function addUserToSelected(userId) {
+    return {
+        type: "ADD-USER",
+        userId,
+    };
+}
+
+export function removeUserFromSelected(userId) {
+    return {
+        type: "REMOVE-USER",
+        userId,
+    };
+}
+
+export function clearSelectedUsers() {
+    return {
+        type: "CLEAR-SELECTED-USERS",
+    };
+}
+
+
+export function submitSelectedUsers(surveyId, selectedUsers) {
+    debugger
+    return async (dispatch) => {
+        dispatch({ type: "START-LOADING" });
+
+        try {
+            const validUsers = selectedUsers.filter(userId => userId !== null);
+            if (validUsers.length === 0) {
+                throw new Error("Список выбранных пользователей пуст.");
+            }
+
+            const requests = validUsers.map(userId => {
+                return fetch('http://localhost:8081/api/users-surveys', {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userId,
+                        surveyId,
+                    }),
+                });
+            });
+
+            const responses = await Promise.all(requests);
+            responses.forEach(response => {
+                if (!response.ok) {
+                    throw new Error(`Ошибка при отправке данных: ${response.statusText}`);
+                }
+            });
+
+            dispatch(clearSelectedUsers());
+        } catch (error) {
+            dispatch({ type: "SET-ERROR", error: error.message });
+        } finally {
+            dispatch({ type: "STOP-LOADING" });
+        }
+    };
+}
+
+export function submitAllUsers(surveyId) {
+    debugger
+    return async (dispatch) => {
+        dispatch({ type: "START-LOADING" });
+
+        try {
+            const response = await fetch(`http://localhost:8081/api/all-users-surveys/${surveyId}`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`Ошибка при отправке данных: ${response.statusText}`);
+            }
+            dispatch(clearSelectedUsers());
+        } catch (error) {
+            dispatch({ type: "SET-ERROR", error: error.message });
+        } finally {
+            dispatch({ type: "STOP-LOADING" });
+        }
+    };
 }
 
 export function fetchAllEmployees() {
