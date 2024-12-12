@@ -71,7 +71,7 @@ p {
 .employeeInfoTitle, .teamInfoTitle{
   font-size: 20px;
   font-weight: 500;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 .nameSurnameBlock {
@@ -93,7 +93,28 @@ p {
   color: #524747;
 }
 
-.employeeNameProps, .employeeSurnameProps, .employeeEmailProps, .employeePostProps, .employeeChiefProps {
+.employeeNameProps, .employeeSurnameProps, .employeeEmailProps, .employeePostProps, .employeeChiefProps, .employeeSubordinatesProps {
+  border: 2px solid #8D8D8D;
+  border-radius: 14px;
+  padding: 12px 16px;
+  width: 100%; 
+}
+
+.employeeSubordinatesProps {
+  list-style: none;
+  padding: 0 0;
+}
+
+.subordinateItem {
+  border-bottom: 2px solid #8D8D8D;
+  padding: 12px 16px;
+}
+
+.subordinateItem:last-child {
+  border-bottom: none;
+}
+
+.noSubordinates{
   border: 2px solid #8D8D8D;
   border-radius: 14px;
   padding: 12px 16px;

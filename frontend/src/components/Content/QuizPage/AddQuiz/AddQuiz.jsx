@@ -72,13 +72,13 @@ function AddQuiz(props) {
         <img src={back}></img>
         <NavLink to="/quiz" className={({ isActive }) => isActive ? s.active : undefined}>НАЗАД</NavLink>
       </div>
-      <p className={s.title}>Создание анкеты</p>
+      <p className={s.title}>Создание оценки</p>
       <div className={s.finish} onClick={finishQuizCreation}>
-        <button >Завершить создание анкеты</button>
+        <button >Завершить создание оценки</button>
       </div>
       <div className={s.quizTitleBox}>
         <div className={s.quizName}>
-          <textarea onInput={handleInput} onChange={updateQuizTitle} value={quizTitle} placeholder="Новая анкета" />
+          <textarea onInput={handleInput} onChange={updateQuizTitle} value={quizTitle} placeholder="Новая оценка" />
         </div>
         <div className={s.quizDescription}>
           <textarea onInput={handleInput} onChange={updateQuizDescription} value={quizDecription} placeholder="Описание" />

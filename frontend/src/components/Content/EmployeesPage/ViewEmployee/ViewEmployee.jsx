@@ -21,34 +21,48 @@ function ViewEmployee(props) {
                         <div className={s.nameSurnameBlock}>
                             <div className={s.employeeName}>
                                 <p className={s.miniTitle}>Имя</p>
-                                <p className={s.employeeNameProps}>{props.employee?.user?.name || "aa"}</p>
+                                <p className={s.employeeNameProps}>{props.employee?.user?.name || "У сотрудника нет имени"}</p>
                             </div>
                             <div className={s.employeeSurname}>
                                 <p className={s.miniTitle}>Фамилия</p>
-                                <p className={s.employeeSurnameProps}>{props.employee?.user?.surname || "aa"}</p>
+                                <p className={s.employeeSurnameProps}>{props.employee?.user?.surname || "У сотрудника нет фамилии"}</p>
                             </div>
                         </div>
                         <div className={s.employeeEmail}>
                             <p className={s.miniTitle}>Почта</p>
-                            <p className={s.employeeEmailProps}>{props.employee?.user?.email || "aa"}</p>
+                            <p className={s.employeeEmailProps}>{props.employee?.user?.email || "У сотрудника нет почты"}</p>
                         </div>
                         <div className={s.employeePost}>
                             <p className={s.miniTitle}>Должность</p>
-                            <p className={s.employeePostProps}>{props.employee?.user?.post || "aa"}</p>
+                            <p className={s.employeePostProps}>{props.employee?.user?.post || "У сотрудника нет должности"}</p>
                         </div>
                     </div>
                 );
             case "team":
                 return (
                     <div className={s.teamInfo}>
-                        <p className={s.teamInfoTitle}>Основная информация</p>
+                        <p className={s.teamInfoTitle}>Команда</p>
                         <div className={s.employeeChief}>
                             <p className={s.miniTitle}>Начальник</p>
-                            <p className={s.employeeChiefProps}>{`${props.employee?.chief?.surname} ${props.employee?.chief?.name}` || "Начальник не назначен"}</p>
+                            <p className={s.employeeChiefProps}>
+                                {props.employee?.chief
+                                    ? `${props.employee.chief.surname} ${props.employee.chief.name}`
+                                    : "Начальник не назначен"}
+                            </p>
                         </div>
-                        <div className={s.employeeChief}>
-                            <p className={s.miniTitle}>Подчиненные</p>
-                            <p className={s.employeeChiefProps}>{`${props.employee?.subordinates[0]?.surname} ${props.employee?.subordinates[0]?.name}` || "Начальник не назначен"}</p>
+                        <div className={s.employeeSubordinates}>
+                            <p className={s.miniTitle}>Подчинённые</p>
+                            {props.employee?.subordinates?.length > 0 ? (
+                                <ul className={s.employeeSubordinatesProps}>
+                                    {props.employee.subordinates.map((subordinate, index) => (
+                                        <li key={index} className={s.subordinateItem}>
+                                            {subordinate.surname} {subordinate.name}
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p className={s.noSubordinates}>Подчинённые не назначены</p>
+                            )}
                         </div>
                     </div>
                 );

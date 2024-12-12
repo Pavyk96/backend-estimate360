@@ -27,13 +27,13 @@ function QuizDetails(props) {
                 <img src={back}></img>
                 <NavLink to="/quiz" className={({ isActive }) => isActive ? s.active : undefined}>НАЗАД</NavLink>
             </div>
-            <p className={s.title}>Просмотр анкеты</p>
+            <p className={s.title}>Просмотр оценки</p>
             <div className={s.buttonBox}>
                 <div className={s.edit}>
-                    <button onClick={editQuiz}>Редкатировать анкету</button>
+                    <button onClick={editQuiz}>Редкатировать оценку</button>
                 </div>
                 <div className={s.assign}>
-                    <button onClick={assignQuiz}>Назначить анкету</button>
+                    <button onClick={assignQuiz}>Назначить оценку</button>
                 </div>
             </div>
             <div className={s.quizTitleBox}>

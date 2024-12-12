@@ -74,9 +74,9 @@ function EditQuiz(props) {
         <img src={back}></img>
         <NavLink to={`/quiz/${props.quizId}`} className={({ isActive }) => isActive ? s.active : undefined}>НАЗАД</NavLink>
       </div>
-      <p className={s.title}>Редкатирование анкеты</p>
+      <p className={s.title}>Редкатирование оценки</p>
       <div className={s.finish} onClick={finishQuizCreation}>
-        <button >Завершить редкатирование анкеты</button>
+        <button >Завершить редкатирование оценки</button>
       </div>
       <div className={s.quizTitleBox}>
         <div className={s.quizName}>

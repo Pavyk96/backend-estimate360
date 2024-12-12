@@ -2,6 +2,10 @@ import React from "react";
 import s from './AssignQuizEmployee.module.css';
 
 function AssignQuizEmployee(props) {
+    const handleChange = (e) => {
+        props.onCheckboxChange(props.employeeId, e.target.checked);
+    };
+
     return (
         <div className={s.assignQuizEmployee}>
             <div className={s.employeeInfoBox}>
@@ -15,6 +19,8 @@ function AssignQuizEmployee(props) {
                 <input
                     className={s.roundCheckbox}
                     type="checkbox"
+                    checked={props.isSelected}
+                    onChange={handleChange}
                 />
             </label>
         </div>
