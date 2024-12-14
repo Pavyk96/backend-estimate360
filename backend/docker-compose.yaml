@@ -51,18 +51,19 @@ services:
     restart: unless-stopped
 
   estimate-app:
-    image: payk96/estimate:0.0.1
+    image: payk96/estimate:0.0.3
     build:
       context: .
     container_name: estimate-app
     ports:
       - "8081:8081"
     environment:
-      - KEYCLOAK_URL=http://keycloak_1:8080/auth
       - KEYCLOAK_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8ZlVuVQWTuK2dkDv7cAOvwEKaOqE4JwnCcGtmH34eeKpKl+ovWaUmgy30Nl67RJye36cpEThIxWiEfoS0SJ0i4pOXvr7G/hOdJik+UaEMNGR9Kgfr91DQ1KHMerjbsjbLysLpV++5YrutjnsliiqTEvdZn4Ccd/kz19AQ8peDbqmBj2PDl4TlGOu2UBC/3nL2JtJZJHgT3k9Kiy2+M0u/2hr9GH1FR9jYENomDSf0APm+gp6JypRYpfILQqW1lKAmivweMaAs8j9CIBr80sIZ/8NAxn3ijDwQslN8UfSJnChA+iCjasEy7RMgQiemO6P7eTRPtC7hH2LJKnvQBFNgQIDAQAB
       - CLIENT_ID=estimate-app
-      - GRANT_TYPE=password
-      - RESOURCE_URL=http://keycloak_1:8080/realms/estimate/protocol/openid-connect/token
+      - KEYCLOAK_TOKEN_URL=http://keycloak_1:8080/realms/estimate/protocol/openid-connect/token
+      - SPRING_DATASOURCE_ESTIMATE_URL=jdbc:postgresql://estimate_postgres:5432/estimate
+      - SPRING_DATASOURCE_KEYCLOAK_URL=jdbc:postgresql://keycloak_postgres_1:5432/keycloak_1
+      - KEYCLOAK_GENERATE_TOKEN_URL=http://keycloak_1:8080/realms/estimate/protocol/openid-connect/token
     depends_on:
       - estimate_postgres
       - keycloak_1
