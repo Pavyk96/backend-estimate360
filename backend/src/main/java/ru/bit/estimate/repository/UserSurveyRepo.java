@@ -9,6 +9,7 @@ import java.util.List;
 public interface UserSurveyRepo extends JpaRepository<UserSurvey, UserSurveyId> {
     // Метод для поиска всех записей по userId
     List<UserSurvey> findByUserId(String userId);
+    List<UserSurvey> findBySurveyId(Long surveyId);
 
     // Дополнительные методы
     boolean existsByUserIdAndSurveyId(String userId, Long surveyId);

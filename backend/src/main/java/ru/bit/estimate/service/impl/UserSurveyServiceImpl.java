@@ -83,4 +83,9 @@ public class UserSurveyServiceImpl implements UserSurveyService {
         // Удаляем анкету пользователя, если связь существует
         repo.deleteByUserIdAndSurveyId(userId, surveyId);
     }
+
+    @Override
+    public List<UserSurvey> getAllStudentBySurveyId(Long id) {
+        return repo.findBySurveyId(id);
+    }
 }

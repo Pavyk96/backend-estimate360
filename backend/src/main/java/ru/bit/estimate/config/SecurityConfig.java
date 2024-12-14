@@ -41,7 +41,7 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Добавлено для разрешения CORS
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/swagger-ui/**", "/v3/**", "/auth").permitAll()
+                        request.requestMatchers("/swagger-ui/**", "/v3/**", "api/auth").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/questions", "/api/surveys", "/api/surveys-questions", "/api/users-surveys").permitAll()
                                 .requestMatchers("/api/questions").hasAuthority("HR")
                                 .requestMatchers("/api/surveys-questions").hasAuthority("HR")

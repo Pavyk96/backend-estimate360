@@ -60,4 +60,9 @@ public class UserSurveyController {
     public UserSurvey createUserSurvey(@RequestBody UserSurvey request) {
         return service.createUserSurvey(request);
     }
+
+    @GetMapping("/all-users-surveys/{id}")
+    public List<UserSurvey> getAllStudentBySurveyId(@PathVariable Long id) {
+        return service.getAllStudentBySurveyId(id);
+    }
 }
