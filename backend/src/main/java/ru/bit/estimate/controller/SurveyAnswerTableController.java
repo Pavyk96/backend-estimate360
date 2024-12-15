@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.bit.estimate.dto.SurveyAnswerTableRequest;
-import ru.bit.estimate.model.SurveyAnswerTable;
-import ru.bit.estimate.service.impl.QuestionnaireAnswerTableServiceImpl;
+import ru.bit.estimate.model.SurveyAnswer;
+import ru.bit.estimate.service.impl.SurveyAnswerTableServiceImpl;
 
 import java.util.List;
 
@@ -15,20 +15,20 @@ import java.util.List;
 public class SurveyAnswerTableController {
 
     @NonNull
-    private final QuestionnaireAnswerTableServiceImpl service;
+    private final SurveyAnswerTableServiceImpl service;
 
     @GetMapping("/records")
-    public List<SurveyAnswerTable> getRecorde() {
+    public List<SurveyAnswer> getRecorde() {
         return service.getRecord();
     }
 
     @GetMapping("/records/{id}")
-    public SurveyAnswerTable getRecordeById(@PathVariable long id) {
+    public SurveyAnswer getRecordeById(@PathVariable long id) {
         return service.getRecordById(id);
     }
 
     @PostMapping("/records")
-    public SurveyAnswerTable createRecorde(@RequestBody SurveyAnswerTableRequest request) {
+    public SurveyAnswer createRecorde(@RequestBody SurveyAnswerTableRequest request) {
         return service.createRecord(request);
     }
 
