@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "questions")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Table(name = "questions")
 public class Question {
 
     @Id
@@ -28,6 +28,9 @@ public class Question {
 
     @Column(nullable = false)
     private String type;
+
+    @Column(nullable = false)
+    private boolean answerScoreReversed;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)
