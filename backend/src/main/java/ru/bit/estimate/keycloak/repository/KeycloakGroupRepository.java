@@ -8,5 +8,7 @@ import java.util.List;
 
 @Repository
 public interface KeycloakGroupRepository extends JpaRepository<KeycloakGroup, String> {
+
     List<KeycloakGroup> findAllByParentGroup(String parentGroup);
+
 }

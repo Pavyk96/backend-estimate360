@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserEntityServiceImpl implements UserEntityService {
+
     @NonNull
     private final KeycloakUserRepository repo;
 
@@ -19,4 +20,5 @@ public class UserEntityServiceImpl implements UserEntityService {
     public List<UserEntity> getAllUserEntity() {
         return repo.findAll();
     }
+
 }

@@ -4,7 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.bit.estimate.dto.StatisticsDTO;
 import ru.bit.estimate.model.UserSurvey;
 import ru.bit.estimate.service.StatisticsService;
@@ -55,9 +61,9 @@ public class UserSurveyController {
     @Operation(
             summary = "убрать конкретную анкету с конкретного пользователя"
     )
-    @DeleteMapping("/users-survey/{user_id}/{survey_id}")
-    public void deleteUsersSurvey(@PathVariable String user_id, @PathVariable Long survey_id) {
-        userSurveyService.deleteUsersSurvey(user_id, survey_id);
+    @DeleteMapping("/users-survey/{userId}/{surveyId}")
+    public void deleteUsersSurvey(@PathVariable String userId, @PathVariable Long surveyId) {
+        userSurveyService.deleteUsersSurvey(userId, surveyId);
     }
 
     @Operation(
@@ -80,4 +86,5 @@ public class UserSurveyController {
     public ResponseEntity<List<StatisticsDTO>> getStatistics(@PathVariable UUID userId) {
         return ResponseEntity.ok(statisticsService.getStatisticsByUserId(userId));
     }
+
 }

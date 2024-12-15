@@ -1,14 +1,17 @@
 package ru.bit.estimate.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.bit.estimate.model.Question;
 
-@Getter
-@Setter
+@Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class QuestionResponse {
+
     private Long id;
     private String question;
     private String type;
@@ -22,4 +25,5 @@ public class QuestionResponse {
                 .isAnswerScoreIsReversed(question.isAnswerScoreReversed())
                 .build();
     }
+
 }

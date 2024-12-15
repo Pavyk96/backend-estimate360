@@ -13,11 +13,17 @@ import java.util.Optional;
 
 @Repository
 public interface SurveyQuestionsRepository extends JpaRepository<SurveyQuestions, Long> {
+
     @Query("SELECT sq FROM SurveyQuestions sq WHERE sq.survey.id = :surveyId")
     List<SurveyQuestions> findAllBySurveyId(@Param("surveyId") Long surveyId);
+
     boolean existsBySurveyAndQuestion(Survey survey, Question question);
+
     void deleteAllBySurveyId(Long surveyId);
+
     @Query("SELECT sq.question FROM SurveyQuestions sq WHERE sq.survey = :survey")
     List<Question> findAllQuestionsBySurvey(@Param("survey") Survey survey);
+
     Optional<SurveyQuestions> findBySurveyAndQuestion(Survey survey, Question question);
+
 }

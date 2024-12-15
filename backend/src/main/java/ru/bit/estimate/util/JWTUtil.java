@@ -16,7 +16,6 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * Utility class for handling JWT operations such as generating and validating tokens.
@@ -62,10 +61,11 @@ public class JWTUtil {
      */
     public String getUsernameFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
-        if (claims != null) return (String) claims.get("preferred_username");
+        if (claims != null) {
+            return (String) claims.get("preferred_username");
+        }
         return null;
     }
-
 
     /**
      * Extracts realm access.
@@ -75,7 +75,7 @@ public class JWTUtil {
     public List<String> geRealmRolesFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
         if (claims != null) {
-            return objectMapper.convertValue(((Map<String, String>)claims.get("realm_access")).get("roles"), List.class);
+            return objectMapper.convertValue(((Map<String, String>) claims.get("realm_access")).get("roles"), List.class);
         }
         return null;
 
@@ -93,7 +93,6 @@ public class JWTUtil {
         }
         return claims.getExpiration().before(new Date());
     }
-
 
     /**
      * Validates the token against the user details.
@@ -123,6 +122,5 @@ public class JWTUtil {
             return null;
         }
     }
-
 
 }

@@ -1,19 +1,17 @@
 package ru.bit.estimate.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserSurveyId implements Serializable {
+
     private String userId;
     private Long surveyId;
 
-    // Конструктор по умолчанию (обязателен для Hibernate)
-    public UserSurveyId() {}
-
-    public UserSurveyId(String userId, Long surveyId) {
-        this.userId = userId;
-        this.surveyId = surveyId;
-    }
 }

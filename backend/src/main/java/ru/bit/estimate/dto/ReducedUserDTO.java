@@ -8,6 +8,7 @@ import ru.bit.estimate.keycloak.model.UserEntity;
 @Data
 @Builder
 public class ReducedUserDTO {
+
     private String id;
     private String name;
     private String surname;
@@ -23,4 +24,5 @@ public class ReducedUserDTO {
                 .post(group.getName())
                 .build();
     }
+
 }

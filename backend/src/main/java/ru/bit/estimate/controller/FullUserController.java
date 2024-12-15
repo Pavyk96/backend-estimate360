@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class FullUserController {
+
     @NonNull
     private final FullUserService service;
 
@@ -43,4 +44,5 @@ public class FullUserController {
     public List<ReducedUserDTO> getAllReducedUsers() {
         return service.getAllReducedUsers();
     }
+
 }

@@ -20,4 +20,5 @@ public class UserGroupMembership {
 
     @Column(name = "membership_type")
     private String membershipType;
+
 }

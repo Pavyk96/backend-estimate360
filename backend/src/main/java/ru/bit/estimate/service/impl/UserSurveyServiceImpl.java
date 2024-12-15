@@ -15,6 +15,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserSurveyServiceImpl implements UserSurveyService {
+
     @NonNull
     private final UserSurveyRepository repo;
 
@@ -75,8 +76,6 @@ public class UserSurveyServiceImpl implements UserSurveyService {
         return repo.findByUserId(userId);  // Этот метод должен быть определен в репозитории
     }
 
-
-
     @Override
     public void deleteUsersSurvey(String userId, Long surveyId) {
         // Удаляем анкету пользователя, если связь существует
@@ -87,4 +86,5 @@ public class UserSurveyServiceImpl implements UserSurveyService {
     public List<UserSurvey> getAllStudentBySurveyId(Long id) {
         return repo.findBySurveyId(id);
     }
+
 }

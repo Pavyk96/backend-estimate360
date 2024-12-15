@@ -56,7 +56,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                                 StatisticsDTO.ScoreStatistics scoreStatistics = calculateAverageScores(questionAnswers, user);
 
                                 return StatisticsDTO.QuestionStatistics.builder()
-                                        .question_type(questionType)
+                                        .questionType(questionType)
                                         .data(List.of(scoreStatistics))
                                         .build();
                             })
@@ -69,7 +69,6 @@ public class StatisticsServiceImpl implements StatisticsService {
                 })
                 .toList();
     }
-
 
     private StatisticsDTO.ScoreStatistics calculateAverageScores(List<SurveyAnswer> answers, FullUserDTO user) {
         List<Double> bossScores = new ArrayList<>();
@@ -91,15 +90,16 @@ public class StatisticsServiceImpl implements StatisticsService {
                 case BOSS -> bossScores.add(score);
                 case USER_HIMSELF -> userHimselfScores.add(score);
                 case OTHER -> otherScores.add(score);
+                default -> throw new IllegalArgumentException();
             }
 
         }
 
         return StatisticsDTO.ScoreStatistics.builder()
-                .bosses_avg_score(calculateAverage(bossScores))
-                .subordinates_avg_score(calculateAverage(subordinateScores))
-                .others_avg_score(calculateAverage(otherScores))
-                .user_himself_avg_score(calculateAverage(userHimselfScores))
+                .bossesAvgScore(calculateAverage(bossScores))
+                .subordinatesAvgScore(calculateAverage(subordinateScores))
+                .othersAvgScore(calculateAverage(otherScores))
+                .userHimselfAvgScore(calculateAverage(userHimselfScores))
                 .build();
     }
 

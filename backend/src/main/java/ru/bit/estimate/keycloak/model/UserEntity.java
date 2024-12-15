@@ -20,6 +20,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @Table(name = "user_entity")
 public class UserEntity implements UserDetails {
+
     @Id
     private String id;
 
@@ -66,4 +67,5 @@ public class UserEntity implements UserDetails {
     public String getPassword() {
         return null;
     }
+
 }

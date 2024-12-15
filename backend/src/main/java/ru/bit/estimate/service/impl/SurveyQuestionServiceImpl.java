@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SurveyQuestionServiceImpl implements SurveyQuestionService {
+
     @NonNull
     private final QuestionRepository questionRepository;
 
@@ -39,8 +40,6 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService {
                 .collect(Collectors.toList());
     }
 
-
-
     @Override
     public SurveyQuestionResponse getById(Long surveyId) {
         Survey survey = surveyRepository.findById(surveyId)
@@ -52,7 +51,6 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService {
 
         return SurveyQuestionResponse.toDTO(survey, questions);
     }
-
 
     @Override
     public SurveyQuestionResponse create(SurveyQuestionRequest surveyRequest) {
@@ -88,7 +86,6 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService {
 
         return SurveyQuestionResponse.toDTO(survey, questionList);
     }
-
 
     @Override
     public SurveyQuestionResponse updateById(Long surveyId, SurveyQuestionRequest surveyRequest) {

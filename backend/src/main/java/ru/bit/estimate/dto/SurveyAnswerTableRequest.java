@@ -13,6 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class SurveyAnswerTableRequest {
+
     private Long surveyId;
     private Long questionId;
     private UUID userId;
@@ -26,4 +27,5 @@ public class SurveyAnswerTableRequest {
                 .answer(surveyAnswerTableRequest.getAnswer())
                 .build();
     }
+
 }

@@ -8,6 +8,7 @@ import java.util.List;
 @Builder
 @Data
 public class FullUserDTO {
+
     private ReducedUserDTO user;
     private List<ReducedUserDTO> chiefs;
     private List<ReducedUserDTO> subordinates;
@@ -19,4 +20,5 @@ public class FullUserDTO {
                 .subordinates(servitors)
                 .build();
     }
+
 }

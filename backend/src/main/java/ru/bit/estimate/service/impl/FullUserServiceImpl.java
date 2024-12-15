@@ -33,10 +33,14 @@ public class FullUserServiceImpl implements FullUserService {
     @Override
     public FullUserDTO getFullById(String id) {
         UserEntity user = findUserByIdSafe(id).orElse(null);
-        if (user == null) return null; // Пропускаем, если пользователя нет
+        if (user == null) {
+            return null; // Пропускаем, если пользователя нет
+        }
 
         Optional<KeycloakGroup> groupOpt = getUserGroupSafe(user);
-        if (groupOpt.isEmpty()) return null; // Пропускаем, если группа не найдена
+        if (groupOpt.isEmpty()) {
+            return null; // Пропускаем, если группа не найдена
+        }
 
         KeycloakGroup group = groupOpt.get();
         UserEntity boss = findUserByGroupIdSafe(group.getParentGroup()).orElse(null);
@@ -64,7 +68,9 @@ public class FullUserServiceImpl implements FullUserService {
     @Override
     public ReducedUserDTO getReducedById(String id) {
         UserEntity user = findUserByIdSafe(id).orElse(null);
-        if (user == null) return null;
+        if (user == null) {
+            return null;
+        }
 
         return getUserGroupSafe(user)
                 .map(group -> ReducedUserDTO.toDTO(user, group))
@@ -79,7 +85,7 @@ public class FullUserServiceImpl implements FullUserService {
                         .map(group -> ReducedUserDTO.toDTO(user, group))
                         .orElse(null)
                 )
-                .filter(reducedUser -> reducedUser != null) // Убираем null из результатов
+                .filter(Objects::nonNull) // Убираем null из результатов
                 .toList();
     }
 
@@ -125,4 +131,5 @@ public class FullUserServiceImpl implements FullUserService {
                 .map(KeycloakGroup::getId)
                 .toList();
     }
+
 }

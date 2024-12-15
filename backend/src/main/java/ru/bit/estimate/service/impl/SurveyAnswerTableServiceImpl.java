@@ -57,4 +57,5 @@ public class SurveyAnswerTableServiceImpl implements SurveyAnswerTableService {
     public List<SurveyAnswer> findByTargetId(UUID targetId) {
         return surveyAnswerTableRepository.findAllByTargetId(targetId);
     }
+
 }

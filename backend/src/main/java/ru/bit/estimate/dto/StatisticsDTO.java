@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Builder
@@ -25,7 +24,8 @@ public class StatisticsDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class QuestionStatistics {
-        private String question_type;
+        @JsonProperty("question_type")
+        private String questionType;
         private List<ScoreStatistics> data;
     }
 
@@ -34,9 +34,15 @@ public class StatisticsDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ScoreStatistics {
-        private double bosses_avg_score;
-        private double subordinates_avg_score;
-        private double others_avg_score;
-        private double user_himself_avg_score;
+
+        @JsonProperty("bosses_avg_score")
+        private double bossesAvgScore;
+        @JsonProperty("subordinates_avg_score")
+        private double subordinatesAvgScore;
+        @JsonProperty("others_avg_score")
+        private double othersAvgScore;
+        @JsonProperty("user_himself_avg_score")
+        private double userHimselfAvgScore;
     }
+
 }

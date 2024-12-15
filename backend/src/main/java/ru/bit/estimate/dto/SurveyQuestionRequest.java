@@ -6,6 +6,8 @@ import java.util.List;
 
 @Data
 public class SurveyQuestionRequest {
+
     private Long surveyId;
     private List<Long> questionIdList;
+
 }
