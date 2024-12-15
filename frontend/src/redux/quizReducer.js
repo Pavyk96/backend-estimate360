@@ -35,7 +35,7 @@ const initState = savedState ? JSON.parse(savedState) : {
     error: null
 };
 
-const token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsSThGeVdnZ29JTUpYWERJcG1iOWlZYWM2OVdZNkNfMDZtajV0RjFwc0dJIn0.eyJleHAiOjE3MzQwMjA3MTUsImlhdCI6MTczNDAyMDQxNSwiYXV0aF90aW1lIjoxNzM0MDIwMTYzLCJqdGkiOiJiZjhhZjBiNS04MjFjLTRjNWUtODBjNC1kMTQwYjczYmQ5OGQiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0Ojg0ODQvcmVhbG1zL2VzdGltYXRlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjAxMWU2YTMyLWU2YWUtNGUxOS1hMmIxLWE0ZjI4YmM2YWM2OCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImVzdGltYXRlLWFwcCIsInNpZCI6ImUwMzI1MjdiLWU0M2ItNDM3My1iYzI1LWYxYzY4Yzg5NmU1MyIsImFjciI6IjAiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWVzdGltYXRlIiwib2ZmbGluZV9hY2Nlc3MiLCJIUiIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoi0JPQtdC-0YDQs9C40Lkg0JrQsNCx0LjRhtC60LjQuSIsInByZWZlcnJlZF91c2VybmFtZSI6Im9yZ3kiLCJnaXZlbl9uYW1lIjoi0JPQtdC-0YDQs9C40LkiLCJmYW1pbHlfbmFtZSI6ItCa0LDQsdC40YbQutC40LkiLCJlbWFpbCI6Imdlb3JnaWprYWJpY2tpakBnbWFpbC5jb20ifQ.B3yAX9bYreMagDLPi84F4hFCUcV7V7B_1RzS5EExzYayIF-g_NXX455SrIUxEozFbn-G5cnMqMrXJOJX5X5lXFSKsZJZE08ep6W4KMCmv3mqd4Y6CD7tb3ju0LEvIpt-4-cF7jK6qBzj9out856SIU6hmBA5GI8D91wCgPArq6fjeU2zDCVZY6WuX0bleVYSUMsRj0K9J2imb_mCOrjJ-PEHX3cyMyAJGglU_WNociHw_PaVsc3-gD1xcec3pz49mLBhWAWUbAtIsbewbSKtxdGrnAuD5gk55oWXrUuhpOIfTDOEsIiT5-ainT6lwjz_YVxpKEff-KWZbg63wS46JA"
+
 
 function quizReducer(state = initState, action) {
     let newState = structuredClone(state);
@@ -166,7 +166,7 @@ function quizReducer(state = initState, action) {
                 assigned: false,
             };
             newState.newQuestionText = "";
-            newState.questionTypes =  ["Инициативность", "Гибкость", "Коммуникативность", "Командная работа", "Ответственность"];
+            newState.questionTypes = ["Инициативность", "Гибкость", "Коммуникативность", "Командная работа", "Ответственность"];
             newState.selectedQuestionType = "";
             break;
 
@@ -266,10 +266,14 @@ export function addQuestionOnServer(questionText, qtype, dispType) {
         console.log(questionText || "Ошибка вопроса нет в функции")
         console.log(qtype || "Ошибка типа вопроса нет в функции")
         try {
+            const savedState = JSON.parse(localStorage.getItem('tokenState'));
+            const { accessToken } = savedState; // Получение текущего accessToken
+            if (!accessToken) throw new Error("Токен доступа отсутствует");
+
             const questionResponse = await fetch("http://localhost:8081/api/questions", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${accessToken}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ question: questionText, type: qtype }),
@@ -295,6 +299,10 @@ export function updateQuestionOnServer(id, newText, newType) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         try {
+            const savedState = JSON.parse(localStorage.getItem('tokenState'));
+            const { accessToken } = savedState; // Получение текущего accessToken
+            if (!accessToken) throw new Error("Токен доступа отсутствует");
+
             const payload = {
                 question: newText,
                 type: newType
@@ -302,7 +310,7 @@ export function updateQuestionOnServer(id, newText, newType) {
             const response = await fetch(`http://localhost:8081/api/questions/${id}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
@@ -322,6 +330,10 @@ export function updateQuestionOnServerEdit(id, newText, newType) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         try {
+            const savedState = JSON.parse(localStorage.getItem('tokenState'));
+            const { accessToken } = savedState; // Получение текущего accessToken
+            if (!accessToken) throw new Error("Токен доступа отсутствует");
+
             const payload = {
                 question: newText,
                 type: "fitst_type"
@@ -329,7 +341,7 @@ export function updateQuestionOnServerEdit(id, newText, newType) {
             const response = await fetch(`http://localhost:8081/api/questions/${id}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
@@ -350,10 +362,14 @@ export function CompleteQuizCreation(quizData) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         try {
+            const savedState = JSON.parse(localStorage.getItem('tokenState'));
+            const { accessToken } = savedState; // Получение текущего accessToken
+            if (!accessToken) throw new Error("Токен доступа отсутствует");
+
             const createQuizResponse = await fetch("http://localhost:8081/api/surveys", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${accessToken}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
@@ -374,7 +390,7 @@ export function CompleteQuizCreation(quizData) {
             const updateSurveyResponse = await fetch(`http://localhost:8081/api/surveys-questions/${surveyId}`, {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${accessToken}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
@@ -405,11 +421,15 @@ export function CompleteQuizEdit(quizData) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         try {
+            const savedState = JSON.parse(localStorage.getItem('tokenState'));
+            const { accessToken } = savedState; // Получение текущего accessToken
+            if (!accessToken) throw new Error("Токен доступа отсутствует");
+
             const surveyId = quizData.id;
             const createQuizResponse = await fetch(`http://localhost:8081/api/surveys/${surveyId}`, {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${accessToken}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
@@ -425,7 +445,7 @@ export function CompleteQuizEdit(quizData) {
             await fetch(`http://localhost:8081/api/surveys-questions/${surveyId}`, {
                 method: "DELETE",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${accessToken}`,
                     "Content-Type": "application/json",
                 }
             });
@@ -434,7 +454,7 @@ export function CompleteQuizEdit(quizData) {
             const updateSurveyResponse = await fetch(`http://localhost:8081/api/surveys-questions/${surveyId}`, {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${accessToken}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
@@ -465,10 +485,14 @@ export function fetchQuizToView(quizId) {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         try {
+            const savedState = JSON.parse(localStorage.getItem('tokenState'));
+            const { accessToken } = savedState; // Получение текущего accessToken
+            if (!accessToken) throw new Error("Токен доступа отсутствует");
+
             const response = await fetch(`http://localhost:8081/api/surveys-questions/${quizId}`, {
                 method: "GET",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${accessToken}`,
                     "Content-Type": "application/json",
                 },
             });
@@ -505,10 +529,14 @@ export function fetchAllQuizzes() {
     return async (dispatch) => {
         dispatch({ type: "START-LOADING" });
         try {
+            const savedState = JSON.parse(localStorage.getItem('tokenState'));
+            const { accessToken } = savedState; // Получение текущего accessToken
+            if (!accessToken) throw new Error("Токен доступа отсутствует");
+
             const response = await fetch("http://localhost:8081/api/surveys", {
                 method: "GET",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${accessToken}`,
                     "Content-Type": "application/json",
                 },
             });
