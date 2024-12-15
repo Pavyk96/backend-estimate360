@@ -10,13 +10,13 @@ import java.util.List;
 @Data
 public class FullUser {
     private ReducedUser user;
-    private ReducedUser chief;
+    private List<ReducedUser> chiefs;
     private List<ReducedUser> subordinates;
 
-    public static FullUser toDto(ReducedUser reducedUser, ReducedUser boss, List<ReducedUser> servitors) {
+    public static FullUser toDto(ReducedUser reducedUser, List<ReducedUser> boss, List<ReducedUser> servitors) {
         return FullUser.builder()
                 .user(reducedUser)
-                .chief(boss)
+                .chiefs(boss)
                 .subordinates(servitors)
                 .build();
     }

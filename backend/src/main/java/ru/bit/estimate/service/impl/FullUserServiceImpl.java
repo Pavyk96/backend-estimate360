@@ -14,6 +14,7 @@ import ru.bit.estimate.keycloak.repository.UserGroupMembershipRepository;
 import ru.bit.estimate.service.FullUserService;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -48,13 +49,16 @@ public class FullUserServiceImpl implements FullUserService {
                         .map(group1 -> ReducedUser.toDTO(servitor, group1))
                         .orElse(null)
                 )
-                .filter(reducedUser -> reducedUser != null) // Убираем null из результатов
+                .filter(Objects::nonNull) // Убираем null из результатов
                 .toList();
 
         ReducedUser reducedUser = ReducedUser.toDTO(user, group);
         ReducedUser reducedBoss = boss != null && bossGroup != null ? ReducedUser.toDTO(boss, bossGroup) : null;
 
-        return FullUser.toDto(reducedUser, reducedBoss, reducedServitorsList);
+        if (reducedBoss != null) {
+            return FullUser.toDto(reducedUser, List.of(reducedBoss), reducedServitorsList);
+        }
+        return FullUser.toDto(reducedUser, null, reducedServitorsList);
     }
 
     @Override
