@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserGroupServiceImpl implements UserGroupMembershipService {
+
     @NonNull
     private final UserGroupMembershipRepository repository;
 
@@ -19,4 +20,5 @@ public class UserGroupServiceImpl implements UserGroupMembershipService {
     public List<UserGroupMembership> getAll() {
         return repository.findAll();
     }
+
 }

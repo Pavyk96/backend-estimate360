@@ -6,13 +6,14 @@ import ru.bit.estimate.model.UserSurveyId;
 
 import java.util.List;
 
-public interface UserSurveyRepo extends JpaRepository<UserSurvey, UserSurveyId> {
-    // Метод для поиска всех записей по userId
+public interface UserSurveyRepository extends JpaRepository<UserSurvey, UserSurveyId> {
+
     List<UserSurvey> findByUserId(String userId);
+
     List<UserSurvey> findBySurveyId(Long surveyId);
 
-    // Дополнительные методы
     boolean existsByUserIdAndSurveyId(String userId, Long surveyId);
 
     void deleteByUserIdAndSurveyId(String userId, Long surveyId);
+
 }

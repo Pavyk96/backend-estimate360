@@ -1,6 +1,9 @@
 package ru.bit.estimate.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.bit.estimate.model.Question;
 import ru.bit.estimate.model.Survey;
 
@@ -8,9 +11,10 @@ import java.util.List;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class SurveyQuestionResponse {
+
     private Long id;
     private String name;
     private String description;
@@ -24,4 +28,5 @@ public class SurveyQuestionResponse {
                 .questionList(questionList.stream().map(QuestionResponse::toDTO).toList())
                 .build();
     }
+
 }

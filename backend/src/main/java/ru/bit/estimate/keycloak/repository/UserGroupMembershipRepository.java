@@ -16,6 +16,7 @@ public interface UserGroupMembershipRepository extends JpaRepository<UserGroupMe
 
     @Query("SELECT u.userId FROM UserGroupMembership u WHERE u.groupId IN :groupIds")
     List<String> getUserIdsByGroupIds(@Param("groupIds") List<String> groupIds);
+
 }
 
 

@@ -8,9 +8,11 @@ import ru.bit.estimate.auditor.AuditorAwareImpl;
 
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
-public class MainCfg {
+public class MainConfig {
+
     @Bean
     public AuditorAware<String> auditorProvider() {
         return new AuditorAwareImpl();
     }
+
 }

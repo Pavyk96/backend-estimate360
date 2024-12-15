@@ -1,7 +1,16 @@
 package ru.bit.estimate.model;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,21 +24,24 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "survey_answer_table")
-public class SurveyAnswerTable {
+@Table(name = "survey_answer")
+public class SurveyAnswer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "questionnaire_id", nullable = false)
-    private UUID surveyId;
-
-    @Column(name = "question_id", nullable = false)
-    private Long questionId;
+    @Column(name = "target_id", nullable = false)
+    private UUID targetId;
 
     @Column(name = "user_id", nullable = false)
     private UUID userId;
+
+    @Column(name = "survey_id", nullable = false)
+    private Long surveyId;
+
+    @Column(name = "question_id", nullable = false)
+    private Long questionId;
 
     @Column(nullable = false)
     private String answer;
@@ -41,4 +53,5 @@ public class SurveyAnswerTable {
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
 }

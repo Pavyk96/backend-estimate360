@@ -9,9 +9,9 @@ import ru.bit.estimate.dto.SurveyQuestionResponse;
 import ru.bit.estimate.model.Question;
 import ru.bit.estimate.model.Survey;
 import ru.bit.estimate.model.SurveyQuestions;
-import ru.bit.estimate.repository.QuestionRepo;
-import ru.bit.estimate.repository.SurveyQuestionsRepo;
-import ru.bit.estimate.repository.SurveyRepo;
+import ru.bit.estimate.repository.QuestionRepository;
+import ru.bit.estimate.repository.SurveyQuestionsRepository;
+import ru.bit.estimate.repository.SurveyRepository;
 import ru.bit.estimate.service.SurveyQuestionService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,42 +21,40 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SurveyQuestionServiceImpl implements SurveyQuestionService {
-    @NonNull
-    private final QuestionRepo questionRepository;
 
     @NonNull
-    private final SurveyRepo surveyRepo;
+    private final QuestionRepository questionRepository;
 
     @NonNull
-    private final SurveyQuestionsRepo surveyQuestionsRepo;
+    private final SurveyRepository surveyRepository;
+
+    @NonNull
+    private final SurveyQuestionsRepository surveyQuestionsRepository;
 
     @Override
     public List<SurveyQuestionResponse> getAll() {
-        List<Survey> surveys = surveyRepo.findAll();
+        List<Survey> surveys = surveyRepository.findAll();
 
         return surveys.stream()
                 .map(survey -> getById(survey.getId()))  // Вызов метода getById для каждого опроса
                 .collect(Collectors.toList());
     }
 
-
-
     @Override
     public SurveyQuestionResponse getById(Long surveyId) {
-        Survey survey = surveyRepo.findById(surveyId)
+        Survey survey = surveyRepository.findById(surveyId)
                 .orElseThrow(() -> new EntityNotFoundException("Опрос с id " + surveyId + " не найден"));
 
-        List<Question> questions = surveyQuestionsRepo.findAllBySurveyId(surveyId).stream()
+        List<Question> questions = surveyQuestionsRepository.findAllBySurveyId(surveyId).stream()
                 .map(SurveyQuestions::getQuestion)
                 .toList();
 
         return SurveyQuestionResponse.toDTO(survey, questions);
     }
 
-
     @Override
     public SurveyQuestionResponse create(SurveyQuestionRequest surveyRequest) {
-        Survey survey = surveyRepo.findById(surveyRequest.getSurveyId())
+        Survey survey = surveyRepository.findById(surveyRequest.getSurveyId())
                 .orElseThrow(() -> new EntityNotFoundException("Опрос с ID " + surveyRequest.getSurveyId() + " не найден"));
 
         List<Question> questionList = questionRepository.findAllById(surveyRequest.getQuestionIdList());
@@ -65,7 +63,7 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService {
             throw new EntityNotFoundException("Некоторые вопросы из списка ID не найдены");
         }
 
-        List<Long> existingQuestionIds = surveyQuestionsRepo.findAll().stream()
+        List<Long> existingQuestionIds = surveyQuestionsRepository.findAll().stream()
                 .map(surveyQuestion -> surveyQuestion.getQuestion().getId())
                 .toList();
 
@@ -84,18 +82,17 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService {
                         .build())
                 .toList();
 
-        surveyQuestionsRepo.saveAll(surveyQuestionsList);
+        surveyQuestionsRepository.saveAll(surveyQuestionsList);
 
         return SurveyQuestionResponse.toDTO(survey, questionList);
     }
 
-
     @Override
     public SurveyQuestionResponse updateById(Long surveyId, SurveyQuestionRequest surveyRequest) {
-        Survey survey = surveyRepo.findById(surveyId)
+        Survey survey = surveyRepository.findById(surveyId)
                 .orElseThrow(() -> new EntityNotFoundException("Опрос с ID " + surveyId + " не найден"));
 
-        surveyQuestionsRepo.deleteById(surveyId);
+        surveyQuestionsRepository.deleteById(surveyId);
 
         List<Question> questionList = questionRepository.findAllById(surveyRequest.getQuestionIdList());
 
@@ -109,7 +106,7 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService {
                         .question(question)
                         .build())
                 .toList();
-        surveyQuestionsRepo.saveAll(surveyQuestionsList);
+        surveyQuestionsRepository.saveAll(surveyQuestionsList);
 
         return SurveyQuestionResponse.toDTO(survey, questionList);
     }
@@ -117,22 +114,22 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService {
     @Override
     @Transactional
     public void deleteById(Long surveyId) {
-        if (!surveyRepo.existsById(surveyId)) {
+        if (!surveyRepository.existsById(surveyId)) {
             throw new EntityNotFoundException("Опрос с id " + surveyId + " не найден");
         }
 
-        surveyQuestionsRepo.deleteAllBySurveyId(surveyId);
+        surveyQuestionsRepository.deleteAllBySurveyId(surveyId);
     }
 
     @Override
     public SurveyQuestionResponse addQuestionToSurvey(Long surveyId, Long questionId) {
-        Survey survey = surveyRepo.findById(surveyId)
+        Survey survey = surveyRepository.findById(surveyId)
                 .orElseThrow(() -> new EntityNotFoundException("Survey not found with id: " + surveyId));
 
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + questionId));
 
-        boolean alreadyExists = surveyQuestionsRepo.existsBySurveyAndQuestion(survey, question);
+        boolean alreadyExists = surveyQuestionsRepository.existsBySurveyAndQuestion(survey, question);
         if (alreadyExists) {
             throw new IllegalStateException("Question already exists in the survey");
         }
@@ -140,25 +137,25 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService {
         SurveyQuestions surveyQuestions = new SurveyQuestions();
         surveyQuestions.setSurvey(survey);
         surveyQuestions.setQuestion(question);
-        surveyQuestionsRepo.save(surveyQuestions);
+        surveyQuestionsRepository.save(surveyQuestions);
 
-        List<Question> questionList = surveyQuestionsRepo.findAllQuestionsBySurvey(survey);
+        List<Question> questionList = surveyQuestionsRepository.findAllQuestionsBySurvey(survey);
         return SurveyQuestionResponse.toDTO(survey, questionList);
     }
 
     @Override
     public SurveyQuestionResponse removeQuestionFromSurvey(Long surveyId, Long questionId) {
-        Survey survey = surveyRepo.findById(surveyId)
+        Survey survey = surveyRepository.findById(surveyId)
                 .orElseThrow(() -> new EntityNotFoundException("Survey not found with id: " + surveyId));
 
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + questionId));
 
-        SurveyQuestions surveyQuestions = surveyQuestionsRepo.findBySurveyAndQuestion(survey, question)
+        SurveyQuestions surveyQuestions = surveyQuestionsRepository.findBySurveyAndQuestion(survey, question)
                 .orElseThrow(() -> new EntityNotFoundException("This question is not associated with the survey"));
-        surveyQuestionsRepo.delete(surveyQuestions);
+        surveyQuestionsRepository.delete(surveyQuestions);
 
-        List<Question> questionList = surveyQuestionsRepo.findAllQuestionsBySurvey(survey);
+        List<Question> questionList = surveyQuestionsRepository.findAllQuestionsBySurvey(survey);
         return SurveyQuestionResponse.toDTO(survey, questionList);
     }
 

@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.bit.estimate.dto.SurveyRequest;
 import ru.bit.estimate.model.Survey;
-import ru.bit.estimate.repository.SurveyRepo;
+import ru.bit.estimate.repository.SurveyRepository;
 import ru.bit.estimate.service.SurveyService;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 public class SurveyServiceImpl implements SurveyService {
 
     @NonNull
-    private final SurveyRepo repo;
+    private final SurveyRepository repo;
 
     @Override
     public List<Survey> getAllSurveys() {
@@ -46,4 +46,5 @@ public class SurveyServiceImpl implements SurveyService {
     public void deleteSurveysById(Long id) {
         repo.deleteById(id);
     }
+
 }

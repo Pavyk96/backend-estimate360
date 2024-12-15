@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.bit.estimate.dto.QuestionRequest;
 import ru.bit.estimate.dto.QuestionResponse;
 import ru.bit.estimate.model.Question;
-import ru.bit.estimate.repository.QuestionRepo;
+import ru.bit.estimate.repository.QuestionRepository;
 import ru.bit.estimate.service.QuestionService;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class QuestionServiceImpl implements QuestionService {
 
     @NonNull
-    private final QuestionRepo questionRepo;
+    private final QuestionRepository questionRepository;
 
     /**
      * Получить все вопросы.
@@ -26,7 +26,7 @@ public class QuestionServiceImpl implements QuestionService {
      * @return список объектов QuestionResponse.
      */
     public List<QuestionResponse> getAllQuestions() {
-        return questionRepo.findAll().stream()
+        return questionRepository.findAll().stream()
                 .map(QuestionResponse::toDTO)
                 .collect(Collectors.toList());
     }
@@ -38,7 +38,7 @@ public class QuestionServiceImpl implements QuestionService {
      * @return объект QuestionResponse.
      */
     public QuestionResponse getQuestionByID(long id) {
-        Question question = questionRepo.findById(id)
+        Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Вопрос не найден"));
         return QuestionResponse.toDTO(question);
     }
@@ -51,7 +51,7 @@ public class QuestionServiceImpl implements QuestionService {
      */
     public QuestionResponse createQuestion(QuestionRequest request) {
         Question question = QuestionRequest.fromDto(request);
-        return QuestionResponse.toDTO(questionRepo.save(question));
+        return QuestionResponse.toDTO(questionRepository.save(question));
     }
 
     /**
@@ -62,13 +62,13 @@ public class QuestionServiceImpl implements QuestionService {
      * @return обновленный вопрос в виде объекта QuestionResponse.
      */
     public QuestionResponse updateQuestionByID(QuestionRequest request, long id) {
-        Question existingQuestion = questionRepo.findById(id)
+        Question existingQuestion = questionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Вопрос не найден"));
 
         existingQuestion.setType(request.getType());
         existingQuestion.setQuestion(request.getQuestion());
 
-        return QuestionResponse.toDTO(questionRepo.save(existingQuestion));
+        return QuestionResponse.toDTO(questionRepository.save(existingQuestion));
     }
 
     /**
@@ -77,9 +77,10 @@ public class QuestionServiceImpl implements QuestionService {
      * @param id идентификатор вопроса.
      */
     public void deleteQuestionByID(long id) {
-        if (!questionRepo.existsById(id)) {
+        if (!questionRepository.existsById(id)) {
             throw new EntityNotFoundException("Вопрос не найден");
         }
-        questionRepo.deleteById(id);
+        questionRepository.deleteById(id);
     }
+
 }

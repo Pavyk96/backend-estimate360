@@ -2,8 +2,14 @@ package ru.bit.estimate.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.bit.estimate.model.SurveyAnswerTable;
+import ru.bit.estimate.model.SurveyAnswer;
+
+import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface SurveyAnswerTableRepository extends JpaRepository<SurveyAnswerTable, Long> {
+public interface SurveyAnswerTableRepository extends JpaRepository<SurveyAnswer, Long> {
+
+    List<SurveyAnswer> findAllByTargetId(UUID targetId);
+
 }

@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.bit.estimate.model.Survey;
 
 @Repository
-public interface SurveyRepo extends JpaRepository<Survey, Long> {
+public interface SurveyRepository extends JpaRepository<Survey, Long> {
 }

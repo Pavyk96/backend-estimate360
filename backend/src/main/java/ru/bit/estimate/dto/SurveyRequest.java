@@ -1,14 +1,17 @@
 package ru.bit.estimate.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.bit.estimate.model.Survey;
 
-@Getter
-@Setter
+@Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class SurveyRequest {
+
     private String name;
     private String description;
 
@@ -18,4 +21,5 @@ public class SurveyRequest {
                 .description(questionnaireRequest.description)
                 .build();
     }
+
 }

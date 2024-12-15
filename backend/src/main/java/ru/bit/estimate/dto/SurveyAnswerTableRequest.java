@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.bit.estimate.model.SurveyAnswerTable;
+import ru.bit.estimate.model.SurveyAnswer;
 
 import java.util.UUID;
 
@@ -13,17 +13,19 @@ import java.util.UUID;
 @Getter
 @Setter
 public class SurveyAnswerTableRequest {
-    private UUID surveyId;
+
+    private Long surveyId;
     private Long questionId;
     private UUID userId;
     private String answer;
 
-    public static SurveyAnswerTable fromDto(SurveyAnswerTableRequest questionnaireRequest) {
-        return SurveyAnswerTable.builder()
-                .surveyId(questionnaireRequest.getSurveyId())
-                .questionId(questionnaireRequest.getQuestionId())
-                .userId(questionnaireRequest.getUserId())
-                .answer(questionnaireRequest.getAnswer())
+    public static SurveyAnswer fromDto(SurveyAnswerTableRequest surveyAnswerTableRequest) {
+        return SurveyAnswer.builder()
+                .surveyId(surveyAnswerTableRequest.getSurveyId())
+                .questionId(surveyAnswerTableRequest.getQuestionId())
+                .userId(surveyAnswerTableRequest.getUserId())
+                .answer(surveyAnswerTableRequest.getAnswer())
                 .build();
     }
+
 }

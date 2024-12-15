@@ -1,12 +1,16 @@
 package ru.bit.estimate.service;
 
-import ru.bit.estimate.dto.FullUser;
-import ru.bit.estimate.dto.ReducedUser;
+import ru.bit.estimate.dto.FullUserDTO;
+import ru.bit.estimate.dto.ReducedUserDTO;
 
 import java.util.List;
 
 public interface FullUserService {
-    FullUser getFullById(String id);
-    ReducedUser getReducedById(String id);
-    List<ReducedUser> getAllReducedUsers();
+
+    FullUserDTO getFullById(String id);
+
+    ReducedUserDTO getReducedById(String id);
+
+    List<ReducedUserDTO> getAllReducedUsers();
+
 }

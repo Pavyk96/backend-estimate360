@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserGroupMembershipController {
+
     @NonNull
     private final UserGroupMembershipService service;
 
@@ -21,4 +22,5 @@ public class UserGroupMembershipController {
     public List<UserGroupMembership> getAll() {
         return service.getAll();
     }
+
 }
