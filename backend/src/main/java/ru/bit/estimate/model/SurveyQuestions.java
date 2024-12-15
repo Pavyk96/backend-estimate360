@@ -16,7 +16,7 @@ public class SurveyQuestions {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "questionnaire_id", nullable = false)
+    @JoinColumn(name = "survey_id", nullable = false)
     private Survey survey;
 
     @ManyToOne(fetch = FetchType.LAZY)
