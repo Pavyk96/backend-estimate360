@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SurveyQuestionsRepo extends JpaRepository<SurveyQuestions, Long> {
+public interface SurveyQuestionsRepository extends JpaRepository<SurveyQuestions, Long> {
     @Query("SELECT sq FROM SurveyQuestions sq WHERE sq.survey.id = :surveyId")
     List<SurveyQuestions> findAllBySurveyId(@Param("surveyId") Long surveyId);
     boolean existsBySurveyAndQuestion(Survey survey, Question question);

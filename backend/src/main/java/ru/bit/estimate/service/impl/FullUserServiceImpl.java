@@ -3,8 +3,8 @@ package ru.bit.estimate.service.impl;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.bit.estimate.dto.FullUser;
-import ru.bit.estimate.dto.ReducedUser;
+import ru.bit.estimate.dto.FullUserDTO;
+import ru.bit.estimate.dto.ReducedUserDTO;
 import ru.bit.estimate.keycloak.model.KeycloakGroup;
 import ru.bit.estimate.keycloak.model.UserEntity;
 import ru.bit.estimate.keycloak.model.UserGroupMembership;
@@ -31,7 +31,7 @@ public class FullUserServiceImpl implements FullUserService {
     private final UserGroupMembershipRepository userGroupMembershipRepository;
 
     @Override
-    public FullUser getFullById(String id) {
+    public FullUserDTO getFullById(String id) {
         UserEntity user = findUserByIdSafe(id).orElse(null);
         if (user == null) return null; // Пропускаем, если пользователя нет
 
@@ -44,39 +44,39 @@ public class FullUserServiceImpl implements FullUserService {
 
         List<KeycloakGroup> allServitorsGroup = getServitorGroupsSafe(group);
         List<UserEntity> servitorsEntity = getUsersByGroupIds(extractGroupIds(allServitorsGroup));
-        List<ReducedUser> reducedServitorsList = servitorsEntity.stream()
+        List<ReducedUserDTO> reducedServitorsList = servitorsEntity.stream()
                 .map(servitor -> getUserGroupSafe(servitor)
-                        .map(group1 -> ReducedUser.toDTO(servitor, group1))
+                        .map(group1 -> ReducedUserDTO.toDTO(servitor, group1))
                         .orElse(null)
                 )
                 .filter(Objects::nonNull) // Убираем null из результатов
                 .toList();
 
-        ReducedUser reducedUser = ReducedUser.toDTO(user, group);
-        ReducedUser reducedBoss = boss != null && bossGroup != null ? ReducedUser.toDTO(boss, bossGroup) : null;
+        ReducedUserDTO reducedUserDTO = ReducedUserDTO.toDTO(user, group);
+        ReducedUserDTO reducedBoss = boss != null && bossGroup != null ? ReducedUserDTO.toDTO(boss, bossGroup) : null;
 
         if (reducedBoss != null) {
-            return FullUser.toDto(reducedUser, List.of(reducedBoss), reducedServitorsList);
+            return FullUserDTO.toDto(reducedUserDTO, List.of(reducedBoss), reducedServitorsList);
         }
-        return FullUser.toDto(reducedUser, null, reducedServitorsList);
+        return FullUserDTO.toDto(reducedUserDTO, null, reducedServitorsList);
     }
 
     @Override
-    public ReducedUser getReducedById(String id) {
+    public ReducedUserDTO getReducedById(String id) {
         UserEntity user = findUserByIdSafe(id).orElse(null);
         if (user == null) return null;
 
         return getUserGroupSafe(user)
-                .map(group -> ReducedUser.toDTO(user, group))
+                .map(group -> ReducedUserDTO.toDTO(user, group))
                 .orElse(null);
     }
 
     @Override
-    public List<ReducedUser> getAllReducedUsers() {
+    public List<ReducedUserDTO> getAllReducedUsers() {
         List<UserEntity> allUsers = userRepository.findAll();
         return allUsers.stream()
                 .map(user -> getUserGroupSafe(user)
-                        .map(group -> ReducedUser.toDTO(user, group))
+                        .map(group -> ReducedUserDTO.toDTO(user, group))
                         .orElse(null)
                 )
                 .filter(reducedUser -> reducedUser != null) // Убираем null из результатов

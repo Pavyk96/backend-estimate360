@@ -3,7 +3,7 @@ package ru.bit.estimate.service.impl;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.bit.estimate.dto.FullUser;
+import ru.bit.estimate.dto.FullUserDTO;
 import ru.bit.estimate.dto.StatisticsDTO;
 import ru.bit.estimate.keycloak.repository.KeycloakUserRepository;
 import ru.bit.estimate.model.SurveyAnswer;
@@ -34,7 +34,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final FullUserServiceImpl fullUserService;
     @Override
     public List<StatisticsDTO> getStatisticsByUserId(UUID userId) {
-        FullUser user = fullUserService.getFullById(String.valueOf(userId));
+        FullUserDTO user = fullUserService.getFullById(String.valueOf(userId));
         List<SurveyAnswer> surveyAnswers = surveyAnswerTableService.findByTargetId(userId);
         Map<Long, List<SurveyAnswer>> answersBySurvey = surveyAnswers.stream()
                 .collect(Collectors.groupingBy(SurveyAnswer::getSurveyId));
@@ -71,7 +71,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
 
-    private StatisticsDTO.ScoreStatistics calculateAverageScores(List<SurveyAnswer> answers, FullUser user) {
+    private StatisticsDTO.ScoreStatistics calculateAverageScores(List<SurveyAnswer> answers, FullUserDTO user) {
         List<Double> bossScores = new ArrayList<>();
         List<Double> subordinateScores = new ArrayList<>();
         List<Double> otherScores = new ArrayList<>();
@@ -103,7 +103,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .build();
     }
 
-    private Role determineRole(FullUser user, String answeredUserId) {
+    private Role determineRole(FullUserDTO user, String answeredUserId) {
         if (user.getSubordinates().stream().anyMatch(reducedUser -> reducedUser.getId().equals(answeredUserId))) {
             return Role.SUBORDINATE;
         } else if (user.getChiefs().stream().anyMatch(reducedUser -> reducedUser.getId().equals(answeredUserId))) {

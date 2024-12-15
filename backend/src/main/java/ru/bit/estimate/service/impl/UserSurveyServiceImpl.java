@@ -6,9 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.bit.estimate.keycloak.model.UserEntity;
 import ru.bit.estimate.keycloak.repository.KeycloakUserRepository;
 import ru.bit.estimate.model.UserSurvey;
-import ru.bit.estimate.model.UserSurveyId;
-import ru.bit.estimate.repository.SurveyRepo;
-import ru.bit.estimate.repository.UserSurveyRepo;
+import ru.bit.estimate.repository.SurveyRepository;
+import ru.bit.estimate.repository.UserSurveyRepository;
 import ru.bit.estimate.service.UserSurveyService;
 
 import java.util.List;
@@ -17,13 +16,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserSurveyServiceImpl implements UserSurveyService {
     @NonNull
-    private final UserSurveyRepo repo;
+    private final UserSurveyRepository repo;
 
     @NonNull
     private final KeycloakUserRepository userRepository;
 
     @NonNull
-    private final SurveyRepo surveyRepo;
+    private final SurveyRepository surveyRepository;
 
     @Override
     public List<UserSurvey> getAll() {
@@ -33,7 +32,7 @@ public class UserSurveyServiceImpl implements UserSurveyService {
     @Override
     public UserSurvey createUserSurvey(UserSurvey request) {
         // Проверяем существование опросника перед сохранением
-        if (!surveyRepo.existsById(request.getSurveyId())) {
+        if (!surveyRepository.existsById(request.getSurveyId())) {
             throw new IllegalArgumentException("Survey with ID " + request.getSurveyId() + " does not exist.");
         }
 
@@ -48,7 +47,7 @@ public class UserSurveyServiceImpl implements UserSurveyService {
     @Override
     public void setAll(Long surveyId) {
         // Проверяем существование опросника
-        if (!surveyRepo.existsById(surveyId)) {
+        if (!surveyRepository.existsById(surveyId)) {
             throw new IllegalArgumentException("Survey with ID " + surveyId + " does not exist.");
         }
 

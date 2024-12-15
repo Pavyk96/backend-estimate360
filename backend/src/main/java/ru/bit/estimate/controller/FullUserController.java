@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bit.estimate.dto.FullUser;
-import ru.bit.estimate.dto.ReducedUser;
+import ru.bit.estimate.dto.FullUserDTO;
+import ru.bit.estimate.dto.ReducedUserDTO;
 import ru.bit.estimate.service.FullUserService;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class FullUserController {
             summary = "Получить всю информацию о пользователе по его id"
     )
     @GetMapping("/full-users/{id}")
-    public FullUser getFullUserById(@PathVariable String id) {
+    public FullUserDTO getFullUserById(@PathVariable String id) {
         return service.getFullById(id);
     }
 
@@ -32,7 +32,7 @@ public class FullUserController {
             summary = "Получить сокращенную информацию о пользователе по его id"
     )
     @GetMapping("/reduced-users/{id}")
-    public ReducedUser getReducedUserById(@PathVariable String id) {
+    public ReducedUserDTO getReducedUserById(@PathVariable String id) {
         return service.getReducedById(id);
     }
 
@@ -40,7 +40,7 @@ public class FullUserController {
             summary = "Получить всю сокращенную информацию о всех пользователях"
     )
     @GetMapping("/reduced-users")
-    public List<ReducedUser> getAllReducedUsers() {
+    public List<ReducedUserDTO> getAllReducedUsers() {
         return service.getAllReducedUsers();
     }
 }
