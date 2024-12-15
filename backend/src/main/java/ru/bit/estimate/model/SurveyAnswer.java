@@ -15,21 +15,24 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "survey_answer_table")
-public class SurveyAnswerTable {
+@Table(name = "survey_answer")
+public class SurveyAnswer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "questionnaire_id", nullable = false)
-    private UUID surveyId;
-
-    @Column(name = "question_id", nullable = false)
-    private Long questionId;
+    @Column(name = "target_id", nullable = false)
+    private UUID targetId;
 
     @Column(name = "user_id", nullable = false)
     private UUID userId;
+
+    @Column(name = "survey_id", nullable = false)
+    private Long surveyId;
+
+    @Column(name = "question_id", nullable = false)
+    private Long questionId;
 
     @Column(nullable = false)
     private String answer;
