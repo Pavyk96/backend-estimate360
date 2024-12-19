@@ -47,13 +47,12 @@ services:
     volumes:
       - keycloak_data_1:/opt/keycloak/data_1
       - ./keycloak_export_1:/opt/keycloak_export_1
+      - ./themes:/opt/keycloak/themes  # Монтирование вашей папки с темами
     command: start-dev
     restart: unless-stopped
 
   estimate-app:
     image: payk96/estimate:0.0.3
-    build:
-      context: .
     container_name: estimate-app
     ports:
       - "8081:8081"
@@ -67,6 +66,16 @@ services:
     depends_on:
       - estimate_postgres
       - keycloak_1
+    restart: unless-stopped
+
+
+  frontend:
+    image: orgylei/estimate-frontend:0.0.1 # Укажите имя образа, если он уже создан
+    container_name: estimate_frontend
+    ports:
+      - "3000:3000" # Пробрасываем порт для доступа
+    environment:
+      - CHOKIDAR_USEPOLLING=true # Для корректной работы live-reload в Docker
     restart: unless-stopped
 
 

@@ -158,5 +158,4 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService {
         List<Question> questionList = surveyQuestionsRepository.findAllQuestionsBySurvey(survey);
         return SurveyQuestionResponse.toDTO(survey, questionList);
     }
-
 }

@@ -41,16 +41,16 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Добавлено для разрешения CORS
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/swagger-ui/**", "/v3/**", "api/auth").permitAll()
+                        request.requestMatchers("/swagger-ui/**", "/v3/**", "api/auth", "api/records").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/questions", "/api/surveys", "/api/surveys-questions", "/api/users-surveys").permitAll()
                                 .requestMatchers("/api/questions").hasAuthority("HR")
                                 .requestMatchers("/api/surveys-questions").hasAuthority("HR")
                                 .requestMatchers("/api/surveys").hasAuthority("HR")
                                 .requestMatchers("/api/users").hasAuthority("HR")
-                                .requestMatchers("/api/reduced-users").hasAuthority("HR")
                                 .requestMatchers("/api/full-users").hasAuthority("HR")
-                                .requestMatchers("/api/all-users-surveys").hasAuthority("HR")
+                                .requestMatchers("/api/all-users-surveys/").hasAuthority("HR")
                                 .requestMatchers("/api/users-surveys").hasAuthority("HR")
+                                .requestMatchers("/api/statistics").hasAuthority("HR")
                                 .anyRequest().permitAll())
                 .sessionManagement(manager ->
                         manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -72,6 +72,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

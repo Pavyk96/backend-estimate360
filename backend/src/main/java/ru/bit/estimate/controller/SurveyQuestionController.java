@@ -87,5 +87,4 @@ public class SurveyQuestionController {
     public SurveyQuestionResponse removeQuestionFromSurvey(@PathVariable Long surveyId, @PathVariable Long questionId) {
         return service.removeQuestionFromSurvey(surveyId, questionId);
     }
-
 }

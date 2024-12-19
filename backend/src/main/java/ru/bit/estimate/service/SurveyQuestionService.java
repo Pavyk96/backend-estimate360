@@ -20,5 +20,4 @@ public interface SurveyQuestionService {
     SurveyQuestionResponse addQuestionToSurvey(Long surveyId, Long questionId);
 
     SurveyQuestionResponse removeQuestionFromSurvey(Long surveyId, Long questionId);
-
 }

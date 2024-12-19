@@ -25,7 +25,7 @@ public class SurveyAnswerTableServiceImpl implements SurveyAnswerTableService {
     }
 
     @Override
-    public SurveyAnswer getRecordById(long id) {
+    public SurveyAnswer getRecordById(UUID id) {
         return surveyAnswerTableRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Опросник не найден"));
     }
@@ -36,7 +36,7 @@ public class SurveyAnswerTableServiceImpl implements SurveyAnswerTableService {
     }
 
     @Override
-    public void updateRecordById(SurveyAnswerTableRequest request, long id) {
+    public void updateRecordById(SurveyAnswerTableRequest request, UUID id) {
         SurveyAnswer oldQuestionnaire = getRecordById(id);
         SurveyAnswer updateQuestionnaire = SurveyAnswerTableRequest.fromDto(request);
 
@@ -49,7 +49,7 @@ public class SurveyAnswerTableServiceImpl implements SurveyAnswerTableService {
     }
 
     @Override
-    public void deleteRecordById(long id) {
+    public void deleteRecordById(UUID id) {
         surveyAnswerTableRepository.deleteById(id);
     }
 

@@ -1,5 +1,6 @@
 package ru.bit.estimate.service;
 
+import ru.bit.estimate.dto.SurveyRequest;
 import ru.bit.estimate.model.UserSurvey;
 
 import java.util.List;
@@ -18,4 +19,5 @@ public interface UserSurveyService {
 
     List<UserSurvey> getAllStudentBySurveyId(Long id);
 
+    List<Long> getAllActiveSurveys();
 }

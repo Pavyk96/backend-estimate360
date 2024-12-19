@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface SurveyAnswerTableRepository extends JpaRepository<SurveyAnswer, Long> {
+public interface SurveyAnswerTableRepository extends JpaRepository<SurveyAnswer, UUID> {
 
     List<SurveyAnswer> findAllByTargetId(UUID targetId);
 

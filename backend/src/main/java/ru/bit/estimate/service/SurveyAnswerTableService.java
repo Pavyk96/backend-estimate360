@@ -10,13 +10,13 @@ public interface SurveyAnswerTableService {
 
     List<SurveyAnswer> getRecord();
 
-    SurveyAnswer getRecordById(long id);
+    SurveyAnswer getRecordById(UUID id);
 
     SurveyAnswer createRecord(SurveyAnswerTableRequest request);
 
-    void updateRecordById(SurveyAnswerTableRequest request, long id);
+    void updateRecordById(SurveyAnswerTableRequest request, UUID id);
 
-    void deleteRecordById(long id);
+    void deleteRecordById(UUID id);
 
     List<SurveyAnswer> findByTargetId(UUID targetId);
 

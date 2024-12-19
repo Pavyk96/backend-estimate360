@@ -3,8 +3,10 @@ package ru.bit.estimate.service.impl;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.bit.estimate.dto.SurveyRequest;
 import ru.bit.estimate.keycloak.model.UserEntity;
 import ru.bit.estimate.keycloak.repository.KeycloakUserRepository;
+import ru.bit.estimate.model.Survey;
 import ru.bit.estimate.model.UserSurvey;
 import ru.bit.estimate.repository.SurveyRepository;
 import ru.bit.estimate.repository.UserSurveyRepository;
@@ -86,5 +88,13 @@ public class UserSurveyServiceImpl implements UserSurveyService {
     public List<UserSurvey> getAllStudentBySurveyId(Long id) {
         return repo.findBySurveyId(id);
     }
+
+    @Override
+    public List<Long> getAllActiveSurveys() {
+        // Возвращаем уникальные идентификаторы активных опросов
+        return repo.findDistinctSurveyIds();
+    }
+
+
 
 }

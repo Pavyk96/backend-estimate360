@@ -26,4 +26,7 @@ public interface SurveyQuestionsRepository extends JpaRepository<SurveyQuestions
 
     Optional<SurveyQuestions> findBySurveyAndQuestion(Survey survey, Question question);
 
+    @Query("SELECT DISTINCT sq.survey FROM SurveyQuestions sq")
+    List<Survey> findAllDistinctSurveys();
+
 }

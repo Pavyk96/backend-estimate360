@@ -16,6 +16,7 @@ public class SurveyAnswerTableRequest {
 
     private Long surveyId;
     private Long questionId;
+    private UUID targetId;
     private UUID userId;
     private String answer;
 
@@ -23,6 +24,7 @@ public class SurveyAnswerTableRequest {
         return SurveyAnswer.builder()
                 .surveyId(surveyAnswerTableRequest.getSurveyId())
                 .questionId(surveyAnswerTableRequest.getQuestionId())
+                .targetId(surveyAnswerTableRequest.getTargetId())
                 .userId(surveyAnswerTableRequest.getUserId())
                 .answer(surveyAnswerTableRequest.getAnswer())
                 .build();

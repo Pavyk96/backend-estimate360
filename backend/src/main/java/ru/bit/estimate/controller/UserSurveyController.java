@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bit.estimate.dto.StatisticsDTO;
+import ru.bit.estimate.dto.SurveyQuestionResponse;
+import ru.bit.estimate.dto.SurveyRequest;
 import ru.bit.estimate.model.UserSurvey;
 import ru.bit.estimate.service.StatisticsService;
 import ru.bit.estimate.service.UserSurveyService;
@@ -38,7 +40,6 @@ public class UserSurveyController {
         return userSurveyService.getAll();
     }
 
-    //TODO: назначить всем пользователям
     @Operation(
             summary = "назначить анкету всем пользователям"
     )
@@ -48,7 +49,6 @@ public class UserSurveyController {
         return userSurveyService.getAll();
     }
 
-    //TODO: просмотреть анкеты конкретного пользователя
     @Operation(
             summary = "просмотреть анкеты конкретного пользователя"
     )
@@ -57,7 +57,6 @@ public class UserSurveyController {
         return userSurveyService.getUsersSurvey(id);
     }
 
-    //TODO: удалить анкету назначенную пользователю
     @Operation(
             summary = "убрать конкретную анкету с конкретного пользователя"
     )
@@ -85,6 +84,11 @@ public class UserSurveyController {
     @GetMapping("/statistics/{userId}")
     public ResponseEntity<List<StatisticsDTO>> getStatistics(@PathVariable UUID userId) {
         return ResponseEntity.ok(statisticsService.getStatisticsByUserId(userId));
+    }
+
+    @GetMapping("users-surveys/active")
+    public List<Long> getAllActiveSurveys() {
+        return userSurveyService.getAllActiveSurveys();
     }
 
 }

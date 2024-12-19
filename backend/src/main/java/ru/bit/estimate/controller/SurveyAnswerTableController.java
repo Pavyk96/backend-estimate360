@@ -15,6 +15,7 @@ import ru.bit.estimate.model.SurveyAnswer;
 import ru.bit.estimate.service.impl.SurveyAnswerTableServiceImpl;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -30,7 +31,7 @@ public class SurveyAnswerTableController {
     }
 
     @GetMapping("/records/{id}")
-    public SurveyAnswer getRecordeById(@PathVariable long id) {
+    public SurveyAnswer getRecordeById(@PathVariable UUID id) {
         return service.getRecordById(id);
     }
 
@@ -40,12 +41,12 @@ public class SurveyAnswerTableController {
     }
 
     @PutMapping("/records/{id}")
-    public void updateRecord(@RequestBody SurveyAnswerTableRequest request, @PathVariable long id) {
+    public void updateRecord(@RequestBody SurveyAnswerTableRequest request, @PathVariable UUID id) {
         service.updateRecordById(request, id);
     }
 
     @DeleteMapping("/records/{id}")
-    public void deleteRecord(@PathVariable long id) {
+    public void deleteRecord(@PathVariable UUID id) {
         service.deleteRecordById(id);
     }
 

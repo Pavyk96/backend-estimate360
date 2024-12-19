@@ -14,11 +14,13 @@ public class QuestionRequest {
 
     private String question;
     private String type;
+    private boolean answerScoreReversed;
 
     public static Question fromDto(QuestionRequest questionRequest) {
         return Question.builder()
                 .question(questionRequest.getQuestion())
                 .type(questionRequest.getType())
+                .answerScoreReversed(questionRequest.isAnswerScoreReversed())
                 .build();
     }
 

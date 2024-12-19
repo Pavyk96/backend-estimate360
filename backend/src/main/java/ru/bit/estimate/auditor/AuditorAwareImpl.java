@@ -17,5 +17,4 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     public @NonNull Optional<String> getCurrentAuditor() {
         return Optional.of("username");
     }
-
 }
