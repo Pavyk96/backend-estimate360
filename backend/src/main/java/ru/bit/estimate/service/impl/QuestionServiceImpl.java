@@ -67,6 +67,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         existingQuestion.setType(request.getType());
         existingQuestion.setQuestion(request.getQuestion());
+        existingQuestion.setAnswerScoreReversed(request.isAnswerScoreReversed());
 
         return QuestionResponse.toDTO(questionRepository.save(existingQuestion));
     }

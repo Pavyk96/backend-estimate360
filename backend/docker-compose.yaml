@@ -47,22 +47,26 @@ services:
     volumes:
       - keycloak_data_1:/opt/keycloak/data_1
       - ./keycloak_export_1:/opt/keycloak_export_1
-      - ./themes:/opt/keycloak/themes  # Монтирование вашей папки с темами
     command: start-dev
     restart: unless-stopped
 
   estimate-app:
-    image: payk96/estimate:0.0.3
+    image: payk96/estimate:0.0.5
     container_name: estimate-app
     ports:
       - "8081:8081"
     environment:
-      - KEYCLOAK_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8ZlVuVQWTuK2dkDv7cAOvwEKaOqE4JwnCcGtmH34eeKpKl+ovWaUmgy30Nl67RJye36cpEThIxWiEfoS0SJ0i4pOXvr7G/hOdJik+UaEMNGR9Kgfr91DQ1KHMerjbsjbLysLpV++5YrutjnsliiqTEvdZn4Ccd/kz19AQ8peDbqmBj2PDl4TlGOu2UBC/3nL2JtJZJHgT3k9Kiy2+M0u/2hr9GH1FR9jYENomDSf0APm+gp6JypRYpfILQqW1lKAmivweMaAs8j9CIBr80sIZ/8NAxn3ijDwQslN8UfSJnChA+iCjasEy7RMgQiemO6P7eTRPtC7hH2LJKnvQBFNgQIDAQAB
+      - KEYCLOAK_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlM4AAguoiOaY9QDZFcvTFRN8F7KxaIjGXKlxcgUxNpY3Smx2kuC+Wbp6aqDk/5OrXwLgm7o6Jqy6aYelc7IP4dbCD0642D5wycO456/afrgxnZQ+HOsaQ+d900oSIFaCu41qZ23ncqgvZ4yn325CE/JyQENFcw0RRk9PllmN1cxWMAStSotkn3P2lpizC+8W47Y4Oj57yRhGDTmWzsPtwdvVKjvqSzeApFNuHQsumectbmqEHHGHzA+CXAEjTJRPy+/0oixRpOMQco9Mb0YPzx9XQuV0BgHXLSDvn71btdzBX1zfkvMjNpN9OIFrgy68FIl7gKFAEHYeT+aNvUM8tQIDAQAB
       - CLIENT_ID=estimate-app
       - KEYCLOAK_TOKEN_URL=http://keycloak_1:8080/realms/estimate/protocol/openid-connect/token
       - SPRING_DATASOURCE_ESTIMATE_URL=jdbc:postgresql://estimate_postgres:5432/estimate
       - SPRING_DATASOURCE_KEYCLOAK_URL=jdbc:postgresql://keycloak_postgres_1:5432/keycloak_1
       - KEYCLOAK_GENERATE_TOKEN_URL=http://keycloak_1:8080/realms/estimate/protocol/openid-connect/token
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d keycloak_1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     depends_on:
       - estimate_postgres
       - keycloak_1

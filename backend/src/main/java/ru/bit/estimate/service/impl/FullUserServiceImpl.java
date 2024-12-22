@@ -57,13 +57,13 @@ public class FullUserServiceImpl implements FullUserService {
                 .toList();
 
         ReducedUserDTO reducedUserDTO = ReducedUserDTO.toDTO(user, group);
-        ReducedUserDTO reducedBoss = boss != null && bossGroup != null ? ReducedUserDTO.toDTO(boss, bossGroup) : null;
+        List<ReducedUserDTO> reducedBossList = boss != null && bossGroup != null
+                ? List.of(ReducedUserDTO.toDTO(boss, bossGroup))
+                : List.of();
 
-        if (reducedBoss != null) {
-            return FullUserDTO.toDto(reducedUserDTO, List.of(reducedBoss), reducedServitorsList);
-        }
-        return FullUserDTO.toDto(reducedUserDTO, null, reducedServitorsList);
+        return FullUserDTO.toDto(reducedUserDTO, reducedBossList, reducedServitorsList);
     }
+
 
     @Override
     public ReducedUserDTO getReducedById(String id) {
