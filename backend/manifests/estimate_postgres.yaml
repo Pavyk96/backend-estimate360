@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: estimate-postgres
+  namespace: estimate360
+spec:
+  serviceName: estimate-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: estimate-postgres
+  template:
+    metadata:
+      labels:
+        app: estimate-postgres
+    spec:
+      containers:
+        - name: estimate-postgres
+          image: postgres:16
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: estimate
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: estimate-postgres-service
+  namespace: estimate360
+spec:
+  selector:
+    app: estimate-postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
