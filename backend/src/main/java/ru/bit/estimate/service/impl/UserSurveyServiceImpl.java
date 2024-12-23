@@ -3,6 +3,7 @@ package ru.bit.estimate.service.impl;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.bit.estimate.dto.SurveyRequest;
 import ru.bit.estimate.keycloak.model.UserEntity;
 import ru.bit.estimate.keycloak.repository.KeycloakUserRepository;
@@ -78,6 +79,7 @@ public class UserSurveyServiceImpl implements UserSurveyService {
         return repo.findByUserId(userId);  // Этот метод должен быть определен в репозитории
     }
 
+    @Transactional
     @Override
     public void deleteUsersSurvey(String userId, Long surveyId) {
         // Удаляем анкету пользователя, если связь существует

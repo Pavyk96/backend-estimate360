@@ -60,7 +60,7 @@ public class UserSurveyController {
     @Operation(
             summary = "убрать конкретную анкету с конкретного пользователя"
     )
-    @DeleteMapping("/users-survey/{userId}/{surveyId}")
+    @DeleteMapping("/users-surveys/{userId}/{surveyId}")
     public void deleteUsersSurvey(@PathVariable String userId, @PathVariable Long surveyId) {
         userSurveyService.deleteUsersSurvey(userId, surveyId);
     }
