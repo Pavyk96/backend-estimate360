@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: estimate360-ingress
+  namespace: estimate360
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "estimate360.stk8s.66bit.ru"
+      http:
+        paths:
+          # Для фронтенда
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: estimate-frontend-service
+                port:
+                  number: 3000
+          # Для бэкенда
+          - pathType: Prefix
+            path: /api
+            backend:
+              service:
+                name: estimate-app-service
+                port:
+                  number: 8081
+          # Для Keycloak
+          - pathType: Prefix
+            path: /auth
+            backend:
+              service:
+                name: keycloak-service
+                port:
+                  number: 8080
