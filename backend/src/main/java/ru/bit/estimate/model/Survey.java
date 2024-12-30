@@ -36,6 +36,10 @@ public class Survey {
     @Column(nullable = false, unique = true)
     private String description;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean isArchive = false;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

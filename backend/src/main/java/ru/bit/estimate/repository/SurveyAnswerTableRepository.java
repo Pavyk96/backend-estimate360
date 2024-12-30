@@ -12,4 +12,7 @@ public interface SurveyAnswerTableRepository extends JpaRepository<SurveyAnswer,
 
     List<SurveyAnswer> findAllByTargetId(UUID targetId);
 
+    void deleteAllByQuestionId(Long questionId);
+
+    void deleteAllBySurveyId(Long surveyId);
 }

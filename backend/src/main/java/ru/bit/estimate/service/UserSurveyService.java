@@ -11,7 +11,7 @@ public interface UserSurveyService {
 
     UserSurvey createUserSurvey(UserSurvey request);
 
-    void setAll(Long id);
+    void setAll(Long surveyId, String realmId);
 
     List<UserSurvey> getUsersSurvey(String id);
 

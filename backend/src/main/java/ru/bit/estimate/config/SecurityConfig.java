@@ -51,6 +51,8 @@ public class SecurityConfig {
                                 .requestMatchers("/api/all-users-surveys/").hasAuthority("HR")
                                 .requestMatchers("/api/users-surveys").hasAuthority("HR")
                                 .requestMatchers("/api/statistics").hasAuthority("HR")
+                                .requestMatchers("/api/set-archive").hasAuthority("HR")
+                                .requestMatchers("/api/an-set-archive").hasAuthority("HR")
                                 .anyRequest().permitAll())
                 .sessionManagement(manager ->
                         manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

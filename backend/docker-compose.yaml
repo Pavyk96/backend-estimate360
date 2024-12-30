@@ -51,7 +51,7 @@ services:
     restart: unless-stopped
 
   estimate-app:
-    image: payk96/estimate:0.0.5
+    image: payk96/estimate:0.0.6
     container_name: estimate-app
     ports:
       - "8081:8081"

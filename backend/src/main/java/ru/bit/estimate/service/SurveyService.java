@@ -1,5 +1,6 @@
 package ru.bit.estimate.service;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import ru.bit.estimate.dto.SurveyRequest;
 import ru.bit.estimate.model.Survey;
 
@@ -16,5 +17,9 @@ public interface SurveyService {
     Survey updateSurveysById(SurveyRequest request, Long id);
 
     void deleteSurveysById(Long id);
+
+    Survey setArchiveById(Long id);
+
+    Survey anSetArchiveById(Long id);
 
 }

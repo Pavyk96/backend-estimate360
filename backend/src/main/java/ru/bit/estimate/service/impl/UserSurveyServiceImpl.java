@@ -49,14 +49,21 @@ public class UserSurveyServiceImpl implements UserSurveyService {
     }
 
     @Override
-    public void setAll(Long surveyId) {
+    public void setAll(Long surveyId, String userId) {
         // Проверяем существование опросника
         if (!surveyRepository.existsById(surveyId)) {
             throw new IllegalArgumentException("Survey with ID " + surveyId + " does not exist.");
         }
 
-        // Получаем всех пользователей из Keycloak
-        List<UserEntity> userEntities = userRepository.findAll();
+        // Находим пользователя по его ID
+        UserEntity requestingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with ID " + userId + " does not exist."));
+
+        // Извлекаем realmId пользователя
+        String realmId = requestingUser.getRealmId();
+
+        // Получаем всех пользователей из Keycloak, фильтруя по realmId
+        List<UserEntity> userEntities = userRepository.findAllByRealmId(realmId);
 
         // Преобразуем пользователей в объекты UserSurvey с переданным surveyId, исключая дублирование
         List<UserSurvey> userSurveys = userEntities.stream()
@@ -72,6 +79,8 @@ public class UserSurveyServiceImpl implements UserSurveyService {
         // Сохраняем все записи в базу данных
         repo.saveAll(userSurveys);
     }
+
+
 
     @Override
     public List<UserSurvey> getUsersSurvey(String userId) {

@@ -4,11 +4,14 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.bit.estimate.dto.QuestionRequest;
 import ru.bit.estimate.dto.QuestionResponse;
 import ru.bit.estimate.model.Question;
 import ru.bit.estimate.repository.QuestionRepository;
+import ru.bit.estimate.repository.SurveyAnswerTableRepository;
 import ru.bit.estimate.service.QuestionService;
+import ru.bit.estimate.service.SurveyAnswerTableService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +22,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @NonNull
     private final QuestionRepository questionRepository;
+
+    @NonNull
+    private final SurveyAnswerTableRepository answerTableRepository;
 
     /**
      * Получить все вопросы.
@@ -77,11 +83,18 @@ public class QuestionServiceImpl implements QuestionService {
      *
      * @param id идентификатор вопроса.
      */
+    @Transactional
     public void deleteQuestionByID(long id) {
         if (!questionRepository.existsById(id)) {
             throw new EntityNotFoundException("Вопрос не найден");
         }
+
+        // Удаляем все ответы, связанные с этим вопросом
+        answerTableRepository.deleteAllByQuestionId(id);
+
+        // Удаляем сам вопрос
         questionRepository.deleteById(id);
     }
+
 
 }

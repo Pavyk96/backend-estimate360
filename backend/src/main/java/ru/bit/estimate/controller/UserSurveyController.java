@@ -43,9 +43,9 @@ public class UserSurveyController {
     @Operation(
             summary = "назначить анкету всем пользователям"
     )
-    @PostMapping("/all-users-surveys/{id}")
-    public List<UserSurvey> setAllUsersSurvey(@PathVariable Long id) {
-        userSurveyService.setAll(id);
+    @PostMapping("/all-users-surveys/{id}/{realmId}")
+    public List<UserSurvey> setAllUsersSurvey(@PathVariable Long id, @PathVariable String realmId) {
+        userSurveyService.setAll(id, realmId);
         return userSurveyService.getAll();
     }
 

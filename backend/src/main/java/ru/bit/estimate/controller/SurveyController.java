@@ -68,4 +68,14 @@ public class SurveyController {
         service.deleteSurveysById(id);
     }
 
+    @PostMapping("/set-archive/{id}")
+    public Survey setArchiveById(@PathVariable Long id) {
+        return service.setArchiveById(id);
+    }
+
+    @PostMapping("/an-set-archive/{id}")
+    public Survey anSetArchiveById(@PathVariable Long id) {
+        return service.anSetArchiveById(id);
+    }
+
 }
