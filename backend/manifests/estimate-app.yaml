@@ -26,7 +26,7 @@ spec:
             - name: KEYCLOAK_TOKEN_URL
               value: http://keycloak-1:8080/realms/estimate/protocol/openid-connect/token
             - name: SPRING_DATASOURCE_ESTIMATE_URL
-              value: jdbc:postgresql://estimate-postgres:5432/estimate
+              value: jdbc:postgresql://estimate-postgres-service:5432/estimate
             - name: SPRING_DATASOURCE_KEYCLOAK_URL
               value: jdbc:postgresql://keycloak-postgres-1:5432/keycloak_1
 ---
