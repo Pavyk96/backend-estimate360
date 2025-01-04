@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: estimate-app
-          image: payk96/estimate:0.0.5
+          image: payk96/estimate:0.0.8
           ports:
             - containerPort: 8081
           env:

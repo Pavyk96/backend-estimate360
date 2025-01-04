@@ -77,24 +77,34 @@ public class StatisticsServiceImpl implements StatisticsService {
         List<Double> userHimselfScores = new ArrayList<>();
 
         for (SurveyAnswer answer : answers) {
-            String answeredUserId = String.valueOf(answer.getUserId());
             double score = Double.parseDouble(answer.getAnswer());
+
+            // Пропускаем, если ответ равен 0
+            if (score == 0) {
+                continue;
+            }
+
+            // Проверяем, нужно ли реверсировать оценку
             boolean isReversed = questionService.getQuestionByID(answer.getQuestionId()).isAnswerScoreIsReversed();
             if (isReversed) {
                 score = reverseScore(score);
             }
+
+            // Определяем роль ответившего пользователя
+            String answeredUserId = String.valueOf(answer.getUserId());
             Role role = determineRole(user, answeredUserId);
 
+            // Распределяем оценки по ролям
             switch (role) {
                 case SUBORDINATE -> subordinateScores.add(score);
                 case BOSS -> bossScores.add(score);
                 case USER_HIMSELF -> userHimselfScores.add(score);
                 case OTHER -> otherScores.add(score);
-                default -> throw new IllegalArgumentException();
+                default -> throw new IllegalArgumentException("Неизвестная роль: " + role);
             }
-
         }
 
+        // Рассчитываем средние значения для каждой роли
         return StatisticsDTO.ScoreStatistics.builder()
                 .bossesAvgScore(calculateAverage(bossScores))
                 .subordinatesAvgScore(calculateAverage(subordinateScores))
@@ -102,6 +112,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .userHimselfAvgScore(calculateAverage(userHimselfScores))
                 .build();
     }
+
 
     private Role determineRole(FullUserDTO user, String answeredUserId) {
         if (user.getSubordinates().stream().anyMatch(reducedUser -> reducedUser.getId().equals(answeredUserId))) {
@@ -130,8 +141,16 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     private double reverseScore(double score) {
-        // Преобразуем оценку: 0 -> 5, 1 -> 4, ..., 5 -> 0
-        return 5.0 - score;
+        // Преобразуем оценку: 5 → 1, 4 → 2, 3 → 3, 2 → 4, 1 → 5
+        return switch ((int) score) {
+            case 5 -> 1;
+            case 4 -> 2;
+            case 3 -> 3;
+            case 2 -> 4;
+            case 1 -> 5;
+            default -> throw new IllegalArgumentException("Некорректное значение для реверса: " + score);
+        };
     }
+
 
 }
