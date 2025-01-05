@@ -24,7 +24,7 @@ spec:
             - name: CLIENT_ID
               value: estimate-app
             - name: KEYCLOAK_TOKEN_URL
-              value: http://keycloak-1:8080/realms/estimate/protocol/openid-connect/token
+              value: https://estimate360.stk8s.66bit.ru/auth/realms/estimate/protocol/openid-connect/token
             - name: SPRING_DATASOURCE_ESTIMATE_URL
               value: jdbc:postgresql://estimate-postgres-service:5432/estimate
             - name: SPRING_DATASOURCE_KEYCLOAK_URL
