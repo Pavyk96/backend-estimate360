@@ -29,6 +29,9 @@ spec:
               value: jdbc:postgresql://estimate-postgres-service:5432/estimate
             - name: SPRING_DATASOURCE_KEYCLOAK_URL
               value: jdbc:postgresql://keycloak-postgres-service:5432/keycloak_1
+            - name: KEYCLOAK_REDIRECT_URI
+              value: https://estimate360.stk8s.66bit.ru/quiz
+
 ---
 apiVersion: v1
 kind: Service
